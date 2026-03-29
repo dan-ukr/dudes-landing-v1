@@ -12,20 +12,20 @@ const t = ui[lang as keyof typeof ui];
 ---
 
 <Layout lang={lang}>
-  <main style="max-width: 1200px; margin: 0 auto; padding: 120px 20px; text-align: center;">
+  <div class="top-spacer"></div>
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; text-align: center;">
     
     <div style="margin-bottom: 80px;">
-      <h1 style="font-size: clamp(4rem, 12vw, 10rem); font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 40px; letter-spacing: -0.05em;">
+      <h1 style="font-size: clamp(3rem, 12vw, 10rem); font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 40px; letter-spacing: -0.05em;">
         {t['hero.title']}
       </h1>
-      <p style="font-size: 2rem; font-weight: 900; text-transform: uppercase; opacity: 0.8;">
+      <p style="font-size: clamp(1.2rem, 4vw, 2rem); font-weight: 900; text-transform: uppercase; opacity: 0.8;">
          {(() => {
-           // Замінюємо плейсхолдери на спани з ID для динамічного оновлення
            let phrase = t['hero.temp']
             .replace('{temp}', '<span id="temp">--</span>')
             .replace('{location}', '<span id="loc">...</span>');
            
-           // Акцентування на ТИ/YOU
            phrase = phrase.replace(/(YOU|ТОБІ|TY|TU|DICH|TÚ|TI|ТАБЕ)/g, 
              '<span style="text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; font-weight: 900;">$1</span>');
            return <Fragment set:html={phrase} />;
@@ -33,8 +33,8 @@ const t = ui[lang as keyof typeof ui];
       </p>
     </div>
 
-    <section id="waitlist-form-container" style="background: black; padding: 80px 40px; border-radius: 80px; border: 8px solid black; box-shadow: 25px 25px 0px var(--wd-yellow); margin-bottom: 150px; transform: rotate(-1deg);">
-      <h2 style="color: white; font-size: clamp(2rem, 5vw, 4rem); text-transform: uppercase; font-style: italic; margin-bottom: 50px; line-height: 1;">
+    <section id="waitlist-form-container" style="background: black; padding: clamp(2rem, 8vw, 80px) 20px; border-radius: clamp(40px, 10vw, 80px); border: 8px solid black; box-shadow: 25px 25px 0px var(--wd-yellow); margin-bottom: 150px; transform: rotate(-1deg);">
+      <h2 style="color: white; font-size: clamp(1.5rem, 5vw, 4rem); text-transform: uppercase; font-style: italic; margin-bottom: 50px; line-height: 1;">
         {t['waitlist.title']}
       </h2>
       <form id="waitlist-form" style="display: flex; flex-direction: column; gap: 25px; max-width: 800px; margin: 0 auto;">
@@ -42,17 +42,17 @@ const t = ui[lang as keyof typeof ui];
           type="email" 
           name="email" 
           placeholder={t['waitlist.placeholder']} 
-          style="padding: 30px; border-radius: 60px; border: 5px solid white; background: transparent; color: white; font-size: 2rem; font-family: 'ActayWide', sans-serif; font-weight: 900;" 
+          class="waitlist-input"
           required 
         />
         <input type="hidden" name="lang" value={lang} />
-        <button type="submit" style="padding: 30px; border-radius: 60px; border: 5px solid black; background: var(--wd-lime); font-size: 2.5rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: 'ActayWide', sans-serif; transition: 0.3s; box-shadow: 8px 8px 0px white;">
+        <button type="submit" class="waitlist-btn">
           {t['waitlist.btn']}
         </button>
       </form>
       <div 
         id="form-msg" 
-        style="display: none; margin-top: 40px; font-size: 2rem; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 30px; border-radius: 30px;"
+        style="display: none; margin-top: 40px; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 900; text-transform: uppercase; font-style: italic; padding: 30px; border-radius: 30px;"
         data-success={t['form.success']}
         data-error={t['form.error']}
         data-exists={t['form.exists']}
@@ -62,8 +62,8 @@ const t = ui[lang as keyof typeof ui];
     <div style="display: flex; flex-direction: column; gap: 120px; text-align: left;">
       <div class="row-brutal">
         <div class="card-brutal" style="background: var(--wd-lime); transform: rotate(2deg);">
-          <h3 style="font-size: 4rem; text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.bias.title']}</h3>
-          <p style="font-size: 1.5rem; font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.bias.desc']}</p>
+          <h3 style="font-size: clamp(2rem, 6vw, 4rem); text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.bias.title']}</h3>
+          <p style="font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.bias.desc']}</p>
         </div>
         <a href="#temp" class="icon-link"><img src="/icons/sun.svg" style="width: 250px; opacity: 0.3;" /></a>
       </div>
@@ -71,15 +71,15 @@ const t = ui[lang as keyof typeof ui];
       <div class="row-brutal row-reverse">
         <a href="#waitlist-form-container" class="icon-link"><img src="/icons/shirt.svg" style="width: 250px; opacity: 0.3;" /></a>
         <div class="card-brutal" style="background: var(--wd-pink); transform: rotate(-2deg);">
-          <h3 style="font-size: 4rem; text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.outfits.title']}</h3>
-          <p style="font-size: 1.5rem; font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.outfits.desc']}</p>
+          <h3 style="font-size: clamp(2rem, 6vw, 4rem); text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.outfits.title']}</h3>
+          <p style="font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.outfits.desc']}</p>
         </div>
       </div>
 
       <div class="card-brutal" style="background: black; color: var(--wd-lime); border-color: var(--wd-lime); max-width: 900px; margin: 60px auto; text-align: center; transform: rotate(1deg); width: 100%;">
-          <h3 style="font-size: 5rem; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 30px;">{t['feature.more.title']}</h3>
-          <p style="font-size: 1.8rem; font-weight: 900; line-height: 1.2;">{t['feature.more.desc']}</p>
-          <img src="/icons/glasses.svg" style="width: 180px; margin-top: 50px; filter: invert(81%) sepia(87%) saturate(2976%) hue-rotate(24deg) brightness(108%) contrast(106%);" />
+          <h3 style="font-size: clamp(2rem, 6vw, 5rem); text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 30px;">{t['feature.more.title']}</h3>
+          <p style="font-size: clamp(1rem, 2.5vw, 1.8rem); font-weight: 900; line-height: 1.2;">{t['feature.more.desc']}</p>
+          <img src="/icons/glasses.svg" style="width: clamp(100px, 20vw, 180px); margin-top: 50px; filter: invert(81%) sepia(87%) saturate(2976%) hue-rotate(24deg) brightness(108%) contrast(106%);" />
       </div>
     </div>
 
@@ -91,18 +91,64 @@ const t = ui[lang as keyof typeof ui];
   </main>
 
   <style>
+    /* Пуста плашка зверху */
+    .top-spacer {
+        height: 100px;
+        width: 100%;
+    }
+
+    .waitlist-input {
+        padding: 30px; 
+        border-radius: 60px; 
+        border: 5px solid white; 
+        background: transparent; 
+        color: white; 
+        font-size: clamp(1.2rem, 4vw, 2rem); /* Адаптивний шрифт інпута */
+        font-family: 'ActayWide', sans-serif; 
+        font-weight: 900;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .waitlist-btn {
+        padding: 30px; 
+        border-radius: 60px; 
+        border: 5px solid black; 
+        background: var(--wd-lime); 
+        font-size: clamp(1.5rem, 5vw, 2.5rem); 
+        font-weight: 900; 
+        text-transform: uppercase; 
+        cursor: pointer; 
+        font-family: 'ActayWide', sans-serif; 
+        transition: 0.3s; 
+        box-shadow: 8px 8px 0px white;
+    }
+
     .card-brutal {
-        border: 8px solid black; border-radius: 80px;
-        box-shadow: 25px 25px 0px black; padding: 80px 50px;
+        border: 8px solid black; border-radius: clamp(40px, 8vw, 80px);
+        box-shadow: 25px 25px 0px black; padding: clamp(2.5rem, 8vw, 80px) clamp(1.5rem, 5vw, 50px);
         transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         flex: 1; min-width: 350px;
     }
     .card-brutal:hover { transform: translate(-10px, -10px) rotate(0deg) !important; box-shadow: 35px 35px 0px black; }
     
+    #temp { text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; }
+    
     .row-brutal { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 60px; }
     .row-reverse { flex-wrap: wrap-reverse; }
+    
     .icon-link img { transition: 0.4s; }
     .icon-link:hover img { transform: scale(1.3) rotate(15deg); opacity: 1 !important; }
+
+    /* Приховування іконок у вертикальному режимі на мобайлі */
+    @media (max-width: 768px) and (orientation: portrait) {
+        .icon-link {
+            display: none;
+        }
+        .row-brutal {
+            justify-content: center;
+        }
+    }
 
     .footer-minimal {
         margin-top: 150px; padding: 40px 0; border-top: 8px solid black;
@@ -111,28 +157,26 @@ const t = ui[lang as keyof typeof ui];
     }
 
     @media (max-width: 768px) {
-        main { padding: 60px 15px !important; }
-        .card-brutal { padding: 40px 25px; border-radius: 40px; min-width: 100%; }
+        main { padding: 40px 15px !important; }
+        .card-brutal { min-width: 100%; box-shadow: 15px 15px 0px black; }
         .footer-minimal { flex-direction: column; gap: 20px; text-align: center; }
+        .top-spacer { height: 80px; }
     }
   </style>
 
   <script is:inline>
     async function updateWeather() { 
       try { 
-        // 1. Отримуємо локацію по IP
         const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
         const city = geo.city || 'Bolzano';
         const locSpan = document.getElementById('loc');
         if (locSpan) locSpan.innerText = city.toUpperCase();
 
-        // 2. Отримуємо погоду для цих координат
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${geo.latitude}&longitude=${geo.longitude}&current_weather=true`);
         const data = await res.json();
         const tempSpan = document.getElementById('temp');
         if (tempSpan) tempSpan.innerText = Math.round(data.current_weather.temperature);
       } catch (e) {
-        // Фолбек на Больцано
         document.getElementById('loc').innerText = 'BOLZANO';
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`)
           .then(r => r.json()).then(data => {
