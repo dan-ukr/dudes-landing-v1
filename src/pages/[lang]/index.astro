@@ -2,9 +2,19 @@
 export const prerender = true;
 import Layout from '../../layouts/layout.astro';
 import { ui } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}}, {params: {lang: 'ua'}}, {params: {lang: 'it'}},
+    {params: {lang: 'de'}}, {params: {lang: 'es'}}, {params: {lang: 'pt'}},
+    {params: {lang: 'fr'}}, {params: {lang: 'be'}}, {params: {lang: 'pl'}}
+  ];
+}
+
 const { lang } = Astro.params;
-const t = ui[lang];
+const t = ui[lang as keyof typeof ui];
 ---
+
 <Layout lang={lang}>
   <main style="max-width: 1200px; margin: 0 auto; padding: 120px 20px; text-align: center;">
     
@@ -53,7 +63,6 @@ const t = ui[lang];
           <p style="font-size: 1.8rem; font-weight: 900; line-height: 1.2;">Wardrobe sync, AI style tips, and zero 'what should I wear' stress. Stay tuned.</p>
           <img src="/icons/glasses.svg" style="width: 180px; margin-top: 50px; filter: invert(81%) sepia(87%) saturate(2976%) hue-rotate(24deg) brightness(108%) contrast(106%);" />
       </div>
-
     </div>
 
     <footer style="margin-top: 200px; font-size: clamp(4rem, 15vw, 15rem); font-weight: 900; text-transform: uppercase; font-style: italic; opacity: 0.03; line-height: 0.7; letter-spacing: -0.08em;">
@@ -74,7 +83,6 @@ const t = ui[lang];
     async function updateWeather() { try { const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`); const data = await res.json(); document.getElementById('temp').innerText = Math.round(data.current_weather.temperature); } catch (e) {} }
     updateWeather();
     
-    // Форма з D1 логікою
     const form = document.querySelector('form');
     const msg = document.getElementById('form-msg');
     form?.addEventListener('submit', async (e) => {
