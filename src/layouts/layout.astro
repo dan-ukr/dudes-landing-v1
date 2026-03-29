@@ -1,113 +1,84 @@
 ---
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import '../styles/global.css'; // Переконайся, що цей файл порожній або видалений
+import '../styles/global.css';
 
 interface Props {
-	title?: string;
-	description?: string;
-	lang: string;
+    title?: string;
+    description?: string;
+    lang: string;
 }
 
-const { title = "WeatherDude", description = "Dress smart.", lang } = Astro.params;
+const { title = "WeatherDude", description = "Dress smart.", lang } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={lang}>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+    <head>
+        <meta charset="UTF-8" /> <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
 
-		<style is:global>
-			@font-face {
-				font-family: 'ActayWide';
-				src: url('/fonts/ActayWide.woff2') format('woff2');
-				font-weight: bold;
-				font-style: normal;
-				font-display: swap;
-			}
+        <style is:global>
+            @font-face {
+                font-family: 'ActayWide';
+                src: url('/fonts/ActayWide.woff2') format('woff2');
+                font-weight: bold;
+                font-style: normal;
+                font-display: swap;
+            }
 
-			:root {
-				/* Наші брендові кольори з PDF */
-				--wd-pink: #FF86CE;
-				--wd-lime: #D0FF00;
-				--wd-yellow: #FFE100;
-				--wd-white: #FFEAF4; /* Напіврожевий фон */
-			}
+            :root {
+                --wd-pink: #FF86CE;
+                --wd-lime: #D0FF00;
+                --wd-yellow: #FFE100;
+                --wd-white: #FFEAF4;
+            }
 
-			html {
-				/* Застосовуємо шрифт за замовчуванням */
-				font-family: 'ActayWide', sans-serif; 
-				background-color: var(--wd-white);
-				color: black;
-				overflow-x: hidden;
-			}
+            html {
+                font-family: 'ActayWide', sans-serif; 
+                background-color: var(--wd-white);
+                color: black;
+                scroll-behavior: smooth;
+            }
 
-			/* 2. НАЛАШТУВАННЯ ФРЕЙМІВ (ЯК У PDF) */
-			.glowing-card {
-				min-height: 250px;
-				border-radius: 40px;
-				padding: 2.5rem;
-				border: 4px solid black; /* Жирна чорна обводка */
-				box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); /* Тінь "нео-бруталізм" */
-				transition: 0.3s;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-			}
+            .glowing-card {
+                min-height: 280px;
+                border-radius: 45px;
+                padding: 2.5rem;
+                border: 5px solid black;
+                box-shadow: 12px 12px 0px 0px rgba(0,0,0,1);
+                transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
 
-			.glowing-card:hover {
-				transform: translateY(-5px);
-				box-shadow: 15px 15px 0px 0px rgba(0,0,0,1);
-			}
+            .glowing-card:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 20px 20px 0px 0px rgba(0,0,0,1);
+            }
 
-			/* Стилі для іконок на фоні (щоб не розповзалися) */
-			.wd-background-wrapper {
-				position: relative;
-				width: 100%;
-				min-height: 100vh;
-			}
-			.wd-bg-element {
-				position: absolute;
-				width: 100px;
-				height: 100px;
-				background-size: contain;
-				background-repeat: no-repeat;
-				opacity: 0.15;
-				z-index: 1;
-				transition: 0.4s ease;
-				pointer-events: none; /* Щоб не заважали клікати */
-			}
-		</style>
-	</head>
-	<body class="antialiased wd-background-wrapper">
-		
-		<main class="max-w-4xl mx-auto px-4 py-10 relative z-10">
-			
-			<nav class="flex justify-center items-center gap-6 mb-12 flex-wrap">
-				
-				<div class="flex items-center gap-2 font-bold uppercase text-xs">
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<circle cx="12" cy="12" r="10"></circle>
-						<line x1="2" y1="12" x2="22" y2="12"></line>
-						<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-					</svg>
-					{lang}
-				</div>
-
-				<div class="flex flex-wrap justify-center gap-2">
-					<a href="/en/" class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-[10px] transition-all ${lang === 'en' ? 'bg-black text-white scale-110' : 'bg-white hover:bg-lime-400'}`}>English</a>
-					<a href="/ua/" class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-[10px] transition-all ${lang === 'ua' ? 'bg-black text-white scale-110' : 'bg-white hover:bg-lime-400'}`}>Українська</a>
-					</div>
-			</nav>
-
-			<slot />
-		</main>
-
-		<Footer />
-	</body>
+            .wd-bg-element {
+                position: absolute;
+                width: 120px; height: 120px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                opacity: 0.1;
+                transition: 0.6s;
+                z-index: 1;
+                filter: grayscale(100%);
+            }
+            .wd-bg-element:hover {
+                opacity: 0.8;
+                filter: grayscale(0%);
+                transform: scale(1.2) rotate(10deg);
+            }
+        </style>
+    </head>
+    <body class="antialiased overflow-x-hidden">
+        <slot />
+    </body>
 </html>

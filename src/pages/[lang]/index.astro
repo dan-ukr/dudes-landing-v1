@@ -1,5 +1,6 @@
 ---
-import layout from '../../layouts/layout.astro';
+export const prerender = true;
+import Layout from '../../layouts/layout.astro';
 import { ui, languages } from '../../i18n/ui';
 
 export function getStaticPaths() {
@@ -14,97 +15,66 @@ const { lang } = Astro.params;
 const t = ui[lang as keyof typeof ui];
 ---
 
-<layout lang={lang}>
-  <div class="wd-background-wrapper min-h-screen">
+<Layout lang={lang}>
+  <div class="relative w-full min-h-screen">
     
-    <a href="#weather-box" class="wd-bg-element wd-icon-sun" style="top: 8%; left: 5%;"></a>
-    <a href="#outfits-box" class="wd-bg-element wd-icon-shirt" style="top: 20%; right: 10%;"></a>
-    <a href="#outfits-box" class="wd-bg-element wd-icon-sneaker" style="bottom: 25%; left: 12%;"></a>
-    <a href="#bias-box" class="wd-bg-element wd-icon-glasses" style="top: 45%; left: 4%;"></a>
-    <a href="#waitlist-form" class="wd-bg-element wd-icon-cap" style="bottom: 15%; right: 5%;"></a>
-    <a href="#outfits-box" class="wd-bg-element wd-icon-shorts" style="bottom: 40%; right: 15%;"></a>
+    <a href="#weather-box" class="wd-bg-element" style="background-image: url('/icons/sun.svg'); top: 8%; left: 5%;"></a>
+    <a href="#outfits-box" class="wd-bg-element" style="background-image: url('/icons/shirt.svg'); top: 20%; right: 10%;"></a>
+    <a href="#outfits-box" class="wd-bg-element" style="background-image: url('/icons/sneaker.svg'); bottom: 25%; left: 12%;"></a>
 
     <main class="max-w-4xl mx-auto px-6 py-10 relative z-10">
       
       <nav class="flex flex-col items-center gap-4 mb-16">
-        <div class="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <div class="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-[10px] font-black uppercase">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>Select Language</span>
         </div>
         <div class="flex flex-wrap justify-center gap-2">
           {Object.entries(languages).map(([l, label]) => (
-            <a
-              href={`/${l}/`}
-              class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-[10px] transition-all hover:scale-110 active:scale-95 ${
-                lang === l ? 'bg-lime-400 text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:bg-wd-pink'
-              }`}
-            >
-              {label}
-            </a>
+            <a href={`/${l}/`} class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-[10px] transition-all ${lang === l ? 'bg-lime-400' : 'bg-white'}`}>{label}</a>
           ))}
         </div>
       </nav>
 
       <section id="weather-box" class="text-center py-24 bg-gradient-to-br from-purple-700 to-pink-500 rounded-[50px] text-white mb-12 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)]">
-        <h1 class="text-6xl md:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase italic">{t['hero.title']}</h1>
-        <p class="text-xl md:text-2xl font-bold opacity-90 max-w-2xl mx-auto px-4">
+        <h1 class="text-5xl md:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase italic px-4">{t['hero.title']}</h1>
+        <p class="text-xl md:text-2xl font-bold opacity-90 mx-auto px-4">
           {t['hero.temp'].replace('{temp}', '--')} <span id="temp" class="text-lime-400 underline decoration-4">...</span>°C in Bolzano.
         </p>
       </section>
 
       <section id="waitlist-form-container" class="p-12 rounded-[50px] text-center mb-16 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] transform -rotate-1" style="background-color: var(--wd-yellow);">
         <h2 class="text-4xl mb-8 font-black uppercase italic tracking-tighter leading-none">{t['waitlist.title']}</h2>
-        
         <form id="waitlist-form" class="flex flex-col md:flex-row gap-4 justify-center items-stretch">
-          <input 
-            type="email" 
-            name="email"
-            placeholder={t['waitlist.placeholder']} 
-            class="px-8 py-5 rounded-full border-4 border-black text-lg font-bold focus:outline-none focus:ring-8 focus:ring-lime-400 transition-all bg-white placeholder:opacity-50" 
-            required 
-          />
-          <input type="hidden" name="lang" value={lang} />
-          
-          <button type="submit" class="bg-black text-white px-12 py-5 rounded-full text-2xl font-black uppercase tracking-tighter hover:bg-lime-400 hover:text-black hover:scale-105 active:scale-95 transition-all border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]">
+          <input type="email" name="email" placeholder={t['waitlist.placeholder']} class="px-8 py-5 rounded-full border-4 border-black text-lg font-bold focus:ring-8 focus:ring-lime-400 outline-none" required />
+          <button type="submit" class="bg-black text-white px-12 py-5 rounded-full text-2xl font-black uppercase tracking-tighter border-4 border-black hover:bg-lime-400 hover:text-black transition-all">
             {t['waitlist.btn']}
           </button>
         </form>
-        
-        <p 
-          id="form-msg" 
-          class="mt-8 text-2xl font-black uppercase italic hidden"
-          data-success={t['form.success']}
-          data-error={t['form.error']}
-          data-exists={t['form.exists']}
-        ></p>
+        <p id="form-msg" class="mt-8 text-2xl font-black uppercase italic hidden" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></p>
       </section>
 
       <div class="grid md:grid-cols-3 gap-10">
-        <div id="bias-box" class="glowing-card transform hover:-rotate-2" style="--card-color: var(--wd-lime); background: var(--wd-lime);">
-          <h3 class="font-black text-3xl mb-4 leading-none uppercase italic tracking-tighter">{t['feature.bias.title']}</h3>
-          <p class="text-sm font-bold leading-tight opacity-80">{t['feature.bias.desc']}</p>
+        <div id="bias-box" class="glowing-card" style="background: var(--wd-lime);">
+          <h3 class="font-black text-3xl mb-4 uppercase italic tracking-tighter leading-none">{t['feature.bias.title']}</h3>
+          <p class="text-sm font-bold opacity-80">{t['feature.bias.desc']}</p>
         </div>
-
-        <div id="outfits-box" class="glowing-card transform hover:rotate-2" style="--card-color: var(--wd-pink); background: var(--wd-pink);">
-          <h3 class="font-black text-3xl mb-4 leading-none uppercase italic tracking-tighter">{t['feature.outfits.title']}</h3>
-          <p class="text-sm font-bold leading-tight opacity-80">{t['feature.outfits.desc']}</p>
+        <div id="outfits-box" class="glowing-card" style="background: var(--wd-pink);">
+          <h3 class="font-black text-3xl mb-4 uppercase italic tracking-tighter leading-none">{t['feature.outfits.title']}</h3>
+          <p class="text-sm font-bold opacity-80">{t['feature.outfits.desc']}</p>
         </div>
-
-        <div class="glowing-card transform hover:-rotate-1" style="--card-color: var(--wd-yellow); background: var(--wd-yellow);">
-          <h3 class="font-black text-3xl mb-4 leading-none uppercase italic tracking-tighter">{t['feature.more.title']}</h3>
-          <p class="text-sm font-bold leading-tight opacity-80">{t['feature.more.desc']}</p>
+        <div class="glowing-card" style="background: var(--wd-yellow);">
+          <h3 class="font-black text-3xl mb-4 uppercase italic tracking-tighter leading-none">{t['feature.more.title']}</h3>
+          <p class="text-sm font-bold opacity-80">{t['feature.more.desc']}</p>
         </div>
       </div>
 
       <footer class="mt-40 border-t-8 border-black pt-12 pb-24 text-center">
-        <div class="flex flex-col items-center gap-6">
-          <div class="text-5xl font-black uppercase italic tracking-tighter mb-4">DUDES. INC</div>
-          <div class="flex flex-wrap justify-center gap-x-10 gap-y-4 font-black text-sm uppercase tracking-widest opacity-80">
-            <span>© 2026</span>
-            <span class="underline decoration-pink-500 decoration-4">Bolzano, Italy</span>
-            <span class="text-purple-700">Protected by Cloudflare</span>
-          </div>
-          <div class="font-bold text-[10px] uppercase opacity-40 mt-8 tracking-[0.3em]">Built with Astro & D1 Database</div>
+        <div class="text-5xl font-black uppercase italic tracking-tighter mb-4 text-black">DUDES. INC</div>
+        <div class="flex flex-wrap justify-center gap-x-10 gap-y-4 font-black text-sm uppercase opacity-80 text-black">
+          <span>© 2026</span>
+          <span class="underline decoration-pink-500 decoration-4">Bolzano, Italy</span>
+          <span class="text-purple-700">Protected by Cloudflare</span>
         </div>
       </footer>
     </main>
@@ -115,91 +85,28 @@ const t = ui[lang as keyof typeof ui];
         try {
             const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`);
             const data = await res.json();
-            const tempElement = document.getElementById('temp');
-            if (tempElement) tempElement.innerText = Math.round(data.current_weather.temperature);
-        } catch (err) { console.error(err); }
+            const temp = document.getElementById('temp');
+            if (temp) temp.innerText = Math.round(data.current_weather.temperature);
+        } catch (e) {}
     }
 
     const form = document.getElementById('waitlist-form');
     const msg = document.getElementById('form-msg');
-
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
-      const res = await fetch('/api/subscribe', { method: 'POST', body: formData });
+      const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
       const result = await res.json();
-      
-      msg.classList.remove('hidden', 'text-black', 'text-purple-800');
-      
+      msg.classList.remove('hidden', 'text-black', 'bg-lime-400');
       if (res.ok) {
         msg.innerText = msg.dataset.success;
         msg.classList.add('text-black', 'bg-lime-400', 'p-4', 'rounded-xl');
         form.reset();
       } else {
-        msg.innerText = (result.error && result.error.includes('already')) ? msg.dataset.exists : msg.dataset.error;
+        msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error;
         msg.classList.add('text-red-600');
       }
       msg.classList.remove('hidden');
     });
-
     updateWeather();
   </script>
 </Layout>
-
-<style>
-  .wd-background-wrapper {
-    position: relative;
-    width: 100%;
-    background-color: var(--wd-white);
-    overflow-x: hidden;
-  }
-
-  /* Іконки на фоні: фіксований розмір та правильна прозорість */
-  .wd-bg-element {
-    position: absolute;
-    width: 120px; height: 120px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.1;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    z-index: 1;
-    filter: grayscale(100%);
-  }
-
-  .wd-bg-element:hover {
-    opacity: 0.8;
-    filter: grayscale(0%);
-    transform: scale(1.3) rotate(15deg);
-  }
-
-  .wd-icon-sun { background-image: url('/icons/sun.svg'); }
-  .wd-icon-shirt { background-image: url('/icons/shirt.svg'); }
-  .wd-icon-sneaker { background-image: url('/icons/sneaker.svg'); }
-  .wd-icon-glasses { background-image: url('/icons/glasses.svg'); width: 100px; }
-  .wd-icon-cap { background-image: url('/icons/cap.svg'); }
-  .wd-icon-shorts { background-image: url('/icons/shorts.svg'); width: 140px; }
-
-  /* Жорсткі нео-бруталізм картки */
-  .glowing-card {
-    min-height: 280px;
-    border-radius: 45px;
-    padding: 2.5rem;
-    border: 5px solid black;
-    box-shadow: 12px 12px 0px 0px rgba(0,0,0,1);
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .glowing-card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 20px 20px 0px 0px rgba(0,0,0,1);
-  }
-
-  /* Шрифти */
-  h1, h2, h3, button {
-    font-family: 'ActayWide', sans-serif;
-  }
-</style>

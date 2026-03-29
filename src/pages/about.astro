@@ -1,26 +1,15 @@
 ---
-import layout from '../layouts/layout.astro';
+import Layout from '../layouts/layout.astro';
 ---
-
-<layout lang="en">
-	<main class="max-w-3xl mx-auto px-4 py-20 text-center">
-		<h1 class="text-6xl font-black uppercase mb-10 tracking-tighter">About Dudes</h1>
-		<div class="bg-white border-4 border-black p-8 rounded-[40px] shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] text-left space-y-6 text-xl">
-			<p>
-				We are a crew from **Bolzano, Italy**, who got tired of standard weather apps. 
-				Temperature isn't just a number; it's a feeling, bro. 
-			</p>
-			<p>
-				WeatherDude was built for those who want to look sharp and stay comfortable, 
-				regardless of whether the forecast says it's "chilly" or "mild". 
-				We build AI that understands **your** specific vibe.
-			</p>
-			<p class="font-bold underline decoration-lime-400 decoration-4">
-				Join the movement. Dress smart. Stay authentic.
-			</p>
-		</div>
-		<div class="mt-10">
-			<a href="/en/" class="inline-block bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-lime-400 hover:text-black transition">Back to Home</a>
-		</div>
-	</main>
+<Layout lang="en" title="About Dudes">
+    <main class="max-w-3xl mx-auto px-4 py-20 text-center">
+        <h1 class="text-6xl font-black uppercase mb-10 tracking-tighter">About Dudes</h1>
+        <div class="bg-white border-4 border-black p-8 rounded-[40px] shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] text-left space-y-6 text-xl">
+            <p>We are a crew from **Bolzano, Italy**, who got tired of standard weather apps. Temperature isn't just a number; it's a feeling, bro.</p>
+            <p>WeatherDude AI understands **your** specific vibe.</p>
+        </div>
+        <div class="mt-10">
+            <a href="/en/" class="inline-block bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-lime-400 hover:text-black transition">Back to Home</a>
+        </div>
+    </main>
 </Layout>
