@@ -2,7 +2,6 @@
 export const prerender = true;
 import Layout from '../../layouts/layout.astro';
 import { ui, languages } from '../../i18n/ui';
-import '../../styles/global.css';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -13,119 +12,141 @@ const t = ui[lang as keyof typeof ui];
 ---
 
 <Layout lang={lang}>
-  <main class="w-full relative min-h-screen pt-10 px-4 md:px-10 overflow-hidden">
+  <main style="max-width: 1200px; margin: 0 auto; padding: 120px 20px; text-align: center;">
     
-    <nav class="w-full flex justify-end mb-12">
-        <div class="relative group">
-            <button class="px-6 py-2 rounded-full border-4 border-black bg-white font-black uppercase text-xs flex items-center gap-2">
-                🌐 {lang.toUpperCase()} ▼
-            </button>
-            <div class="hidden group-hover:block absolute right-0 top-full mt-2 bg-white border-4 border-black rounded-2xl p-2 z-[100] max-h-48 overflow-y-auto shadow-[8px_8px_0px_black]">
-                {Object.entries(languages).map(([l, label]) => (
-                    <a href={`/${l}/`} class="block px-4 py-2 hover:bg-wd-lime rounded-lg font-bold text-[10px] uppercase text-black">
-                        {label}
-                    </a>
-                ))}
-            </div>
-        </div>
-    </nav>
-
-    <div class="max-w-4xl mx-auto text-center mb-16 relative z-10">
-      <h1 class="text-5xl md:text-8xl font-black uppercase italic leading-[0.85] tracking-tighter mb-10">
+    <div style="margin-bottom: 80px;">
+      <h1 style="font-size: clamp(4rem, 12vw, 10rem); font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 40px; letter-spacing: -0.05em;">
         {t['hero.title']}
       </h1>
-      <p class="text-xl md:text-3xl font-bold uppercase tracking-tighter opacity-70">
-        {(() => {
-          let phrase = t['hero.temp']
-            .replace('{temp}', '<span id="temp" class="text-black underline decoration-wd-lime decoration-4">--</span>')
-            .replace('{location}', '<span id="loc">...</span>');
-          
-          phrase = phrase.replace(/(YOU|ТОБІ|TY|TU|DICH|TÚ|TI|ТАБЕ)/g, 
-            '<span class="text-black underline decoration-wd-lime decoration-[12px] font-black italic">$1</span>');
-          
-          return <Fragment set:html={phrase} />;
-        })()}
+      <p style="font-size: 2rem; font-weight: 900; text-transform: uppercase; opacity: 0.8;">
+         {(() => {
+           let phrase = t['hero.temp'].replace('{temp}', '<span id="temp">--</span>');
+           // Акцентування на ТИ/YOU через заміну в рядку
+           phrase = phrase.replace(/(YOU|ТОБІ|TY|TU|DICH|TÚ|TI|ТАБЕ)/g, 
+             '<span style="text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; font-weight: 900;">$1</span>');
+           return <Fragment set:html={phrase} />;
+         })()}
       </p>
     </div>
 
-    <section class="max-w-5xl mx-auto bg-black p-8 md:p-16 rounded-[60px] shadow-[20px_20px_0px_var(--wd-yellow)] border-4 border-black mb-32 transform -rotate-1">
-      <form id="waitlist-form" class="flex flex-col md:flex-row gap-6 justify-center items-stretch">
-        <input type="email" name="email" placeholder={t['waitlist.placeholder']} class="flex-grow p-6 rounded-full border-4 border-white bg-transparent text-white font-black text-xl md:text-2xl outline-none focus:border-wd-lime placeholder:opacity-30" required />
+    <section id="waitlist-form-container" style="background: black; padding: 80px 40px; border-radius: 80px; border: 8px solid black; box-shadow: 25px 25px 0px var(--wd-yellow); margin-bottom: 150px; transform: rotate(-1deg);">
+      <h2 style="color: white; font-size: clamp(2rem, 5vw, 4rem); text-transform: uppercase; font-style: italic; margin-bottom: 50px; line-height: 1;">
+        {t['waitlist.title']}
+      </h2>
+      <form id="waitlist-form" style="display: flex; flex-direction: column; gap: 25px; max-width: 800px; margin: 0 auto;">
+        <input 
+          type="email" 
+          name="email" 
+          placeholder={t['waitlist.placeholder']} 
+          style="padding: 30px; border-radius: 60px; border: 5px solid white; background: transparent; color: white; font-size: 2rem; font-family: 'ActayWide'; font-weight: 900;" 
+          required 
+        />
         <input type="hidden" name="lang" value={lang} />
-        <button type="submit" class="bg-wd-lime p-6 px-12 rounded-full font-black text-2xl md:text-3xl uppercase border-4 border-black hover:scale-105 active:scale-95 transition-all shadow-[8px_8px_0px_white]">
+        <button type="submit" style="padding: 30px; border-radius: 60px; border: 5px solid black; background: var(--wd-lime); font-size: 2.5rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: 'ActayWide'; transition: 0.3s; box-shadow: 8px 8px 0px white;">
           {t['waitlist.btn']}
         </button>
       </form>
-      <div id="form-msg" class="mt-8 hidden p-6 rounded-3xl border-4 border-black font-black text-2xl uppercase italic text-center" 
-           data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></div>
+      <div 
+        id="form-msg" 
+        style="display: none; margin-top: 40px; font-size: 2rem; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 30px; border-radius: 30px;"
+        data-success={t['form.success']}
+        data-error={t['form.error']}
+        data-exists={t['form.exists']}
+      ></div>
     </section>
 
-    <div class="max-w-6xl mx-auto flex flex-col gap-24 mb-40 relative z-10">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <div class="card-brutal bg-wd-lime rotate-2">
-          <h3 class="text-3xl md:text-5xl font-black uppercase italic leading-none mb-6">{t['feature.bias.title']}</h3>
-          <p class="text-sm md:text-lg font-bold leading-tight">{t['feature.bias.desc']}</p>
+    <div style="display: flex; flex-direction: column; gap: 120px; text-align: left;">
+      <div class="row-brutal">
+        <div class="card-brutal" style="background: var(--wd-lime); transform: rotate(2deg);">
+          <h3 style="font-size: 4rem; text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.bias.title']}</h3>
+          <p style="font-size: 1.5rem; font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.bias.desc']}</p>
         </div>
-        <img src="/icons/sun.svg" class="w-32 md:w-48 opacity-20 transform translate-x-10 rotate-12 md:block hidden" />
+        <a href="#temp" class="icon-link"><img src="/icons/sun.svg" style="width: 250px; opacity: 0.3;" /></a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <img src="/icons/shirt.svg" class="w-32 md:w-48 opacity-20 transform -translate-x-10 -rotate-12 md:block hidden order-last md:order-first" />
-        <div class="card-brutal bg-wd-pink -rotate-1">
-          <h3 class="text-3xl md:text-5xl font-black uppercase italic leading-none mb-6">{t['feature.outfits.title']}</h3>
-          <p class="text-sm md:text-lg font-bold leading-tight">{t['feature.outfits.desc']}</p>
+      <div class="row-brutal row-reverse">
+        <a href="#waitlist-form-container" class="icon-link"><img src="/icons/shirt.svg" style="width: 250px; opacity: 0.3;" /></a>
+        <div class="card-brutal" style="background: var(--wd-pink); transform: rotate(-2deg);">
+          <h3 style="font-size: 4rem; text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.outfits.title']}</h3>
+          <p style="font-size: 1.5rem; font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.outfits.desc']}</p>
         </div>
       </div>
 
-      <div class="max-w-4xl mx-auto w-full card-brutal bg-black border-wd-lime text-wd-lime text-center">
-        <h3 class="text-4xl md:text-6xl font-black uppercase mb-4 italic">{t['feature.more.title']}</h3>
-        <p class="text-sm md:text-xl font-bold opacity-80 mb-10">{t['feature.more.desc']}</p>
-        <img src="/icons/glasses.svg" class="w-32 md:w-40 mx-auto filter invert brightness-200" />
+      <div class="card-brutal" style="background: black; color: var(--wd-lime); border-color: var(--wd-lime); max-width: 900px; margin: 60px auto; text-align: center; transform: rotate(1deg); width: 100%;">
+          <h3 style="font-size: 5rem; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 30px;">{t['feature.more.title']}</h3>
+          <p style="font-size: 1.8rem; font-weight: 900; line-height: 1.2;">{t['feature.more.desc']}</p>
+          <img src="/icons/glasses.svg" style="width: 180px; margin-top: 50px; filter: invert(81%) sepia(87%) saturate(2976%) hue-rotate(24deg) brightness(108%) contrast(106%);" />
       </div>
     </div>
 
-    <footer class="border-t-8 border-black pt-10 pb-20 px-4 flex flex-col md:flex-row justify-between items-center gap-8 font-black uppercase text-[10px] md:text-xs opacity-60">
-        <div>{t['footer.madeby']}</div>
-        <img src="/favicon.svg" class="w-12 h-12 grayscale opacity-40 md:order-none order-first" />
-        <div>{t['footer.secured']}</div>
+    <footer class="footer-minimal">
+        <div class="footer-left">Made by Dudes, Bolzano, Italy, 2026</div>
+        <div class="footer-center"><img src="/favicon.svg" style="width: 50px; opacity: 0.5;" /></div>
+        <div class="footer-right">Secured by Cloudflare</div>
     </footer>
   </main>
 
-  <script is:inline>
-    async function initWeather() {
-      try {
-        const geoRes = await fetch('https://ipapi.co/json/');
-        const geoData = await geoRes.json();
-        document.getElementById('loc').innerText = geoData.city || 'Bolzano';
-        const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${geoData.latitude}&longitude=${geoData.longitude}&current_weather=true`);
-        const weatherData = await weatherRes.json();
-        document.getElementById('temp').innerText = Math.round(weatherData.current_weather.temperature);
-      } catch (e) { document.getElementById('loc').innerText = 'Bolzano'; }
+  <style>
+    .card-brutal {
+        border: 8px solid black; border-radius: 80px;
+        box-shadow: 25px 25px 0px black; padding: 80px 50px;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        flex: 1; min-width: 350px;
     }
+    .card-brutal:hover { transform: translate(-10px, -10px) rotate(0deg) !important; box-shadow: 35px 35px 0px black; }
+    #temp { text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; }
+    
+    .row-brutal { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 60px; }
+    .row-reverse { flex-wrap: wrap-reverse; }
+    .icon-link img { transition: 0.4s; }
+    .icon-link:hover img { transform: scale(1.3) rotate(15deg); opacity: 1 !important; }
+
+    .footer-minimal {
+        margin-top: 150px; padding: 40px 0; border-top: 8px solid black;
+        display: flex; justify-content: space-between; align-items: center;
+        font-weight: 900; text-transform: uppercase; font-size: 0.8rem; opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+        main { padding: 60px 15px !important; }
+        .card-brutal { padding: 40px 25px; border-radius: 40px; min-width: 100%; }
+        .footer-minimal { flex-direction: column; gap: 20px; text-align: center; }
+    }
+  </style>
+
+  <script is:inline>
+    async function updateWeather() { 
+      try { 
+        // Геолокація по IP
+        const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${geo.latitude}&longitude=${geo.longitude}&current_weather=true`);
+        const data = await res.json();
+        const tempSpan = document.getElementById('temp');
+        if (tempSpan) tempSpan.innerText = Math.round(data.current_weather.temperature);
+      } catch (e) {
+        // Фолбек на Больцано, якщо геолокація впала
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`)
+          .then(r => r.json()).then(data => {
+            document.getElementById('temp').innerText = Math.round(data.current_weather.temperature);
+          });
+      }
+    }
+    updateWeather();
     
     const form = document.getElementById('waitlist-form');
     const msg = document.getElementById('form-msg');
     form?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
-        const result = await res.json();
-        msg.classList.remove('hidden', 'bg-wd-lime', 'bg-red-500', 'text-black', 'text-white');
-        if (res.ok) {
-            msg.innerText = msg.dataset.success; msg.classList.add('block', 'bg-wd-lime', 'text-black'); form.reset();
-        } else {
-            msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error;
-            msg.classList.add('block', 'bg-red-500', 'text-white');
-        }
+      e.preventDefault();
+      const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
+      const result = await res.json();
+      msg.style.display = 'block';
+      if (res.ok) {
+        msg.innerText = msg.dataset.success; msg.style.background = '#D0FF00'; msg.style.color = 'black'; form.reset();
+      } else {
+        const isExists = result.error?.includes('already');
+        msg.innerText = isExists ? msg.dataset.exists : msg.dataset.error;
+        msg.style.background = 'red'; msg.style.color = 'white';
+      }
     });
-    initWeather();
   </script>
 </Layout>
-
-<style>
-  .card-brutal { padding: 4rem 2rem; border: 6px solid black; border-radius: 70px; box-shadow: 20px 20px 0px black; width: 100%; display: flex; flex-direction: column; justify-content: center; }
-  /* ПРИМУСОВИЙ ШРИФТ ДЛЯ ВСЬОГО */
-  * { font-family: 'ActayWide', sans-serif !important; }
-  @media (max-width: 768px) {
-    .card-brutal { padding: 2.5rem 1.5rem; border-radius: 40px; box-shadow: 10px 10px 0px black; }
-  }
-</style>
