@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/layout.astro';
+import layout from '../../layouts/layout.astro';
 import { ui, languages } from '../../i18n/ui';
 
 export function getStaticPaths() {
@@ -14,7 +14,7 @@ const { lang } = Astro.params;
 const t = ui[lang as keyof typeof ui];
 ---
 
-<Layout lang={lang}>
+<layout lang={lang}>
   <div class="wd-background-wrapper min-h-screen">
     
     <a href="#weather-box" class="wd-bg-element wd-icon-sun" style="top: 8%; left: 5%;"></a>
