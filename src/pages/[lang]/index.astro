@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/layout.astro';
-import { ui, languages } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
 
 export function getStaticPaths() {
   return [
@@ -12,101 +12,125 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const t = ui[lang as keyof typeof ui];
+const t = ui[lang];
 ---
 
 <Layout lang={lang}>
-  <div class="relative w-full min-h-screen">
+  <main class="w-full relative min-h-screen pt-10 px-4 md:px-10 overflow-hidden">
     
-    <a href="#weather-box" class="wd-bg-element" style="background-image: url('/icons/sun.svg'); top: 8%; left: 5%;"></a>
-    <a href="#outfits-box" class="wd-bg-element" style="background-image: url('/icons/shirt.svg'); top: 20%; right: 10%;"></a>
-    <a href="#outfits-box" class="wd-bg-element" style="background-image: url('/icons/sneaker.svg'); bottom: 25%; left: 12%;"></a>
+    <div class="max-w-4xl mx-auto flex flex-col items-center gap-10 text-center mb-16 relative z-10">
+      <h1 class="text-6xl md:text-8xl font-black uppercase italic leading-[0.85] tracking-tighter">
+        {t['hero.title']}
+      </h1>
+      <p class="text-2xl font-bold uppercase tracking-tighter opacity-70">
+         It's <span id="temp" class="text-black underline decoration-wd-lime decoration-4">--</span>°C in Bolzano.
+      </p>
+    </div>
 
-    <main class="max-w-4xl mx-auto px-6 py-10 relative z-10">
+    <section class="max-w-6xl mx-auto bg-black p-10 md:p-16 rounded-[60px] shadow-[20px_20px_0px_var(--wd-yellow)] border-4 border-black mb-24 relative z-10">
+      <h2 class="text-white text-4xl font-black uppercase mb-10 italic tracking-tighter text-center">
+        {t['waitlist.title']}
+      </h2>
       
-      <nav class="flex flex-col items-center gap-4 mb-16">
-        <div class="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-[10px] font-black uppercase">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>Select Language</span>
-        </div>
-        <div class="flex flex-wrap justify-center gap-2">
-          {Object.entries(languages).map(([l, label]) => (
-            <a href={`/${l}/`} class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-[10px] transition-all ${lang === l ? 'bg-lime-400' : 'bg-white'}`}>{label}</a>
-          ))}
-        </div>
-      </nav>
+      <form id="waitlist-form" class="flex flex-col md:flex-row gap-6 justify-center items-stretch">
+        <input 
+          type="email" 
+          name="email"
+          placeholder={t['waitlist.placeholder']} 
+          class="flex-grow p-6 rounded-full border-4 border-white bg-transparent text-white font-black text-2xl outline-none focus:border-wd-lime placeholder:opacity-30" 
+          required 
+        />
+        <input type="hidden" name="lang" value={lang} />
+        
+        <button type="submit" class="bg-wd-lime p-6 px-12 rounded-full font-black text-3xl uppercase border-4 border-black hover:scale-105 active:scale-95 transition-all shadow-[8px_8px_0px_white]">
+          {t['waitlist.btn']}
+        </button>
+      </form>
+      
+      <p id="form-msg" class="mt-8 text-2xl font-black uppercase italic hidden" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></p>
+    </section>
 
-      <section id="weather-box" class="text-center py-24 bg-gradient-to-br from-purple-700 to-pink-500 rounded-[50px] text-white mb-12 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)]">
-        <h1 class="text-5xl md:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase italic px-4">{t['hero.title']}</h1>
-        <p class="text-xl md:text-2xl font-bold opacity-90 mx-auto px-4">
-          {t['hero.temp'].replace('{temp}', '--')} <span id="temp" class="text-lime-400 underline decoration-4">...</span>°C in Bolzano.
-        </p>
-      </section>
-
-      <section id="waitlist-form-container" class="p-12 rounded-[50px] text-center mb-16 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] transform -rotate-1" style="background-color: var(--wd-yellow);">
-        <h2 class="text-4xl mb-8 font-black uppercase italic tracking-tighter leading-none">{t['waitlist.title']}</h2>
-        <form id="waitlist-form" class="flex flex-col md:flex-row gap-4 justify-center items-stretch">
-          <input type="email" name="email" placeholder={t['waitlist.placeholder']} class="px-8 py-5 rounded-full border-4 border-black text-lg font-bold focus:ring-8 focus:ring-lime-400 outline-none" required />
-          <button type="submit" class="bg-black text-white px-12 py-5 rounded-full text-2xl font-black uppercase tracking-tighter border-4 border-black hover:bg-lime-400 hover:text-black transition-all">
-            {t['waitlist.btn']}
-          </button>
-        </form>
-        <p id="form-msg" class="mt-8 text-2xl font-black uppercase italic hidden" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></p>
-      </section>
-
-      <div class="grid md:grid-cols-3 gap-10">
-        <div id="bias-box" class="glowing-card" style="background: var(--wd-lime);">
-          <h3 class="font-black text-3xl mb-4 uppercase italic tracking-tighter leading-none">{t['feature.bias.title']}</h3>
-          <p class="text-sm font-bold opacity-80">{t['feature.bias.desc']}</p>
+    <div class="max-w-7xl mx-auto flex flex-col gap-20 w-full mb-32 relative z-10">
+      
+      <div id="bias-box" class="grid md:grid-cols-[1fr_auto] gap-10 items-center">
+        <div class="glowing-card bg-wd-lime rotate-2 hover:rotate-0 transition-transform">
+          <h3 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-6">
+            {t['feature.bias.title']}
+          </h3>
+          <p class="text-lg font-bold leading-tight max-w-md mx-auto">{t['feature.bias.desc']}</p>
         </div>
-        <div id="outfits-box" class="glowing-card" style="background: var(--wd-pink);">
-          <h3 class="font-black text-3xl mb-4 uppercase italic tracking-tighter leading-none">{t['feature.outfits.title']}</h3>
-          <p class="text-sm font-bold opacity-80">{t['feature.outfits.desc']}</p>
-        </div>
-        <div class="glowing-card" style="background: var(--wd-yellow);">
-          <h3 class="font-black text-3xl mb-4 uppercase italic tracking-tighter leading-none">{t['feature.more.title']}</h3>
-          <p class="text-sm font-bold opacity-80">{t['feature.more.desc']}</p>
+        <img src="/icons/sun.svg" alt="Sun" class="w-40 h-40 opacity-20 transform translate-x-10 rotate-15 md:block hidden" />
+      </div>
+
+      <div id="outfits-box" class="grid md:grid-cols-[auto_1fr] gap-10 items-center">
+        <img src="/icons/shirt.svg" alt="Shirt" class="w-40 h-40 opacity-20 transform -translate-x-10 -rotate-15 md:block hidden" />
+        <div class="glowing-card bg-wd-pink -rotate-1 hover:rotate-0 transition-transform">
+          <h3 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-6">
+            {t['feature.outfits.title']}
+          </h3>
+          <p class="text-lg font-bold leading-tight max-w-md mx-auto">{t['feature.outfits.desc']}</p>
         </div>
       </div>
 
-      <footer class="mt-40 border-t-8 border-black pt-12 pb-24 text-center">
-        <div class="text-5xl font-black uppercase italic tracking-tighter mb-4 text-black">DUDES. INC</div>
-        <div class="flex flex-wrap justify-center gap-x-10 gap-y-4 font-black text-sm uppercase opacity-80 text-black">
-          <span>© 2026</span>
-          <span class="underline decoration-pink-500 decoration-4">Bolzano, Italy</span>
-          <span class="text-purple-700">Protected by Cloudflare</span>
+      <div class="grid md:grid-cols-[1fr_auto] gap-10 items-center">
+        <div class="glowing-card bg-wd-yellow rotate-3 hover:rotate-0 transition-transform">
+          <h3 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-6">
+            {t['feature.more.title']}
+          </h3>
+          <p class="text-lg font-bold leading-tight max-w-md mx-auto">{t['feature.more.desc']}</p>
         </div>
-      </footer>
-    </main>
-  </div>
+        <img src="/icons/sneaker.svg" alt="Sneaker" class="w-40 h-40 opacity-20 transform translate-x-10 rotate-15 md:block hidden" />
+      </div>
+
+      <div class="max-w-3xl mx-auto w-full flex flex-col items-center gap-10 mt-16 text-center glowing-card bg-black border-wd-lime -rotate-1">
+        <h3 class="text-wd-lime text-5xl font-black uppercase mb-4 italic tracking-tighter leading-none">
+          Capsule Goals
+        </h3>
+        <p class="text-wd-lime text-lg font-bold leading-tight max-w-md">
+           Wardrobe sync, AI style tips, and zero 'what should I wear' stress. Stay tuned.
+        </p>
+        <img src="/icons/glasses.svg" alt="Glasses" class="w-40 h-40 opacity-60 transform rotate-15 mt-6" />
+      </div>
+
+    </div>
+
+    <footer class="font-black uppercase italic text-7xl md:text-[10rem] pb-40 opacity-10 tracking-tighter leading-none text-center">
+      DUDES. INC 2026<br/>BOLZANO ITALY
+    </footer>
+
+  </main>
 
   <script is:inline>
-    async function updateWeather() {
-        try {
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`);
-            const data = await res.json();
-            const temp = document.getElementById('temp');
-            if (temp) temp.innerText = Math.round(data.current_weather.temperature);
-        } catch (e) {}
-    }
-
-    const form = document.getElementById('waitlist-form');
-    const msg = document.getElementById('form-msg');
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
-      const result = await res.json();
-      msg.classList.remove('hidden', 'text-black', 'bg-lime-400');
-      if (res.ok) {
-        msg.innerText = msg.dataset.success;
-        msg.classList.add('text-black', 'bg-lime-400', 'p-4', 'rounded-xl');
-        form.reset();
-      } else {
-        msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error;
-        msg.classList.add('text-red-600');
-      }
-      msg.classList.remove('hidden');
-    });
+    // Погода і форма залишаються незмінними
+    async function updateWeather() { try { const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`); const data = await res.json(); const temp = document.getElementById('temp'); if (temp) temp.innerText = Math.round(data.current_weather.temperature); } catch (e) {} }
+    const form = document.getElementById('waitlist-form'); const msg = document.getElementById('form-msg');
+    form?.addEventListener('submit', async (e) => { e.preventDefault(); const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) }); const result = await res.json(); msg.classList.remove('hidden', 'bg-lime-400', 'p-6'); if (res.ok) { msg.innerText = msg.dataset.success; msg.classList.add('block', 'text-black', 'bg-wd-lime', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); form.reset(); } else { msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error; msg.classList.add('block', 'text-white', 'bg-red-600', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); } });
     updateWeather();
   </script>
 </Layout>
+
+<style>
+  /* Жорсткі, неідеальні стилі для нео-бруталізму */
+  .glowing-card {
+    padding: 4rem 2rem;
+    border: 6px solid black;
+    border-radius: 60px;
+    box-shadow: 15px 15px 0px black;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .glowing-card:hover {
+    box-shadow: 20px 20px 0px black;
+    transform: translateY(-5px);
+  }
+
+  /* Шрифти - примусово ActayWide для всього */
+  h1, h2, h3, button, input {
+    font-family: 'ActayWide', sans-serif !important;
+  }
+</style>

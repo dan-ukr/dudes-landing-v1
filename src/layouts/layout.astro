@@ -23,7 +23,7 @@ const { title = "WeatherDude", description = "Dress smart.", lang } = Astro.prop
         <style is:global>
             @font-face {
                 font-family: 'ActayWide';
-                src: url('/fonts/ActayWide.woff2') format('woff2');
+                src: url('/fonts/ActayWide.woff2') format('woff2'); /* Має бути слеш на початку */
                 font-weight: bold;
                 font-style: normal;
                 font-display: swap;
@@ -42,7 +42,18 @@ const { title = "WeatherDude", description = "Dress smart.", lang } = Astro.prop
                 color: black;
                 scroll-behavior: smooth;
             }
-
+            .lang-dropdown {
+            position: relative; display: inline-block;
+            }
+            .lang-list {
+                display: none; position: absolute; top: 100%; right: 0;
+                max-height: 200px; overflow-y: auto; background: white;
+                border: 3px solid black; border-radius: 15px; z-index: 100;
+                box-shadow: 5px 5px 0px black;
+            }
+            .lang-dropdown:hover .lang-list { display: block; }
+            .lang-item { padding: 8px 20px; display: block; text-decoration: none; color: black; font-size: 12px; }
+            .lang-item:hover { background: var(--wd-lime); }
             .glowing-card {
                 min-height: 280px;
                 border-radius: 45px;
