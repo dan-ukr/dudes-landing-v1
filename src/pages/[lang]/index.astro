@@ -20,8 +20,12 @@ const t = ui[lang as keyof typeof ui];
       </h1>
       <p style="font-size: 2rem; font-weight: 900; text-transform: uppercase; opacity: 0.8;">
          {(() => {
-           let phrase = t['hero.temp'].replace('{temp}', '<span id="temp">--</span>');
-           // Акцентування на ТИ/YOU через заміну в рядку
+           // Замінюємо плейсхолдери на спани з ID для динамічного оновлення
+           let phrase = t['hero.temp']
+            .replace('{temp}', '<span id="temp">--</span>')
+            .replace('{location}', '<span id="loc">...</span>');
+           
+           // Акцентування на ТИ/YOU
            phrase = phrase.replace(/(YOU|ТОБІ|TY|TU|DICH|TÚ|TI|ТАБЕ)/g, 
              '<span style="text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; font-weight: 900;">$1</span>');
            return <Fragment set:html={phrase} />;
@@ -38,11 +42,11 @@ const t = ui[lang as keyof typeof ui];
           type="email" 
           name="email" 
           placeholder={t['waitlist.placeholder']} 
-          style="padding: 30px; border-radius: 60px; border: 5px solid white; background: transparent; color: white; font-size: 2rem; font-family: 'ActayWide'; font-weight: 900;" 
+          style="padding: 30px; border-radius: 60px; border: 5px solid white; background: transparent; color: white; font-size: 2rem; font-family: 'ActayWide', sans-serif; font-weight: 900;" 
           required 
         />
         <input type="hidden" name="lang" value={lang} />
-        <button type="submit" style="padding: 30px; border-radius: 60px; border: 5px solid black; background: var(--wd-lime); font-size: 2.5rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: 'ActayWide'; transition: 0.3s; box-shadow: 8px 8px 0px white;">
+        <button type="submit" style="padding: 30px; border-radius: 60px; border: 5px solid black; background: var(--wd-lime); font-size: 2.5rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: 'ActayWide', sans-serif; transition: 0.3s; box-shadow: 8px 8px 0px white;">
           {t['waitlist.btn']}
         </button>
       </form>
@@ -80,7 +84,7 @@ const t = ui[lang as keyof typeof ui];
     </div>
 
     <footer class="footer-minimal">
-        <div class="footer-left">Made by Dudes, Bolzano, Italy, 2026</div>
+        <div class="footer-left">{t['footer.madeby']}</div>
         <div class="footer-center"><img src="/favicon.svg" style="width: 50px; opacity: 0.5;" /></div>
         <div class="footer-right">Secured by Cloudflare</div>
     </footer>
@@ -94,7 +98,6 @@ const t = ui[lang as keyof typeof ui];
         flex: 1; min-width: 350px;
     }
     .card-brutal:hover { transform: translate(-10px, -10px) rotate(0deg) !important; box-shadow: 35px 35px 0px black; }
-    #temp { text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; }
     
     .row-brutal { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 60px; }
     .row-reverse { flex-wrap: wrap-reverse; }
@@ -117,14 +120,20 @@ const t = ui[lang as keyof typeof ui];
   <script is:inline>
     async function updateWeather() { 
       try { 
-        // Геолокація по IP
+        // 1. Отримуємо локацію по IP
         const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
+        const city = geo.city || 'Bolzano';
+        const locSpan = document.getElementById('loc');
+        if (locSpan) locSpan.innerText = city.toUpperCase();
+
+        // 2. Отримуємо погоду для цих координат
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${geo.latitude}&longitude=${geo.longitude}&current_weather=true`);
         const data = await res.json();
         const tempSpan = document.getElementById('temp');
         if (tempSpan) tempSpan.innerText = Math.round(data.current_weather.temperature);
       } catch (e) {
-        // Фолбек на Больцано, якщо геолокація впала
+        // Фолбек на Больцано
+        document.getElementById('loc').innerText = 'BOLZANO';
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`)
           .then(r => r.json()).then(data => {
             document.getElementById('temp').innerText = Math.round(data.current_weather.temperature);
