@@ -16,10 +16,10 @@ const t = ui[lang];
 ---
 
 <Layout lang={lang}>
-  <main class="w-full relative min-h-screen pt-10 px-4 md:px-10 overflow-hidden">
+  <main class="w-full relative min-h-screen pt-20 px-4 md:px-10">
     
-    <div class="max-w-4xl mx-auto flex flex-col items-center gap-10 text-center mb-16 relative z-10">
-      <h1 class="text-6xl md:text-8xl font-black uppercase italic leading-[0.85] tracking-tighter">
+    <div class="max-w-4xl mx-auto flex flex-col items-center gap-10 text-center mb-24 relative z-10">
+      <h1 class="text-6xl md:text-[8rem] font-black uppercase italic leading-[0.8] tracking-tighter">
         {t['hero.title']}
       </h1>
       <p class="text-2xl font-bold uppercase tracking-tighter opacity-70">
@@ -27,8 +27,8 @@ const t = ui[lang];
       </p>
     </div>
 
-    <section class="max-w-6xl mx-auto bg-black p-10 md:p-16 rounded-[60px] shadow-[20px_20px_0px_var(--wd-yellow)] border-4 border-black mb-24 relative z-10">
-      <h2 class="text-white text-4xl font-black uppercase mb-10 italic tracking-tighter text-center">
+    <section class="max-w-5xl mx-auto bg-black p-10 md:p-16 rounded-[80px] shadow-[25px_25px_0px_var(--wd-yellow)] border-4 border-black mb-32 relative z-10 transform -rotate-1">
+      <h2 class="text-white text-5xl font-black uppercase mb-10 italic tracking-tighter text-center">
         {t['waitlist.title']}
       </h2>
       
@@ -37,12 +37,12 @@ const t = ui[lang];
           type="email" 
           name="email"
           placeholder={t['waitlist.placeholder']} 
-          class="flex-grow p-6 rounded-full border-4 border-white bg-transparent text-white font-black text-2xl outline-none focus:border-wd-lime placeholder:opacity-30" 
+          class="flex-grow p-8 rounded-full border-4 border-white bg-transparent text-white font-black text-2xl outline-none focus:border-wd-lime placeholder:opacity-30" 
           required 
         />
         <input type="hidden" name="lang" value={lang} />
         
-        <button type="submit" class="bg-wd-lime p-6 px-12 rounded-full font-black text-3xl uppercase border-4 border-black hover:scale-105 active:scale-95 transition-all shadow-[8px_8px_0px_white]">
+        <button type="submit" class="bg-wd-lime p-8 px-16 rounded-full font-black text-3xl uppercase border-4 border-black hover:scale-105 active:scale-95 transition-all shadow-[8px_8px_0px_white]">
           {t['waitlist.btn']}
         </button>
       </form>
@@ -50,87 +50,54 @@ const t = ui[lang];
       <p id="form-msg" class="mt-8 text-2xl font-black uppercase italic hidden" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></p>
     </section>
 
-    <div class="max-w-7xl mx-auto flex flex-col gap-20 w-full mb-32 relative z-10">
+    <div class="max-w-6xl mx-auto flex flex-col gap-32 w-full mb-40 relative z-10">
       
-      <div id="bias-box" class="grid md:grid-cols-[1fr_auto] gap-10 items-center">
-        <div class="glowing-card bg-wd-lime rotate-2 hover:rotate-0 transition-transform">
-          <h3 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-6">
-            {t['feature.bias.title']}
-          </h3>
-          <p class="text-lg font-bold leading-tight max-w-md mx-auto">{t['feature.bias.desc']}</p>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-10">
+        <div class="glowing-card flex-1 bg-wd-lime rotate-2">
+          <h3 class="text-5xl font-black uppercase italic tracking-tighter mb-6">{t['feature.bias.title']}</h3>
+          <p class="text-xl font-bold leading-tight">{t['feature.bias.desc']}</p>
         </div>
-        <img src="/icons/sun.svg" alt="Sun" class="w-40 h-40 opacity-20 transform translate-x-10 rotate-15 md:block hidden" />
+        <img src="/icons/sun.svg" class="w-64 opacity-20 transform translate-x-10 rotate-12 md:block hidden" />
       </div>
 
-      <div id="outfits-box" class="grid md:grid-cols-[auto_1fr] gap-10 items-center">
-        <img src="/icons/shirt.svg" alt="Shirt" class="w-40 h-40 opacity-20 transform -translate-x-10 -rotate-15 md:block hidden" />
-        <div class="glowing-card bg-wd-pink -rotate-1 hover:rotate-0 transition-transform">
-          <h3 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-6">
-            {t['feature.outfits.title']}
-          </h3>
-          <p class="text-lg font-bold leading-tight max-w-md mx-auto">{t['feature.outfits.desc']}</p>
+      <div class="flex flex-col md:flex-row-reverse items-center justify-between gap-10">
+        <div class="glowing-card flex-1 bg-wd-pink -rotate-2">
+          <h3 class="text-5xl font-black uppercase italic tracking-tighter mb-6">{t['feature.outfits.title']}</h3>
+          <p class="text-xl font-bold leading-tight">{t['feature.outfits.desc']}</p>
         </div>
+        <img src="/icons/shirt.svg" class="w-64 opacity-20 transform -translate-x-10 -rotate-12 md:block hidden" />
       </div>
 
-      <div class="grid md:grid-cols-[1fr_auto] gap-10 items-center">
-        <div class="glowing-card bg-wd-yellow rotate-3 hover:rotate-0 transition-transform">
-          <h3 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-6">
-            {t['feature.more.title']}
-          </h3>
-          <p class="text-lg font-bold leading-tight max-w-md mx-auto">{t['feature.more.desc']}</p>
-        </div>
-        <img src="/icons/sneaker.svg" alt="Sneaker" class="w-40 h-40 opacity-20 transform translate-x-10 rotate-15 md:block hidden" />
+      <div class="max-w-4xl mx-auto w-full bg-black text-wd-lime border-[6px] border-wd-lime rounded-[100px] p-20 text-center shadow-[30px_30px_0px_black]">
+          <h3 class="text-6xl font-black uppercase italic mb-8">{t['feature.more.title']}</h3>
+          <p class="text-2xl font-bold opacity-80 max-w-2xl mx-auto mb-10">{t['feature.more.desc']}</p>
+          <img src="/icons/glasses.svg" class="w-40 mx-auto filter brightness-0 invert" style="filter: invert(80%) sepia(100%) saturate(1000%) hue-rotate(30deg);" />
       </div>
-
-      <div class="max-w-3xl mx-auto w-full flex flex-col items-center gap-10 mt-16 text-center glowing-card bg-black border-wd-lime -rotate-1">
-        <h3 class="text-wd-lime text-5xl font-black uppercase mb-4 italic tracking-tighter leading-none">
-          Capsule Goals
-        </h3>
-        <p class="text-wd-lime text-lg font-bold leading-tight max-w-md">
-           Wardrobe sync, AI style tips, and zero 'what should I wear' stress. Stay tuned.
-        </p>
-        <img src="/icons/glasses.svg" alt="Glasses" class="w-40 h-40 opacity-60 transform rotate-15 mt-6" />
-      </div>
-
     </div>
 
-    <footer class="font-black uppercase italic text-7xl md:text-[10rem] pb-40 opacity-10 tracking-tighter leading-none text-center">
+    <footer class="font-black uppercase italic text-8xl md:text-[14rem] pb-40 opacity-5 tracking-tighter leading-none text-center">
       DUDES. INC 2026<br/>BOLZANO ITALY
     </footer>
-
   </main>
 
   <script is:inline>
-    // Погода і форма залишаються незмінними
     async function updateWeather() { try { const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`); const data = await res.json(); const temp = document.getElementById('temp'); if (temp) temp.innerText = Math.round(data.current_weather.temperature); } catch (e) {} }
-    const form = document.getElementById('waitlist-form'); const msg = document.getElementById('form-msg');
-    form?.addEventListener('submit', async (e) => { e.preventDefault(); const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) }); const result = await res.json(); msg.classList.remove('hidden', 'bg-lime-400', 'p-6'); if (res.ok) { msg.innerText = msg.dataset.success; msg.classList.add('block', 'text-black', 'bg-wd-lime', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); form.reset(); } else { msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error; msg.classList.add('block', 'text-white', 'bg-red-600', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); } });
+    
+    const form = document.getElementById('waitlist-form'); 
+    const msg = document.getElementById('form-msg');
+    
+    form?.addEventListener('submit', async (e) => { 
+        e.preventDefault(); 
+        const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) }); 
+        const result = await res.json(); 
+        msg.classList.remove('hidden', 'bg-wd-lime', 'bg-red-500'); 
+        if (res.ok) { 
+            msg.innerText = msg.dataset.success; msg.classList.add('block', 'bg-wd-lime', 'text-black', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); form.reset(); 
+        } else { 
+            msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error; msg.classList.add('block', 'bg-red-500', 'text-white', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); 
+        } 
+        msg.classList.remove('hidden');
+    });
     updateWeather();
   </script>
 </Layout>
-
-<style>
-  /* Жорсткі, неідеальні стилі для нео-бруталізму */
-  .glowing-card {
-    padding: 4rem 2rem;
-    border: 6px solid black;
-    border-radius: 60px;
-    box-shadow: 15px 15px 0px black;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .glowing-card:hover {
-    box-shadow: 20px 20px 0px black;
-    transform: translateY(-5px);
-  }
-
-  /* Шрифти - примусово ActayWide для всього */
-  h1, h2, h3, button, input {
-    font-family: 'ActayWide', sans-serif !important;
-  }
-</style>
