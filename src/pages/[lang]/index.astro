@@ -2,102 +2,90 @@
 export const prerender = true;
 import Layout from '../../layouts/layout.astro';
 import { ui } from '../../i18n/ui';
-
-export function getStaticPaths() {
-  return [
-    {params: {lang: 'en'}}, {params: {lang: 'ua'}}, {params: {lang: 'it'}},
-    {params: {lang: 'de'}}, {params: {lang: 'es'}}, {params: {lang: 'pt'}},
-    {params: {lang: 'fr'}}, {params: {lang: 'be'}}, {params: {lang: 'pl'}}
-  ];
-}
-
 const { lang } = Astro.params;
 const t = ui[lang];
 ---
-
 <Layout lang={lang}>
-  <main class="w-full relative min-h-screen pt-20 px-4 md:px-10">
+  <main style="max-width: 1200px; margin: 0 auto; padding: 120px 20px; text-align: center;">
     
-    <div class="max-w-4xl mx-auto flex flex-col items-center gap-10 text-center mb-24 relative z-10">
-      <h1 class="text-6xl md:text-[8rem] font-black uppercase italic leading-[0.8] tracking-tighter">
+    <div style="margin-bottom: 80px;">
+      <h1 style="font-size: clamp(4rem, 12vw, 10rem); font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 40px; letter-spacing: -0.05em;">
         {t['hero.title']}
       </h1>
-      <p class="text-2xl font-bold uppercase tracking-tighter opacity-70">
-         It's <span id="temp" class="text-black underline decoration-wd-lime decoration-4">--</span>°C in Bolzano.
+      <p style="font-size: 2rem; font-weight: 900; text-transform: uppercase; opacity: 0.8;">
+         IT'S <span id="temp" style="text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px;">--</span>°C IN BOLZANO.
       </p>
     </div>
 
-    <section class="max-w-5xl mx-auto bg-black p-10 md:p-16 rounded-[80px] shadow-[25px_25px_0px_var(--wd-yellow)] border-4 border-black mb-32 relative z-10 transform -rotate-1">
-      <h2 class="text-white text-5xl font-black uppercase mb-10 italic tracking-tighter text-center">
+    <section id="waitlist-form" style="background: black; padding: 80px 40px; border-radius: 80px; border: 8px solid black; box-shadow: 25px 25px 0px var(--wd-yellow); margin-bottom: 150px; transform: rotate(-1deg);">
+      <h2 style="color: white; font-size: clamp(2rem, 5vw, 4rem); text-transform: uppercase; font-style: italic; margin-bottom: 50px; line-height: 1;">
         {t['waitlist.title']}
       </h2>
-      
-      <form id="waitlist-form" class="flex flex-col md:flex-row gap-6 justify-center items-stretch">
-        <input 
-          type="email" 
-          name="email"
-          placeholder={t['waitlist.placeholder']} 
-          class="flex-grow p-8 rounded-full border-4 border-white bg-transparent text-white font-black text-2xl outline-none focus:border-wd-lime placeholder:opacity-30" 
-          required 
-        />
-        <input type="hidden" name="lang" value={lang} />
-        
-        <button type="submit" class="bg-wd-lime p-8 px-16 rounded-full font-black text-3xl uppercase border-4 border-black hover:scale-105 active:scale-95 transition-all shadow-[8px_8px_0px_white]">
+      <form style="display: flex; flex-direction: column; gap: 25px; max-width: 800px; margin: 0 auto;">
+        <input type="email" name="email" placeholder={t['waitlist.placeholder']} style="padding: 30px; border-radius: 60px; border: 5px solid white; background: transparent; color: white; font-size: 2rem; font-family: 'ActayWide'; font-weight: 900;" required />
+        <button type="submit" style="padding: 30px; border-radius: 60px; border: 5px solid black; background: var(--wd-lime); font-size: 2.5rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: 'ActayWide'; transition: 0.3s; box-shadow: 8px 8px 0px white;">
           {t['waitlist.btn']}
         </button>
       </form>
-      
-      <p id="form-msg" class="mt-8 text-2xl font-black uppercase italic hidden" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></p>
+      <div id="form-msg" style="display: none; margin-top: 40px; font-size: 2rem; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 30px; border-radius: 30px;"></div>
     </section>
 
-    <div class="max-w-6xl mx-auto flex flex-col gap-32 w-full mb-40 relative z-10">
+    <div style="display: flex; flex-direction: column; gap: 120px; text-align: left;">
       
-      <div class="flex flex-col md:flex-row items-center justify-between gap-10">
-        <div class="glowing-card flex-1 bg-wd-lime rotate-2">
-          <h3 class="text-5xl font-black uppercase italic tracking-tighter mb-6">{t['feature.bias.title']}</h3>
-          <p class="text-xl font-bold leading-tight">{t['feature.bias.desc']}</p>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 60px;">
+        <div class="card-brutal" style="background: var(--wd-lime); flex: 1; min-width: 350px; transform: rotate(2deg);">
+          <h3 style="font-size: 4rem; text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.bias.title']}</h3>
+          <p style="font-size: 1.5rem; font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.bias.desc']}</p>
         </div>
-        <img src="/icons/sun.svg" class="w-64 opacity-20 transform translate-x-10 rotate-12 md:block hidden" />
+        <a href="#temp" style="transition: 0.4s;"><img src="/icons/sun.svg" style="width: 250px; opacity: 0.3;" onmouseover="this.style.transform='scale(1.3) rotate(15deg)'; this.style.opacity='1'" onmouseout="this.style.transform='scale(1) rotate(0deg)'; this.style.opacity='0.3'" /></a>
       </div>
 
-      <div class="flex flex-col md:flex-row-reverse items-center justify-between gap-10">
-        <div class="glowing-card flex-1 bg-wd-pink -rotate-2">
-          <h3 class="text-5xl font-black uppercase italic tracking-tighter mb-6">{t['feature.outfits.title']}</h3>
-          <p class="text-xl font-bold leading-tight">{t['feature.outfits.desc']}</p>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap-reverse; gap: 60px;">
+        <a href="#waitlist-form" style="transition: 0.4s;"><img src="/icons/shirt.svg" style="width: 250px; opacity: 0.3;" onmouseover="this.style.transform='scale(1.3) rotate(-15deg)'; this.style.opacity='1'" onmouseout="this.style.transform='scale(1) rotate(0deg)'; this.style.opacity='0.3'" /></a>
+        <div class="card-brutal" style="background: var(--wd-pink); flex: 1; min-width: 350px; transform: rotate(-2deg);">
+          <h3 style="font-size: 4rem; text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.outfits.title']}</h3>
+          <p style="font-size: 1.5rem; font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.outfits.desc']}</p>
         </div>
-        <img src="/icons/shirt.svg" class="w-64 opacity-20 transform -translate-x-10 -rotate-12 md:block hidden" />
       </div>
 
-      <div class="max-w-4xl mx-auto w-full bg-black text-wd-lime border-[6px] border-wd-lime rounded-[100px] p-20 text-center shadow-[30px_30px_0px_black]">
-          <h3 class="text-6xl font-black uppercase italic mb-8">{t['feature.more.title']}</h3>
-          <p class="text-2xl font-bold opacity-80 max-w-2xl mx-auto mb-10">{t['feature.more.desc']}</p>
-          <img src="/icons/glasses.svg" class="w-40 mx-auto filter brightness-0 invert" style="filter: invert(80%) sepia(100%) saturate(1000%) hue-rotate(30deg);" />
+      <div class="card-brutal" style="background: black; color: var(--wd-lime); border-color: var(--wd-lime); max-width: 900px; margin: 60px auto; text-align: center; transform: rotate(1deg);">
+          <h3 style="font-size: 5rem; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 30px;">MORE FIRE COMING</h3>
+          <p style="font-size: 1.8rem; font-weight: 900; line-height: 1.2;">Wardrobe sync, AI style tips, and zero 'what should I wear' stress. Stay tuned.</p>
+          <img src="/icons/glasses.svg" style="width: 180px; margin-top: 50px; filter: invert(81%) sepia(87%) saturate(2976%) hue-rotate(24deg) brightness(108%) contrast(106%);" />
       </div>
+
     </div>
 
-    <footer class="font-black uppercase italic text-8xl md:text-[14rem] pb-40 opacity-5 tracking-tighter leading-none text-center">
-      DUDES. INC 2026<br/>BOLZANO ITALY
+    <footer style="margin-top: 200px; font-size: clamp(4rem, 15vw, 15rem); font-weight: 900; text-transform: uppercase; font-style: italic; opacity: 0.03; line-height: 0.7; letter-spacing: -0.08em;">
+        DUDES INC 2026 BOLZANO
     </footer>
   </main>
 
+  <style>
+    .card-brutal {
+        border: 8px solid black; border-radius: 80px;
+        box-shadow: 25px 25px 0px black; padding: 80px 50px;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .card-brutal:hover { transform: translate(-10px, -10px) rotate(0deg) !important; box-shadow: 35px 35px 0px black; }
+  </style>
+
   <script is:inline>
-    async function updateWeather() { try { const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`); const data = await res.json(); const temp = document.getElementById('temp'); if (temp) temp.innerText = Math.round(data.current_weather.temperature); } catch (e) {} }
-    
-    const form = document.getElementById('waitlist-form'); 
-    const msg = document.getElementById('form-msg');
-    
-    form?.addEventListener('submit', async (e) => { 
-        e.preventDefault(); 
-        const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) }); 
-        const result = await res.json(); 
-        msg.classList.remove('hidden', 'bg-wd-lime', 'bg-red-500'); 
-        if (res.ok) { 
-            msg.innerText = msg.dataset.success; msg.classList.add('block', 'bg-wd-lime', 'text-black', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); form.reset(); 
-        } else { 
-            msg.innerText = result.error?.includes('already') ? msg.dataset.exists : msg.dataset.error; msg.classList.add('block', 'bg-red-500', 'text-white', 'p-6', 'rounded-3xl', 'border-4', 'border-black'); 
-        } 
-        msg.classList.remove('hidden');
-    });
+    async function updateWeather() { try { const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`); const data = await res.json(); document.getElementById('temp').innerText = Math.round(data.current_weather.temperature); } catch (e) {} }
     updateWeather();
+    
+    // Форма з D1 логікою
+    const form = document.querySelector('form');
+    const msg = document.getElementById('form-msg');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
+      msg.style.display = 'block';
+      if (res.ok) {
+        msg.innerText = "YO, YOU'RE IN! 🔥"; msg.style.background = '#D0FF00'; msg.style.color = 'black'; form.reset();
+      } else {
+        msg.innerText = "ALREADY IN THE SQUAD, BRO!"; msg.style.background = 'red'; msg.style.color = 'white';
+      }
+    });
   </script>
 </Layout>

@@ -1,104 +1,59 @@
 ---
-import Footer from '../components/Footer.astro';
 import { languages } from '../i18n/ui';
-
-interface Props {
-    title?: string;
-    description?: string;
-    lang: string;
-}
-
-const { title = "WeatherDude", description = "Dress smart.", lang } = Astro.props;
+const { lang, title = "WeatherDude" } = Astro.props;
 ---
-
 <!doctype html>
 <html lang={lang}>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <title>{title}</title>
-
-        <style is:global>
-            @font-face {
-                font-family: 'ActayWide';
-                src: url('/fonts/ActayWide.woff2') format('woff2');
-                font-weight: bold;
-                font-style: normal;
-                font-display: swap;
-            }
-
-            :root {
-                --wd-pink: #FF86CE;
-                --wd-lime: #D0FF00;
-                --wd-yellow: #FFE100;
-                --wd-white: #FFEAF4;
-            }
-
-            html {
-                font-family: 'ActayWide', sans-serif;
-                background-color: var(--wd-white);
-                color: black;
-                scroll-behavior: smooth;
-            }
-
-            /* Стильний скролер для мов */
-            .lang-dropdown {
-                position: fixed; top: 20px; right: 20px; z-index: 100;
-            }
-            .lang-trigger {
-                background: white; border: 4px solid black; padding: 10px 20px;
-                font-weight: 900; text-transform: uppercase; border-radius: 99px;
-                box-shadow: 4px 4px 0px black; cursor: pointer;
-            }
-            .lang-list {
-                display: none; position: absolute; top: 110%; right: 0;
-                background: white; border: 4px solid black; border-radius: 20px;
-                max-height: 200px; overflow-y: auto; box-shadow: 8px 8px 0px black;
-            }
-            .lang-dropdown:hover .lang-list { display: block; }
-            .lang-item {
-                display: block; padding: 12px 24px; color: black;
-                text-decoration: none; font-size: 14px; font-weight: bold;
-            }
-            .lang-item:hover { background: var(--wd-lime); }
-
-            .glowing-card {
-                min-height: 280px;
-                border-radius: 60px;
-                padding: 4rem 2rem;
-                border: 6px solid black;
-                box-shadow: 15px 15px 0px black;
-                transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-            }
-
-            .glowing-card:hover {
-                transform: translate(-4px, -4px);
-                box-shadow: 25px 25px 0px black;
-            }
-
-            h1, h2, h3, button, input {
-                font-family: 'ActayWide', sans-serif !important;
-            }
-        </style>
-    </head>
-    <body class="antialiased overflow-x-hidden">
-        <header>
-            <div class="lang-dropdown">
-                <div class="lang-trigger">🌐 {lang} ▼</div>
-                <div class="lang-list">
-                    {Object.entries(languages).map(([code, label]) => (
-                        <a href={`/${code}/`} class="lang-item">{label}</a>
-                    ))}
-                </div>
-            </div>
-        </header>
-        <slot />
-        <Footer />
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <style is:global>
+        @font-face {
+            font-family: 'ActayWide';
+            src: url('/fonts/ActayWide.woff2') format('woff2');
+            font-weight: bold;
+            font-display: swap;
+        }
+        :root {
+            --wd-pink: #FF86CE; --wd-lime: #D0FF00;
+            --wd-yellow: #FFE100; --wd-white: #FFEAF4;
+        }
+        html, body {
+            margin: 0; padding: 0;
+            font-family: 'ActayWide', sans-serif;
+            background-color: var(--wd-white);
+            color: black;
+            scroll-behavior: smooth;
+        }
+        /* Брутальний селектор мови */
+        .lang-dropdown {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+        }
+        .lang-trigger {
+            background: white; border: 5px solid black; padding: 12px 24px;
+            font-weight: 900; border-radius: 99px; box-shadow: 6px 6px 0px black; cursor: pointer;
+            text-transform: uppercase;
+        }
+        .lang-list {
+            display: none; position: absolute; top: 110%; right: 0;
+            background: white; border: 5px solid black; border-radius: 25px;
+            max-height: 250px; overflow-y: auto; box-shadow: 10px 10px 0px black;
+        }
+        .lang-dropdown:hover .lang-list { display: block; }
+        .lang-item { display: block; padding: 15px 30px; color: black; text-decoration: none; font-weight: 900; text-transform: uppercase; }
+        .lang-item:hover { background: var(--wd-lime); }
+    </style>
+</head>
+<body>
+    <div class="lang-dropdown">
+        <div class="lang-trigger">🌐 {lang.toUpperCase()} ▼</div>
+        <div class="lang-list">
+            {Object.entries(languages).map(([code, label]) => (
+                <a href={`/${code}/`} class="lang-item">{label}</a>
+            ))}
+        </div>
+    </div>
+    <slot />
+</body>
 </html>
