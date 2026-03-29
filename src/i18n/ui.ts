@@ -13,7 +13,7 @@ export const languages = {
 export const ui = {
   en: {
     'hero.title': "Dress for the weather. Look your best.",
-    'hero.temp': "It's {temp}°C in Bolzano. But how do <span class='text-wd-lime font-black underline'>YOU</span> feel?",
+    'hero.temp': "It's {temp}°C in {location}. But how do YOU feel?",
     'waitlist.title': "Don't miss the drop. Grab your spot.",
     'waitlist.placeholder': "Your best email...",
     'waitlist.btn': "I'm in",
@@ -31,7 +31,7 @@ export const ui = {
   },
   ua: {
     'hero.title': "Одягайся по погоді. Виглядай на всі сто.",
-    'hero.temp': "Зараз {temp}°C у Больцано. Але як воно відчувається саме <span class='text-wd-lime font-black underline'>ТОБІ</span>?",
+    'hero.temp': "Зараз {temp}°C у м. {location}. Але як воно відчувається саме ТОБІ?",
     'waitlist.title': "Не провтикай реліз. Залітай у вейтліст.",
     'waitlist.placeholder': "Твій найкращий імейл...",
     'waitlist.btn': "Я в темі",
@@ -49,7 +49,7 @@ export const ui = {
   },
   pl: {
     'hero.title': "Ubierz się na pogodę. Wyglądaj zajebiście.",
-    'hero.temp': "Jest {temp}°C w Bolzano. Ale powiedz szczerze — jak <span class='text-wd-lime font-black underline'>TY</span> to czujesz?",
+    'hero.temp': "Jest {temp}°C w {location}. Ale powiedz szczerze — jak TY to czujesz?",
     'waitlist.title': "Nie przegap dropu. Wpadaj na listę.",
     'waitlist.placeholder': "Twój e-mail...",
     'waitlist.btn': "Wchodzę w to",
@@ -67,7 +67,7 @@ export const ui = {
   },
   it: {
     'hero.title': "Vestiti per il meteo. Sii al top.",
-    'hero.temp': "Ci sono {temp}°C a Bolzano. Ma siamo onesti: <span class='text-wd-lime font-black underline'>TU</span> come li senti?",
+    'hero.temp': "Ci sono {temp}°C a {location}. Ma siamo onesti: TU come li senti?",
     'waitlist.title': "Non perderti il drop. Unisciti ora.",
     'waitlist.placeholder': "La tua email...",
     'waitlist.btn': "Ci sono",
@@ -85,7 +85,7 @@ export const ui = {
   },
   de: {
     'hero.title': "Zieh dich passend an. Sieh top aus.",
-    'hero.temp': "Es sind {temp}°C in Bozen. Aber mal ehrlich: Wie fühlt es sich für <span class='text-wd-lime font-black underline'>DICH</span> an?",
+    'hero.temp': "Es sind {temp}°C in {location}. Aber mal ehrlich: Wie fühlt es sich für DICH an?",
     'waitlist.title': "Verpass den Drop nicht.",
     'waitlist.placeholder': "Deine E-Mail...",
     'waitlist.btn': "Bin dabei",
@@ -103,7 +103,7 @@ export const ui = {
   },
   es: {
     'hero.title': "Vístete para el clima. Luce increíble.",
-    'hero.temp': "Hay {temp}°C en Bolzano. Pero seamos reales, ¿cómo lo sientes <span class='text-wd-lime font-black underline'>TÚ</span>?",
+    'hero.temp': "Hay {temp}°C en {location}. Pero seamos reales, ¿cómo lo sientes TÚ?",
     'waitlist.title': "No te pierdas el drop.",
     'waitlist.placeholder': "Tu email...",
     'waitlist.btn': "Me apunto",
@@ -121,7 +121,7 @@ export const ui = {
   },
   pt: {
     'hero.title': "Veste-te para o tempo. Fica no teu melhor.",
-    'hero.temp': "Estão {temp}°C em Bolzano. Mas vamos ser realistas — como te sentes <span class='text-wd-lime font-black underline'>TU</span>?",
+    'hero.temp': "Estão {temp}°C em {location}. Mas vamos ser realistas — como te sentes TU?",
     'waitlist.title': "Não percas o drop.",
     'waitlist.placeholder': "Teu melhor e-mail...",
     'waitlist.btn': "Tô dentro",
@@ -139,7 +139,7 @@ export const ui = {
   },
   fr: {
     'hero.title': "Habille-toi selon la météo. Sois au top.",
-    'hero.temp': "Il fait {temp}°C à Bolzano. Mais soyons vrais — comment <span class='text-wd-lime font-black underline'>TU</span> le sens ?",
+    'hero.temp': "Il fait {temp}°C à {location}. Mais soyons vrais — comment TU le sens ?",
     'waitlist.title': "Ne manque pas le drop.",
     'waitlist.placeholder': "Ton e-mail...",
     'waitlist.btn': "J'en suis",
@@ -157,16 +157,16 @@ export const ui = {
   },
   be: {
     'hero.title': "Апранайся па надвор'і. Выглядай на ўсе сто.",
-    'hero.temp': "Зараз {temp}°C у Больцана. Але давай па-часнаму — як яно адчуваецца САМА <span class='text-wd-lime font-black underline'>ТАБЕ</span>?",
+    'hero.temp': "Зараз {temp}°C у {location}. Але давай па-часнаму — як яно адчуваецца САМА ТАБЕ?",
     'waitlist.title': "Не прагаў пачатак.",
     'waitlist.placeholder': "Твой лепшы імейл...",
     'waitlist.btn': "Я ў тэме",
     'feature.bias.title': "Твой вайб, твая тэмпература",
     'feature.bias.desc': "Прагнозы хлусяць. Мы разумеем твой асабісты парог холаду. Гэта база, бра.",
     'feature.outfits.title': "Капсульныя мэты",
-    'feature.outfits.desc': "У дарогу ці на трэню? Збяром ідэальны лук пад тваю канкрэтную задачу.",
+    'feature.outfits.desc': "У дарогу чи на трэню? Збяром ідэальны лук пад тваю канкрэтную задачу.",
     'feature.more.title': "Далей — больш агню",
-    'feature.more.desc': "Сынхранізацыя гардэроба, парады ад AI і нуль стрэсу «што апрануць». Будзе магутна.",
+    'feature.more.desc': "Сынхранізацыя гардэроба, парады від AI і нуль стрэсу «што апрануць». Будзе магутна.",
     'footer.madeby': "Made by Dudes, Bolzano, Italy, 2026",
     'footer.secured': "Secured by Cloudflare",
     'form.success': "ЁСЦЬ! ТЫ Ў ТЭМЕ! 🔥",
