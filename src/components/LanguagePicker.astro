@@ -1,0 +1,18 @@
+---
+import { languages } from '../i18n/ui';
+const { currentLang } = Astro.props;
+---
+<div class="flex flex-wrap justify-center gap-2 mb-10">
+  {Object.entries(languages).map(([lang, label]) => (
+    <a
+      href={`/${lang}/`}
+      class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-xs transition-all ${
+        currentLang === lang 
+        ? 'bg-black text-white scale-110' 
+        : 'bg-white hover:bg-wd-lime'
+      }`}
+    >
+      {label}
+    </a>
+  ))}
+</div>

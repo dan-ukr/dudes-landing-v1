@@ -1,0 +1,193 @@
+---
+import Layout from '../../layouts/layout.astro';
+import { ui, languages } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}}, {params: {lang: 'ua'}}, {params: {lang: 'it'}},
+    {params: {lang: 'de'}}, {params: {lang: 'es'}}, {params: {lang: 'pt'}},
+    {params: {lang: 'fr'}}, {params: {lang: 'be'}}, {params: {lang: 'pl'}}
+  ];
+}
+
+const { lang } = Astro.params;
+const t = ui[lang as keyof typeof ui];
+---
+
+<Layout lang={lang}>
+  <div class="wd-background-wrapper">
+    
+    <a href="#weather-box" class="wd-bg-element wd-icon-sun" style="top: 5%; left: 10%;"></a>
+    <a href="#outfits-box" class="wd-bg-element wd-icon-shirt" style="top: 25%; right: 5%;"></a>
+    <a href="#outfits-box" class="wd-bg-element wd-icon-sneaker" style="bottom: 15%; left: 5%;"></a>
+    <a href="#bias-box" class="wd-bg-element wd-icon-glasses" style="top: 45%; left: 2%;"></a>
+    <a href="#waitlist-form" class="wd-bg-element wd-icon-cap" style="bottom: 30%; right: 8%;"></a>
+    <a href="#outfits-box" class="wd-bg-element wd-icon-shorts" style="bottom: 5%; right: 20%;"></a>
+
+    <main class="max-w-4xl mx-auto px-4 py-10 relative z-10">
+      
+      <nav class="flex flex-wrap justify-center gap-2 mb-12">
+        {Object.entries(languages).map(([l, label]) => (
+          <a
+            href={`/${l}/`}
+            class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-[10px] transition-all ${
+              lang === l ? 'bg-black text-white scale-110' : 'bg-white hover:bg-lime-400'
+            }`}
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+
+      <section id="weather-box" class="text-center py-20 bg-gradient-to-br from-purple-700 to-pink-400 rounded-[40px] text-white mb-10 shadow-2xl">
+        <h1 class="text-5xl font-bold mb-6 leading-tight">{t['hero.title']}</h1>
+        <p class="text-2xl opacity-90">
+          {t['hero.temp'].replace('{temp}', '--')} <span id="temp" class="font-bold underline"></span>°C in Bolzano.
+        </p>
+      </section>
+
+      <section class="p-10 rounded-[40px] text-center mb-10 border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]" style="background-color: var(--wd-yellow);">
+        <h2 class="text-3xl mb-8 font-bold uppercase tracking-wider">{t['waitlist.title']}</h2>
+        
+        <form id="waitlist-form" class="flex flex-col md:flex-row gap-4 justify-center">
+          <input 
+            type="email" 
+            name="email"
+            placeholder={t['waitlist.placeholder']} 
+            class="px-8 py-4 rounded-full border-4 border-black text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 transition-all bg-white" 
+            required 
+          />
+          <input type="hidden" name="lang" value={lang} />
+          
+          <button type="submit" class="bg-black text-white px-12 py-4 rounded-full text-xl font-bold hover:bg-lime-400 hover:text-black hover:scale-105 active:scale-95 transition-all border-4 border-black">
+            {t['waitlist.btn']}
+          </button>
+        </form>
+        
+        <p 
+          id="form-msg" 
+          class="mt-6 text-xl font-bold hidden"
+          data-success={t['form.success']}
+          data-error={t['form.error']}
+          data-exists={t['form.exists']}
+        ></p>
+      </section>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div id="bias-box" class="glowing-card" style="--card-color: var(--wd-lime); background: var(--wd-lime);">
+          <h3 class="font-bold text-2xl mb-4">{t['feature.bias.title']}</h3>
+          <p class="text-lg leading-snug">{t['feature.bias.desc']}</p>
+        </div>
+
+        <div id="outfits-box" class="glowing-card" style="--card-color: var(--wd-pink); background: var(--wd-pink);">
+          <h3 class="font-bold text-2xl mb-4">{t['feature.outfits.title']}</h3>
+          <p class="text-lg leading-snug">{t['feature.outfits.desc']}</p>
+        </div>
+
+        <div class="glowing-card" style="--card-color: var(--wd-yellow); background: var(--wd-yellow);">
+          <h3 class="font-bold text-2xl mb-4">{t['feature.more.title']}</h3>
+          <p class="text-lg leading-snug">{t['feature.more.desc']}</p>
+        </div>
+      </div>
+
+      <footer class="mt-32 border-t-4 border-black pt-10 pb-20 text-center">
+        <div class="flex flex-col items-center gap-4">
+          <div class="text-2xl font-black uppercase tracking-tighter">DUDES. INC</div>
+          <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 font-bold text-sm uppercase">
+            <span>© 2026</span>
+            <span>Bolzano, Italy</span>
+            <span class="text-purple-700">Protected by Cloudflare</span>
+          </div>
+          <div class="opacity-40 text-xs mt-4">Built with Astro & D1 Database</div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script is:inline>
+    async function updateWeather() {
+        try {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`);
+            const data = await res.json();
+            const tempElement = document.getElementById('temp');
+            if (tempElement) tempElement.innerText = Math.round(data.current_weather.temperature);
+        } catch (err) { console.error(err); }
+    }
+
+    const form = document.getElementById('waitlist-form');
+    const msg = document.getElementById('form-msg');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const res = await fetch('/api/subscribe', { method: 'POST', body: formData });
+      const result = await res.json();
+      
+      msg.classList.remove('hidden', 'text-red-600', 'text-green-700');
+      
+      if (res.ok) {
+        msg.innerText = msg.dataset.success;
+        msg.classList.add('text-green-700');
+        form.reset();
+      } else {
+        // Перевірка на вже існуючий імейл
+        msg.innerText = (result.error && result.error.includes('already')) ? msg.dataset.exists : msg.dataset.error;
+        msg.classList.add('text-red-600');
+      }
+      msg.classList.remove('hidden');
+    });
+
+    updateWeather();
+  </script>
+</Layout>
+
+<style>
+  .wd-background-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--wd-white);
+    overflow-x: hidden;
+  }
+
+  .wd-bg-element {
+    position: absolute;
+    width: 100px; height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    transition: all 0.4s ease;
+    z-index: 1;
+    filter: grayscale(1);
+  }
+
+  .wd-bg-element:hover {
+    opacity: 1;
+    filter: grayscale(0);
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  .wd-icon-sun { background-image: url('/icons/sun.svg'); }
+  .wd-icon-shirt { background-image: url('/icons/shirt.svg'); }
+  .wd-icon-sneaker { background-image: url('/icons/sneaker.svg'); }
+  .wd-icon-glasses { background-image: url('/icons/glasses.svg'); width: 80px; }
+  .wd-icon-cap { background-image: url('/icons/cap.svg'); }
+  .wd-icon-shorts { background-image: url('/icons/shorts.svg'); width: 120px; }
+
+  .glowing-card {
+    min-height: 250px;
+    border-radius: 40px;
+    padding: 2.5rem;
+    border: 4px solid black;
+    box-shadow: 10px 10px 0px 0px rgba(0,0,0,1);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .glowing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 15px 15px 0px 0px rgba(0,0,0,1);
+  }
+</style>

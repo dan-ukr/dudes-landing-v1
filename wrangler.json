@@ -10,5 +10,12 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "weatherdude_db",
+      "database_id": "095c6818-11c5-4c95-8718-5355235f70bb"
+    }
+  ]
 }
