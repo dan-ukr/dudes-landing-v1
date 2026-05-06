@@ -10,7 +10,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return new Response(JSON.stringify({ error: 'Bro, enter a real email' }), { status: 400 });
     }
 
-    // Отримуємо доступ до D1 через locals
     const { DB } = locals.runtime.env;
 
     await DB.prepare('INSERT INTO emails (email, lang) VALUES (?, ?)')

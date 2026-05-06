@@ -1,0 +1,98 @@
+---
+interface Props {
+  id: string;
+  title: string;
+}
+const { id, title } = Astro.props;
+---
+
+<dialog id={id} class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{title}</h2>
+      <button class="close-btn" data-close-modal>✕</button>
+    </div>
+    <div class="modal-body text-content">
+      <slot />
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .modal-dialog {
+    border: 5px solid black;
+    border-radius: 25px;
+    box-shadow: 10px 10px 0px black;
+    padding: 0;
+    max-width: 800px;
+    width: 90%;
+    background-color: var(--wd-white);
+    color: black;
+  }
+  
+  .modal-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-content { padding: 2rem; }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 5px solid black;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-header h2 { 
+    margin: 0; 
+    text-transform: uppercase; 
+    font-weight: 900; 
+  }
+  
+  .close-btn { 
+    cursor: pointer; 
+    background: var(--wd-pink); 
+    border: 3px solid black; 
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 4px 4px 0px black;
+    transition: all 0.2s ease;
+  }
+  
+  .close-btn:hover { 
+    background: var(--wd-lime); 
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px black;
+  }
+  
+  .modal-body { 
+    max-height: 60vh; 
+    overflow-y: auto; 
+    padding-right: 10px;
+    /* Трохи простіший шрифт для великих текстів, якщо ActayWide важко читати */
+    font-family: sans-serif; 
+    line-height: 1.6;
+  }
+
+  /* Стилізація скролбару під бруталізм */
+  .modal-body::-webkit-scrollbar { width: 12px; }
+  .modal-body::-webkit-scrollbar-track { background: var(--wd-white); border-left: 3px solid black; }
+  .modal-body::-webkit-scrollbar-thumb { background: var(--wd-yellow); border: 3px solid black; border-radius: 6px; }
+</style>
+
+<script>
+  document.querySelectorAll('dialog').forEach((dialog) => {
+    dialog.querySelector('[data-close-modal]')?.addEventListener('click', () => {
+      dialog.close();
+    });
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  });
+</script>
