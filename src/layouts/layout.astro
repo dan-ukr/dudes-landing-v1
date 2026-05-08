@@ -47,6 +47,19 @@ const { lang, title = "WeatherDude" } = Astro.props;
         .lang-item { display: block; padding: 15px 30px; color: black; text-decoration: none; font-weight: 900; text-transform: uppercase; }
         .lang-item:hover { background: var(--wd-lime); }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script 
+            is:inline 
+            async 
+            src="https://www.googletagmanager.com/gtag/js?id=AW-17988270765"
+    ></script>
+    <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-17988270765');
+    </script>
 </head>
 <body class="antialiased overflow-x-hidden">
     <div class="lang-dropdown">

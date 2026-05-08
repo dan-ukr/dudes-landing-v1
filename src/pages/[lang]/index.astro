@@ -87,9 +87,14 @@ const t = ui[lang as keyof typeof ui];
     </div>
 
     <footer class="footer-minimal">
-        <div class="footer-left">{t['footer.madeby']}</div>
-        <div class="footer-center"><img src="/favicon.svg" style="width: 50px; opacity: 0.5;" /></div>
-        <div class="footer-right">Secured by Cloudflare</div>
+    <div class="footer-left">
+        {t['footer.madeby']} <br />
+        <span class="contact-email">Contact us: dudes.info.temp@gmail.com</span>
+    </div>
+    <div class="footer-center">
+        <img src="/favicon.svg" style="width: 50px; opacity: 0.5;" />
+    </div>
+    <div class="footer-right">Secured by Cloudflare</div>
     </footer>
   </main>
 
