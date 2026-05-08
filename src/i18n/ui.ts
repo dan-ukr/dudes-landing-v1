@@ -88,7 +88,7 @@ export const ui = {
     'form.exists': "SEI GIÀ NEL TEAM!",
   },
   de: {
-    'hero.subtitle': 'The Dudes präsentieren dir das neue Wettersteuerungsinstrument.',
+    'hero.subtitle': 'The Dudes präsentieren dir das neue Wettertool.',
     'hero.title': "Zieh dich passend an. Sieh top aus.",
     'hero.temp': "Es sind {temp}°C in {location}. Aber mal ehrlich: Wie fühlt es sich für DICH an?",
     'waitlist.title': "Verpass den Drop nicht.",
