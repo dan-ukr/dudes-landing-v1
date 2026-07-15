@@ -133,9 +133,17 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
     }
     ring.addEventListener('animationend', () => ring.classList.remove('bounce'));
 
-    // click-hit-area radius is ~260/397 of the canvas half-width (see the merge
-    // script that built dudes-logo-ring.svg — inner disc r=245.91 + margin)
-    const CLICK_RATIO = 260 / 397;
+    // Geometry baked into dudes-logo-ring.svg's merge script: the ring itself
+    // spans a 794-unit canvas (outer radius 397), padded by 40 units on every
+    // side in the viewBox (so the wordmark's "D"/"S" don't get clipped by
+    // renderers that don't honor CSS overflow, e.g. favicons). The rendered
+    // element's half-width in screen px therefore corresponds to 397+40=437
+    // viewBox units, not 397 — ratios below are relative to that padded half.
+    const VIEWBOX_HALF = 397 + 40;
+    const RING_OUTER = 397;
+    const HIT_R = 245.91 + 14;
+    const CLICK_RATIO = HIT_R / VIEWBOX_HALF;
+    const ROTATE_MAX_RATIO = (RING_OUTER * 1.05) / VIEWBOX_HALF;
 
     if (prefersReduced) {
       wrap.querySelector('.click-hit-area')?.addEventListener('click', triggerBounce);
@@ -150,7 +158,7 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
       downTime = Date.now();
       if (ratio <= CLICK_RATIO) {
         mode = 'click';
-      } else if (ratio <= 1.05) {
+      } else if (ratio <= ROTATE_MAX_RATIO) {
         mode = 'rotate';
         startAngle = angleAt(e.clientX, e.clientY);
         wrap.classList.add('grabbing');

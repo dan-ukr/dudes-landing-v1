@@ -26,7 +26,7 @@ export const WEATHERDUDE_GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/d
 // duplicated (and risking drift) across all 9 translation dicts.
 export const WEATHERDUDE_STATS = {
   launched: '09.07.2026',
-  users: '700 (as of 14.07.2026)',
+  users: '1000 (upd. 15.07.2026)',
 };
 
 export const ui = {
