@@ -3,6 +3,7 @@ export const prerender = true;
 import Layout from '../../layouts/layout.astro';
 import Modal from '../../components/Modal.astro';
 import DudesLogo from '../../components/DudesLogo.astro';
+import SocialIcon from '../../components/SocialIcon.astro';
 import { ui, languages, PRODUCTS, WEATHERDUDE_GOOGLE_PLAY_URL, WEATHERDUDE_STATS } from '../../i18n/ui';
 
 export function getStaticPaths() {
@@ -13,9 +14,31 @@ const { lang } = Astro.params;
 const t = ui[lang as keyof typeof ui];
 
 const team = [
-  { key: 'daniil', name: 'Daniil Mezentsev', initial: 'D', color: 'var(--wd-pink)' },
-  { key: 'alexei', name: 'Alexei Karavan', initial: 'A', color: 'var(--md-lime)' },
-  { key: 'fiorella', name: 'Fiorella Licciardiello', initial: 'F', color: 'var(--wd-yellow)' },
+  {
+    key: 'daniil', name: 'Daniil Mezentsev', initial: 'D', color: 'var(--wd-pink)', photo: '/icons/Daniil.png', focus: '50% 30%',
+    links: [
+      { type: 'github', url: 'https://github.com/dan-ukr' },
+      { type: 'huggingface', url: 'https://huggingface.co/danyilds' },
+      { type: 'telegram', url: 'https://t.me/danyilds' },
+      { type: 'discord', url: 'https://discord.com/users/751476053691596960' },
+      { type: 'email', url: 'mailto:daniil.swed@gmail.com' },
+    ],
+  },
+  {
+    key: 'alexei', name: 'Alexei Karavan', initial: 'A', color: 'var(--md-lime)', photo: '/icons/Alexei.png', focus: '50% 22%',
+    links: [
+      { type: 'github', url: 'https://github.com/AlexKrgb' },
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/alexei-karavan-0739082aa/' },
+      { type: 'email', url: 'mailto:alexkaravan72@gmail.com' },
+    ],
+  },
+  {
+    key: 'fiorella', name: 'Fiorella Licciardiello', initial: 'F', color: 'var(--wd-yellow)', photo: '/icons/Fiorella.png', focus: '50% 32%',
+    website: 'https://fiorellalicciardiello.com/',
+    links: [
+      { type: 'email', url: 'mailto:licciardiello.fiorella@gmail.com' },
+    ],
+  },
 ] as const;
 
 const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] as const;
@@ -103,8 +126,9 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
         <div class="team-grid">
           {team.map((member) => (
             <div class="team-card">
-              <!-- TODO: swap for a real headshot <img> once files are provided -->
-              <div class="avatar-placeholder" style={`background:${member.color}`}>{member.initial}</div>
+              <div class="avatar-circle" style={`background:${member.color}`}>
+                <img src={member.photo} alt={member.name} style={`object-position: ${member.focus}`} />
+              </div>
               <h3>{member.name}</h3>
               <p class="team-role">{t[`team.${member.key}.role` as keyof typeof t]}</p>
               <p class="team-bio">{t[`team.${member.key}.bio` as keyof typeof t]}</p>
@@ -126,20 +150,52 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
           <p class="founders-title">{t['contact.founders.title']}</p>
           <div class="founders-row">
             {team.map((member) => (
-              <div class="founder-chip">
-                <div class="avatar-placeholder small" style={`background:${member.color}`}>{member.initial}</div>
+              <button class="founder-chip" onclick={`document.getElementById('modal-founder-${member.key}').showModal()`}>
+                <div class="avatar-circle small" style={`background:${member.color}`}>
+                  <img src={member.photo} alt={member.name} style={`object-position: ${member.focus}`} />
+                </div>
                 <div>
                   <p class="founder-name">{member.name}</p>
                   <p class="founder-role">{t[`team.${member.key}.role` as keyof typeof t]}</p>
                 </div>
-                <!-- TODO: add individual email + LinkedIn link per founder once provided -->
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- ===================== FOUNDER PROFILE DIALOGS ===================== -->
+  {team.map((member) => (
+    <Modal id={`modal-founder-${member.key}`} title={member.name}>
+      <div class="founder-profile">
+        <div class="founder-photo-row">
+          <img src={member.photo} alt={member.name} class="founder-photo-rect" style={`object-position: ${member.focus}`} />
+          <p class="founder-profile-role">{t[`team.${member.key}.role` as keyof typeof t]}</p>
+        </div>
+        <p class="founder-profile-bio">{t[`team.${member.key}.bio` as keyof typeof t]}</p>
+
+        <h4>{t['contact.founders.dialog.topics']}</h4>
+        <p>{t[`founders.${member.key}.topics` as keyof typeof t]}</p>
+
+        <h4>{t['contact.founders.dialog.languages']}</h4>
+        <p>{t[`founders.${member.key}.languages` as keyof typeof t]}</p>
+
+        <h4>{t['contact.founders.dialog.links']}</h4>
+        <div class="founder-links">
+          {'website' in member && member.website && (
+            <a href={member.website} target="_blank" rel="noopener noreferrer" class="founder-website-link">{member.website.replace(/^https?:\/\//, '')}</a>
+          )}
+          {member.links.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" class="founder-icon-link" aria-label={link.type}>
+              <SocialIcon type={link.type} class="founder-icon" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </Modal>
+  ))}
 
   <!-- ===================== PRODUCT DETAIL OVERLAYS ===================== -->
   <Modal id="modal-weatherdude" title={PRODUCTS.weatherdude.name} fullscreen accent="var(--wd-white)">
@@ -166,17 +222,6 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       <div class="store-buttons">
         <a href={WEATHERDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="store-btn">{t['products.weatherdude.store.googleplay']}</a>
         <span class="store-btn store-btn-disabled" aria-disabled="true" title="iOS app still in development">{t['products.weatherdude.store.iosSoon']}</span>
-      </div>
-
-      <div class="capture-block">
-        <h4>{t['products.weatherdude.waitlist.title']}</h4>
-        <form class="capture-form">
-          <input type="email" name="email" placeholder={t['products.weatherdude.waitlist.placeholder']} class="capture-input" required />
-          <input type="hidden" name="lang" value={lang} />
-          <input type="hidden" name="product" value="weatherdude" />
-          <button type="submit" class="capture-btn wd-btn">{t['products.weatherdude.waitlist.btn']}</button>
-        </form>
-        <div class="form-msg" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></div>
       </div>
     </div>
   </Modal>
@@ -211,7 +256,7 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
     </div>
   </Modal>
 
-  <Modal id="modal-hungrydude" title={PRODUCTS.hungrydude.name} fullscreen accent="var(--hd-cream)">
+  <Modal id="modal-hungrydude" title={PRODUCTS.hungrydude.name} fullscreen accent="var(--hd-coffee)" accentText="var(--hd-cream)">
     <div class="product-detail pd-hungrydude">
       <span class="detail-logo-wrap"><img src={PRODUCTS.hungrydude.logo} alt="" class="detail-logo" /></span>
       <p class="detail-tagline">{t['products.hungrydude.detail.headline']}</p>
@@ -358,7 +403,7 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
     }
     .pc-weatherdude { background: var(--wd-pink); }
     .pc-mountaindude { background: var(--md-gray); color: var(--md-white); }
-    .pc-hungrydude { background: var(--hd-cream); }
+    .pc-hungrydude { background: var(--hd-coffee); color: var(--hd-cream); }
     .product-card.is-dev { opacity: 0.9; }
 
     .product-logo-wrap {
@@ -430,7 +475,7 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
     }
     .detail-section p { font-size: 1.1rem; line-height: 1.5; font-weight: 500; margin: 0; }
     .pd-mountaindude { color: var(--md-white); }
-    .pd-hungrydude { color: var(--hd-brown); }
+    .pd-hungrydude { color: var(--hd-cream); }
 
     .stats-grid { display: flex; gap: 24px; flex-wrap: wrap; }
     .stat { display: flex; flex-direction: column; gap: 4px; }
@@ -507,20 +552,22 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       box-shadow: 12px 12px 0px black;
       text-align: center;
     }
-    .avatar-placeholder {
+    .avatar-circle {
       width: 90px;
       height: 90px;
       border-radius: 50%;
       border: 5px solid black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      font-weight: 900;
+      overflow: hidden;
       margin: 0 auto 16px;
-      color: black;
+      flex-shrink: 0;
     }
-    .avatar-placeholder.small { width: 46px; height: 46px; font-size: 1.1rem; margin: 0; }
+    .avatar-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .avatar-circle.small { width: 46px; height: 46px; margin: 0; }
     .team-card h3 { font-size: 1.3rem; font-weight: 900; margin: 0 0 4px; }
     .team-role { font-weight: 900; text-transform: uppercase; font-size: 0.85rem; opacity: 0.6; margin: 0 0 14px; }
     .team-bio { font-size: 0.95rem; line-height: 1.4; }
@@ -559,9 +606,74 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       padding: 10px 20px 10px 10px;
       text-align: left;
       box-shadow: 6px 6px 0px var(--wd-lime);
+      font: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .founder-chip:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0px var(--wd-lime);
     }
     .founder-name { font-weight: 900; margin: 0; font-size: 0.95rem; }
     .founder-role { font-size: 0.75rem; opacity: 0.6; margin: 0; }
+
+    /* ---------- Founder profile dialogs ---------- */
+    .founder-photo-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .founder-photo-rect {
+      width: 84px;
+      height: 104px;
+      border-radius: 18px;
+      border: 3px solid black;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .founder-profile-role {
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin: 0;
+    }
+    .founder-profile-bio { font-size: 1.05rem; line-height: 1.5; margin: 0 0 28px; }
+    .founder-profile h4 {
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin: 0 0 8px;
+    }
+    .founder-profile p { margin: 0 0 24px; font-size: 1.05rem; }
+    .founder-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .founder-website-link {
+      font-weight: 900;
+      color: var(--wd-pink);
+      text-decoration: underline;
+    }
+    .founder-icon-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: black;
+      color: white;
+      border: 3px solid black;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .founder-icon-link:hover { background: var(--wd-pink); transform: translateY(-2px); }
+    .founder-icon { width: 18px; height: 18px; }
 
     @media (max-width: 900px) {
       .product-grid, .team-grid, .explainer-grid { grid-template-columns: 1fr; }

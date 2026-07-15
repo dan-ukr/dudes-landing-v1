@@ -2,17 +2,51 @@
 import { languages } from '../i18n/ui';
 const { currentLang } = Astro.props;
 ---
-<div class="flex flex-wrap justify-center gap-2 mb-10">
+<ul class="lang-dropdown-list">
   {Object.entries(languages).map(([lang, label]) => (
-    <a
-      href={`/${lang}/`}
-      class={`px-4 py-2 rounded-full border-2 border-black font-bold uppercase text-xs transition-all ${
-        currentLang === lang 
-        ? 'bg-black text-white scale-110' 
-        : 'bg-white hover:bg-wd-lime'
-      }`}
-    >
-      {label}
-    </a>
+    <li>
+      <a href={`/${lang}/`} class:list={['lang-row', { active: currentLang === lang }]}>
+        <img src={`/icons/flags/${lang}.svg`} alt="" class="lang-flag" />
+        <span>{label}</span>
+      </a>
+    </li>
   ))}
-</div>
+</ul>
+
+<style>
+  .lang-dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .lang-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: black;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: background 0.15s ease;
+  }
+  .lang-row:hover {
+    background: var(--wd-lime, #D0FF00);
+  }
+  .lang-row.active {
+    background: black;
+    color: white;
+    font-weight: 900;
+  }
+  .lang-flag {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+</style>

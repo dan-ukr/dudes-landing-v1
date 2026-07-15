@@ -18,8 +18,11 @@ const t = ui[lang as keyof typeof ui];
     <a href="#contact">{t['nav.contact']}</a>
   </nav>
 
-  <div class="lang-dropdown">
-    <div class="lang-trigger">🌐 {lang.toUpperCase()} ▼</div>
+  <div class="lang-dropdown" data-lang-dropdown>
+    <button type="button" class="lang-trigger" data-lang-trigger>
+      <img src={`/icons/flags/${lang}.svg`} alt="" class="lang-trigger-flag" />
+      {lang.toUpperCase()} ▼
+    </button>
     <div class="lang-list">
       <LanguagePicker currentLang={lang} />
     </div>
@@ -78,6 +81,9 @@ const t = ui[lang as keyof typeof ui];
   }
 
   .lang-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: white;
     border: 3px solid black;
     padding: 6px 14px;
@@ -89,6 +95,12 @@ const t = ui[lang as keyof typeof ui];
     font-size: 0.8rem;
     white-space: nowrap;
   }
+  .lang-trigger-flag {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
   .lang-list {
     display: none;
@@ -98,14 +110,15 @@ const t = ui[lang as keyof typeof ui];
     background: white;
     border: 5px solid black;
     border-radius: 25px;
-    max-height: 300px;
+    max-height: 340px;
     width: 260px;
     overflow-y: auto;
     box-shadow: 10px 10px 0px black;
-    padding: 16px;
+    padding: 12px;
   }
 
-  .lang-dropdown:hover .lang-list {
+  .lang-dropdown:hover .lang-list,
+  .lang-dropdown.open .lang-list {
     display: block;
   }
 
@@ -118,3 +131,16 @@ const t = ui[lang as keyof typeof ui];
     }
   }
 </style>
+
+<script is:inline>
+  document.querySelectorAll('[data-lang-dropdown]').forEach((dropdown) => {
+    const trigger = dropdown.querySelector('[data-lang-trigger]');
+    trigger?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+    });
+  });
+</script>
