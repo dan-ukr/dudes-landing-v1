@@ -12,14 +12,16 @@ const { lang, title = "DUDES" } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style is:global>
-        @font-face {
-            font-family: 'ActayWide';
-            src: url('/fonts/ActayWide.woff2') format('woff2');
-            font-weight: bold;
-            font-display: swap;
-        }
         :root {
+            /* the old ActayWide file was never actually shipped in /public/fonts — it
+               silently fell back to Arial everywhere. Darker Grotesque (already used
+               in the MountainDude/CoachDude concept guide) + Inter replace it. */
+            --font-display: 'Darker Grotesque', 'Arial Narrow', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             /* WeatherDude */
             --wd-pink: #FF86CE; --wd-lime: #D0FF00;
             --wd-yellow: #FFE100; --wd-white: #FFEAF4;
@@ -33,14 +35,17 @@ const { lang, title = "DUDES" } = Astro.props;
         }
         html, body {
             margin: 0; padding: 0;
-            font-family: 'ActayWide', sans-serif;
+            font-family: var(--font-body);
             background-color: var(--wd-white);
             color: black;
             scroll-behavior: smooth;
         }
-        html { scroll-padding-top: 90px; }
+        h1, h2, h3, h4, button, input, .font-display {
+            font-family: var(--font-display);
+        }
+        html { scroll-padding-top: 70px; }
         @media (max-width: 768px) {
-            html { scroll-padding-top: 70px; }
+            html { scroll-padding-top: 56px; }
         }
     </style>
     <!-- Google tag (gtag.js) -->

@@ -4,11 +4,16 @@ interface Props {
   title: string;
   fullscreen?: boolean;
   accent?: string;
+  accentText?: string;
 }
-const { id, title, fullscreen = false, accent } = Astro.props;
+const { id, title, fullscreen = false, accent, accentText } = Astro.props;
+const styleVars = [
+  accent ? `--modal-accent: ${accent}` : '',
+  accentText ? `--modal-accent-text: ${accentText}` : '',
+].filter(Boolean).join('; ') || undefined;
 ---
 
-<dialog id={id} class:list={['modal-dialog', { 'modal-fullscreen': fullscreen }]} style={accent ? `--modal-accent: ${accent}` : undefined}>
+<dialog id={id} class:list={['modal-dialog', { 'modal-fullscreen': fullscreen }]} style={styleVars}>
   <div class="modal-content">
     <div class="modal-header">
       <h2>{title}</h2>
@@ -48,7 +53,12 @@ const { id, title, fullscreen = false, accent } = Astro.props;
     border-radius: 0;
     box-shadow: none;
     background-color: var(--modal-accent, var(--wd-white));
+    color: var(--modal-accent-text, black);
     margin: 0;
+  }
+
+  .modal-dialog.modal-fullscreen .close-btn {
+    color: black;
   }
 
   .modal-dialog.modal-fullscreen .modal-content {
@@ -75,10 +85,17 @@ const { id, title, fullscreen = false, accent } = Astro.props;
     margin-bottom: 1rem;
   }
   
-  .modal-header h2 { 
-    margin: 0; 
-    text-transform: uppercase; 
-    font-weight: 900; 
+  .modal-header h2 {
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 900;
+  }
+
+  /* Product names (WeatherDude, MountainDude, HungryDude) must never render
+     all-caps — only the fullscreen product-detail variant needs this override,
+     the legal/privacy modal titles above are untouched. */
+  .modal-dialog.modal-fullscreen .modal-header h2 {
+    text-transform: none;
   }
   
   .close-btn { 

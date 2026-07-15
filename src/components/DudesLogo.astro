@@ -1,136 +1,51 @@
 ---
-// Placeholder-art version of the DUDES puzzle-ring logo: 4 quadrant wedges
-// (pink/lime/blue/yellow) + simple avatar tokens standing in for the real
-// character illustrations, and a center "DUDES" wordmark.
-// Swap the <path>/avatar markup below for the real layered SVG once it lands —
-// the animation logic (assembly + idle wobble) doesn't need to change.
+// Real logo asset lives at /public/icons/DudesLogo.svg (~1.7MB, auto-traced,
+// flat — no separable per-quadrant groups), so it's referenced as an <img>
+// rather than inlined: one cached network request instead of ~1.7MB of raw
+// markup duplicated on every one of the 9 language pages. That also rules out
+// a piece-by-piece assembly animation on load (nothing to animate
+// independently) — this does a simple scale/fade entrance plus a slow idle
+// wobble on the whole mark instead.
 interface Props {
   size?: string; // any CSS length, e.g. "40px" or "clamp(180px, 42vw, 320px)"
-  static?: boolean; // no entrance/idle animation — used for the small header mark
+  static?: boolean; // no entrance/idle animation — used for small reuse spots
   class?: string;
 }
 const { size = 'clamp(180px, 42vw, 320px)', static: isStatic = false, class: className = '' } = Astro.props;
 ---
 
-<div class={`dudes-logo ${isStatic ? 'is-static' : ''} ${className}`} style={`--dudes-logo-size: ${size}px`}>
-  <svg class="dudes-logo-ring" viewBox="0 0 200 200" role="img" aria-label="DUDES logo">
-    <g class="quadrant q-pink">
-      <path d="M5,100 A95,95 0 0 1 100,5 L100,48 A52,52 0 0 0 48,100 Z" fill="var(--wd-pink, #FF86CE)" stroke="black" stroke-width="3" />
-      <circle class="avatar" cx="38" cy="38" r="17" fill="#FFEAF4" stroke="black" stroke-width="3" />
-    </g>
-    <g class="quadrant q-lime">
-      <path d="M100,5 A95,95 0 0 1 195,100 L152,100 A52,52 0 0 0 100,48 Z" fill="#D0FF00" stroke="black" stroke-width="3" />
-      <circle class="avatar" cx="162" cy="38" r="17" fill="#FFEAF4" stroke="black" stroke-width="3" />
-    </g>
-    <g class="quadrant q-blue">
-      <path d="M195,100 A95,95 0 0 1 100,195 L100,152 A52,52 0 0 0 152,100 Z" fill="#6C5CE7" stroke="black" stroke-width="3" />
-      <circle class="avatar" cx="162" cy="162" r="17" fill="#FFEAF4" stroke="black" stroke-width="3" />
-      <text x="150" y="168" class="you-label">you</text>
-    </g>
-    <g class="quadrant q-yellow">
-      <path d="M100,195 A95,95 0 0 1 5,100 L48,100 A52,52 0 0 0 100,152 Z" fill="#FFE100" stroke="black" stroke-width="3" />
-      <circle class="avatar" cx="38" cy="162" r="17" fill="#FFEAF4" stroke="black" stroke-width="3" />
-    </g>
-    <g class="center-mark">
-      <circle cx="100" cy="100" r="50" fill="white" stroke="black" stroke-width="3" />
-      <text x="100" y="107" class="wordmark">DUDES</text>
-    </g>
-  </svg>
-</div>
+<img
+  src="/icons/DudesLogo.svg"
+  alt="DUDES"
+  class:list={['dudes-logo', { 'is-static': isStatic }, className]}
+  style={`--dudes-logo-size: ${size}`}
+  width="120"
+  height="120"
+  loading="eager"
+  decoding="async"
+/>
 
 <style>
   .dudes-logo {
-    display: inline-block;
+    display: block;
     width: var(--dudes-logo-size);
     height: var(--dudes-logo-size);
-    line-height: 0;
-  }
-
-  .dudes-logo-ring {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .wordmark {
-    font-family: 'ActayWide', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    text-anchor: middle;
-    fill: black;
-  }
-
-  .you-label {
-    font-family: 'ActayWide', sans-serif;
-    font-weight: 900;
-    font-style: italic;
-    font-size: 13px;
-    fill: black;
-  }
-
-  .quadrant .avatar { transform-box: fill-box; }
-
-  /* Static mark (header/footer use): render fully assembled, no motion */
-  .dudes-logo.is-static .quadrant,
-  .dudes-logo.is-static .center-mark {
-    opacity: 1;
-    transform: none;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .dudes-logo:not(.is-static) .quadrant {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: dudes-assemble 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    .dudes-logo:not(.is-static) {
+      animation: dudes-enter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                 dudes-idle-wobble 6s ease-in-out 0.9s infinite alternate;
     }
-    .dudes-logo:not(.is-static) .q-pink   { animation-delay: 0s; }
-    .dudes-logo:not(.is-static) .q-lime   { animation-delay: 0.12s; }
-    .dudes-logo:not(.is-static) .q-blue   { animation-delay: 0.24s; }
-    .dudes-logo:not(.is-static) .q-yellow { animation-delay: 0.36s; }
-
-    .dudes-logo:not(.is-static) .center-mark {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: dudes-center-in 0.6s ease-out 0.9s both;
-    }
-
-    .dudes-logo:not(.is-static) .dudes-logo-ring {
-      transform-box: view-box;
-      transform-origin: center;
-      animation: dudes-idle-wobble 6s ease-in-out 1.3s infinite alternate;
-    }
-
-    .q-pink   { --fly-x: -140px; --fly-y: -140px; }
-    .q-lime   { --fly-x: 140px;  --fly-y: -140px; }
-    .q-blue   { --fly-x: 140px;  --fly-y: 140px; }
-    .q-yellow { --fly-x: -140px; --fly-y: 140px; }
   }
 
-  @keyframes dudes-assemble {
-    0%   { transform: translate(var(--fly-x), var(--fly-y)) scale(0.6); opacity: 0; }
-    60%  { opacity: 1; }
-    100% { transform: translate(0, 0) scale(1); opacity: 1; }
-  }
-
-  @keyframes dudes-center-in {
-    0%   { transform: scale(0.5); opacity: 0; }
+  @keyframes dudes-enter {
+    0%   { transform: scale(0.7); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
   }
 
   @keyframes dudes-idle-wobble {
     from { transform: rotate(-2deg); }
     to   { transform: rotate(2deg); }
-  }
-
-  /* Reduced motion: simple fade-in, no flying pieces, no idle motion */
-  @media (prefers-reduced-motion: reduce) {
-    .dudes-logo:not(.is-static) .quadrant,
-    .dudes-logo:not(.is-static) .center-mark {
-      animation: dudes-fade-in 0.5s ease-out both;
-    }
-  }
-  @keyframes dudes-fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
   }
 </style>
