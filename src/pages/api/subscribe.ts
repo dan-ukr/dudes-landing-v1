@@ -5,6 +5,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const formData = await request.formData();
     const email = formData.get('email')?.toString();
     const lang = formData.get('lang')?.toString() || 'en';
+    const product = formData.get('product')?.toString() || 'weatherdude';
 
     if (!email || !email.includes('@')) {
       return new Response(JSON.stringify({ error: 'Bro, enter a real email' }), { status: 400 });
@@ -12,8 +13,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { DB } = locals.runtime.env;
 
-    await DB.prepare('INSERT INTO emails (email, lang) VALUES (?, ?)')
-      .bind(email, lang)
+    await DB.prepare('INSERT INTO emails (email, lang, product) VALUES (?, ?, ?)')
+      .bind(email, lang, product)
       .run();
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });

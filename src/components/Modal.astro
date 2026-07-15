@@ -2,11 +2,13 @@
 interface Props {
   id: string;
   title: string;
+  fullscreen?: boolean;
+  accent?: string;
 }
-const { id, title } = Astro.props;
+const { id, title, fullscreen = false, accent } = Astro.props;
 ---
 
-<dialog id={id} class="modal-dialog">
+<dialog id={id} class:list={['modal-dialog', { 'modal-fullscreen': fullscreen }]} style={accent ? `--modal-accent: ${accent}` : undefined}>
   <div class="modal-content">
     <div class="modal-header">
       <h2>{title}</h2>
@@ -29,12 +31,39 @@ const { id, title } = Astro.props;
     background-color: var(--wd-white);
     color: black;
   }
-  
+
   .modal-dialog::backdrop {
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
   }
-  
+
+  /* Full-screen variant, used for the product detail overlays — leaves the
+     default centered-card look (privacy/terms) completely untouched. */
+  .modal-dialog.modal-fullscreen {
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-width: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--modal-accent, var(--wd-white));
+    margin: 0;
+  }
+
+  .modal-dialog.modal-fullscreen .modal-content {
+    height: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-dialog.modal-fullscreen .modal-body {
+    max-height: none;
+    flex: 1;
+  }
+
   .modal-content { padding: 2rem; }
   
   .modal-header {

@@ -1,7 +1,9 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/layout.astro';
-import { ui, languages } from '../../i18n/ui';
+import Modal from '../../components/Modal.astro';
+import DudesLogo from '../../components/DudesLogo.astro';
+import { ui, languages, PRODUCTS } from '../../i18n/ui';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -9,205 +11,516 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params;
 const t = ui[lang as keyof typeof ui];
+
+const team = [
+  { key: 'daniil', name: 'Daniil Mezentsev', initial: 'D', color: 'var(--wd-pink)' },
+  { key: 'alexei', name: 'Alexei Karavan', initial: 'A', color: 'var(--md-lime)' },
+  { key: 'fiorella', name: 'Fiorella Licciardiello', initial: 'F', color: 'var(--wd-yellow)' },
+] as const;
 ---
 
-<Layout lang={lang}>
-  <div class="top-spacer"></div>
-
-  <main style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; text-align: center;">
-    
-    <div style="margin-bottom: 80px;">
-        <p style="font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 700; font-style: italic; text-transform: uppercase; margin-bottom: 20px; opacity: 0.9;">
-        {t['hero.subtitle']}
-        </p>
-      <h1 style="font-size: clamp(3rem, 12vw, 10rem); font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 40px; letter-spacing: -0.05em;">
-        {t['hero.title']}
-      </h1>
-      <p style="font-size: clamp(1.2rem, 4vw, 2rem); font-weight: 900; text-transform: uppercase; opacity: 0.8;">
-         {(() => {
-           let phrase = t['hero.temp']
-            .replace('{temp}', '<span id="temp">--</span>')
-            .replace('{location}', '<span id="loc">...</span>');
-           
-           phrase = phrase.replace(/(YOU|ТОБІ|TY|TU|DICH|TÚ|TI|ТАБЕ)/g, 
-             '<span style="text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; font-weight: 900;">$1</span>');
-           return <Fragment set:html={phrase} />;
-         })()}
-      </p>
-    </div>
-
-    <section id="waitlist-form-container" style="background: black; padding: clamp(2rem, 8vw, 80px) 20px; border-radius: clamp(40px, 10vw, 80px); border: 8px solid black; box-shadow: 25px 25px 0px var(--wd-yellow); margin-bottom: 150px; transform: rotate(-1deg);">
-      <h2 style="color: white; font-size: clamp(1.5rem, 5vw, 4rem); text-transform: uppercase; font-style: italic; margin-bottom: 50px; line-height: 1;">
-        {t['waitlist.title']}
-      </h2>
-      <form id="waitlist-form" style="display: flex; flex-direction: column; gap: 25px; max-width: 800px; margin: 0 auto;">
-        <input 
-          type="email" 
-          name="email" 
-          placeholder={t['waitlist.placeholder']} 
-          class="waitlist-input"
-          required 
-        />
-        <input type="hidden" name="lang" value={lang} />
-        <button type="submit" class="waitlist-btn">
-          {t['waitlist.btn']}
-        </button>
-      </form>
-      <div 
-        id="form-msg" 
-        style="display: none; margin-top: 40px; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 900; text-transform: uppercase; font-style: italic; padding: 30px; border-radius: 30px;"
-        data-success={t['form.success']}
-        data-error={t['form.error']}
-        data-exists={t['form.exists']}
-      ></div>
+<Layout lang={lang} title="DUDES — Your life, calibrated to you">
+  <main>
+    <!-- ===================== HERO ===================== -->
+    <section id="top" class="hero">
+      <DudesLogo />
+      <p class="hero-kicker">{t['hero.kicker']}</p>
     </section>
 
-    <div style="display: flex; flex-direction: column; gap: 120px; text-align: left;">
-      <div class="row-brutal">
-        <div class="card-brutal" style="background: var(--wd-lime); transform: rotate(2deg);">
-          <h3 style="font-size: clamp(2rem, 6vw, 4rem); text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.bias.title']}</h3>
-          <p style="font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.bias.desc']}</p>
+    <!-- ===================== MOTTO ===================== -->
+    <section class="motto">
+      <h1 class="motto-headline">{t['motto.headline']}</h1>
+      <p class="motto-subline">{t['motto.subline']}</p>
+
+      <div class="motto-widget">
+        <p class="widget-label">
+          {(() => {
+            const phrase = t['motto.widget.label']
+              .replace('{temp}', '<span id="temp">--</span>')
+              .replace('{location}', '<span id="loc">...</span>');
+            return <Fragment set:html={phrase} />;
+          })()}
+        </p>
+        <div class="widget-reactions">
+          <div class="reaction-bubble reaction-cold">❄️ <span>{t['motto.widget.reactionA']}</span></div>
+          <div class="reaction-bubble reaction-warm">☀️ <span>{t['motto.widget.reactionB']}</span></div>
         </div>
-        <a href="#temp" class="icon-link"><img src="/icons/sun.svg" style="width: 250px; opacity: 0.3;" /></a>
+        <p class="widget-caption">{t['motto.widget.caption']}</p>
       </div>
+    </section>
 
-      <div class="row-brutal row-reverse">
-        <a href="#waitlist-form-container" class="icon-link"><img src="/icons/shirt.svg" style="width: 250px; opacity: 0.3;" /></a>
-        <div class="card-brutal" style="background: var(--wd-pink); transform: rotate(-2deg);">
-          <h3 style="font-size: clamp(2rem, 6vw, 4rem); text-transform: uppercase; font-style: italic; line-height: 0.9; margin: 0;">{t['feature.outfits.title']}</h3>
-          <p style="font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 900; margin-top: 30px; line-height: 1.1;">{t['feature.outfits.desc']}</p>
+    <!-- ===================== PRODUCTS ===================== -->
+    <section id="products" class="products">
+      <h2 class="section-title">{t['products.title']}</h2>
+      <p class="section-subtitle">{t['products.subtitle']}</p>
+
+      <div class="product-grid">
+        <button class="product-card pc-weatherdude" onclick="document.getElementById('modal-weatherdude').showModal()">
+          <span class="status-badge status-live">{t['products.status.live']}</span>
+          <span class="product-name">{PRODUCTS.weatherdude.name}</span>
+          <span class="product-pitch">{t['products.weatherdude.pitch']}</span>
+          <span class="card-cta">{t['products.cta.viewDetails']} →</span>
+        </button>
+
+        <button class="product-card pc-mountaindude is-dev" onclick="document.getElementById('modal-mountaindude').showModal()">
+          <span class="status-badge status-dev">{t['products.status.dev']}</span>
+          <span class="product-name">{PRODUCTS.mountaindude.name}</span>
+          <span class="product-pitch">{t['products.mountaindude.pitch']}</span>
+          <span class="card-cta">{t['products.cta.viewDetails']} →</span>
+        </button>
+
+        <button class="product-card pc-hungrydude is-dev" onclick="document.getElementById('modal-hungrydude').showModal()">
+          <span class="status-badge status-dev">{t['products.status.dev']}</span>
+          <span class="product-name">{PRODUCTS.hungrydude.name}</span>
+          <span class="product-pitch">{t['products.hungrydude.pitch']}</span>
+          <span class="card-cta">{t['products.cta.viewDetails']} →</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================== TEAM ===================== -->
+    <section id="team" class="team">
+      <h2 class="section-title">{t['team.title']}</h2>
+      <p class="section-subtitle">{t['team.subtitle']}</p>
+
+      <div class="team-grid">
+        {team.map((member) => (
+          <div class="team-card">
+            <!-- TODO: swap for a real headshot <img> once files are provided -->
+            <div class="avatar-placeholder" style={`background:${member.color}`}>{member.initial}</div>
+            <h3>{member.name}</h3>
+            <p class="team-role">{t[`team.${member.key}.role` as keyof typeof t]}</p>
+            <p class="team-bio">{t[`team.${member.key}.bio` as keyof typeof t]}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact" class="contact">
+      <h2 class="section-title">{t['contact.title']}</h2>
+      <p class="section-subtitle">{t['contact.subtitle']}</p>
+
+      <a href="mailto:dudes.info.temp@gmail.com" class="contact-email-btn">{t['contact.emailBtn']}</a>
+
+      <div class="founders">
+        <p class="founders-title">{t['contact.founders.title']}</p>
+        <div class="founders-row">
+          {team.map((member) => (
+            <div class="founder-chip">
+              <div class="avatar-placeholder small" style={`background:${member.color}`}>{member.initial}</div>
+              <div>
+                <p class="founder-name">{member.name}</p>
+                <p class="founder-role">{t[`team.${member.key}.role` as keyof typeof t]}</p>
+              </div>
+              <!-- TODO: add individual email + LinkedIn link per founder once provided -->
+            </div>
+          ))}
         </div>
       </div>
-
-      <div class="card-brutal" style="background: black; color: var(--wd-lime); border-color: var(--wd-lime); max-width: 900px; margin: 60px auto; text-align: center; transform: rotate(1deg); width: 100%;">
-          <h3 style="font-size: clamp(2rem, 6vw, 5rem); text-transform: uppercase; font-style: italic; line-height: 0.8; margin-bottom: 30px;">{t['feature.more.title']}</h3>
-          <p style="font-size: clamp(1rem, 2.5vw, 1.8rem); font-weight: 900; line-height: 1.2;">{t['feature.more.desc']}</p>
-          <img src="/icons/glasses.svg" style="width: clamp(100px, 20vw, 180px); margin-top: 50px; filter: invert(81%) sepia(87%) saturate(2976%) hue-rotate(24deg) brightness(108%) contrast(106%);" />
-      </div>
-    </div>
-
-    <footer class="footer-minimal">
-    <div class="footer-left">
-        {t['footer.madeby']} <br />
-        <span class="contact-email">Contact us: dudes.info.temp@gmail.com</span>
-    </div>
-    <div class="footer-center">
-        <img src="/favicon.svg" style="width: 50px; opacity: 0.5;" />
-    </div>
-    <div class="footer-right">Secured by Cloudflare</div>
-    </footer>
+    </section>
   </main>
 
+  <!-- ===================== PRODUCT DETAIL OVERLAYS ===================== -->
+  <Modal id="modal-weatherdude" title={PRODUCTS.weatherdude.name} fullscreen accent="var(--wd-white)">
+    <div class="product-detail pd-weatherdude">
+      <h3>{t['products.weatherdude.detail.headline']}</h3>
+      <p>{t['products.weatherdude.detail.body']}</p>
+
+      <div class="store-buttons">
+        <!-- TODO: swap '#' for the real App Store / Google Play URLs once provided -->
+        <a href="#" class="store-btn" data-store-link="appstore">{t['products.weatherdude.store.appstore']}</a>
+        <a href="#" class="store-btn" data-store-link="googleplay">{t['products.weatherdude.store.googleplay']}</a>
+      </div>
+
+      <div class="capture-block">
+        <h4>{t['products.weatherdude.waitlist.title']}</h4>
+        <form class="capture-form">
+          <input type="email" name="email" placeholder={t['products.weatherdude.waitlist.placeholder']} class="capture-input" required />
+          <input type="hidden" name="lang" value={lang} />
+          <input type="hidden" name="product" value="weatherdude" />
+          <button type="submit" class="capture-btn wd-btn">{t['products.weatherdude.waitlist.btn']}</button>
+        </form>
+        <div class="form-msg" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></div>
+      </div>
+    </div>
+  </Modal>
+
+  <Modal id="modal-mountaindude" title={PRODUCTS.mountaindude.name} fullscreen accent="var(--md-gray)">
+    <div class="product-detail pd-mountaindude">
+      <h3>{t['products.mountaindude.detail.headline']}</h3>
+      <p>{t['products.mountaindude.detail.body']}</p>
+
+      <div class="capture-block">
+        <h4>{t['products.mountaindude.notify.title']}</h4>
+        <form class="capture-form">
+          <input type="email" name="email" placeholder={t['products.mountaindude.notify.placeholder']} class="capture-input" required />
+          <input type="hidden" name="lang" value={lang} />
+          <input type="hidden" name="product" value="mountaindude" />
+          <button type="submit" class="capture-btn md-btn">{t['products.mountaindude.notify.btn']}</button>
+        </form>
+        <div class="form-msg" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></div>
+      </div>
+    </div>
+  </Modal>
+
+  <Modal id="modal-hungrydude" title={PRODUCTS.hungrydude.name} fullscreen accent="var(--hd-cream)">
+    <div class="product-detail pd-hungrydude">
+      <h3>{t['products.hungrydude.detail.headline']}</h3>
+      <p>{t['products.hungrydude.detail.body']}</p>
+
+      <div class="capture-block">
+        <h4>{t['products.hungrydude.notify.title']}</h4>
+        <form class="capture-form">
+          <input type="email" name="email" placeholder={t['products.hungrydude.notify.placeholder']} class="capture-input" required />
+          <input type="hidden" name="lang" value={lang} />
+          <input type="hidden" name="product" value="hungrydude" />
+          <button type="submit" class="capture-btn hd-btn">{t['products.hungrydude.notify.btn']}</button>
+        </form>
+        <div class="form-msg" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></div>
+      </div>
+    </div>
+  </Modal>
+
   <style>
-    /* Пуста плашка зверху */
-    .top-spacer {
-        height: 100px;
-        width: 100%;
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
-    .waitlist-input {
-        padding: 30px; 
-        border-radius: 60px; 
-        border: 5px solid white; 
-        background: transparent; 
-        color: white; 
-        font-size: clamp(1.2rem, 4vw, 2rem); /* Адаптивний шрифт інпута */
-        font-family: 'ActayWide', sans-serif; 
-        font-weight: 900;
-        width: 100%;
-        box-sizing: border-box;
+    .section-title {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      text-transform: uppercase;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.95;
+      text-align: center;
+      margin: 0 0 10px;
+    }
+    .section-subtitle {
+      text-align: center;
+      font-weight: 700;
+      opacity: 0.75;
+      max-width: 600px;
+      margin: 0 auto 60px;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
     }
 
-    .waitlist-btn {
-        padding: 30px; 
-        border-radius: 60px; 
-        border: 5px solid black; 
-        background: var(--wd-lime); 
-        font-size: clamp(1.5rem, 5vw, 2.5rem); 
-        font-weight: 900; 
-        text-transform: uppercase; 
-        cursor: pointer; 
-        font-family: 'ActayWide', sans-serif; 
-        transition: 0.3s; 
-        box-shadow: 8px 8px 0px white;
+    /* ---------- Hero ---------- */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding-top: clamp(130px, 22vw, 180px);
+      padding-bottom: 60px;
+      text-align: center;
+    }
+    .hero-kicker {
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      opacity: 0.7;
     }
 
-    .card-brutal {
-        border: 8px solid black; border-radius: clamp(40px, 8vw, 80px);
-        box-shadow: 25px 25px 0px black; padding: clamp(2.5rem, 8vw, 80px) clamp(1.5rem, 5vw, 50px);
-        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        flex: 1; min-width: 350px;
+    /* ---------- Motto ---------- */
+    .motto {
+      text-align: center;
+      padding-bottom: 100px;
     }
-    .card-brutal:hover { transform: translate(-10px, -10px) rotate(0deg) !important; box-shadow: 35px 35px 0px black; }
-    
-    #temp { text-decoration: underline; text-decoration-color: var(--wd-lime); text-decoration-thickness: 8px; }
-    
-    .row-brutal { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 60px; }
-    .row-reverse { flex-wrap: wrap-reverse; }
-    
-    .icon-link img { transition: 0.4s; }
-    .icon-link:hover img { transform: scale(1.3) rotate(15deg); opacity: 1 !important; }
-
-    /* Приховування іконок у вертикальному режимі на мобайлі */
-    @media (max-width: 768px) and (orientation: portrait) {
-        .icon-link {
-            display: none;
-        }
-        .row-brutal {
-            justify-content: center;
-        }
+    .motto-headline {
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 0 0 24px;
+    }
+    .motto-subline {
+      max-width: 700px;
+      margin: 0 auto 50px;
+      font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+      font-weight: 700;
+      opacity: 0.85;
+    }
+    .motto-widget {
+      background: black;
+      color: white;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: clamp(1.8rem, 5vw, 3rem);
+      border-radius: clamp(30px, 6vw, 50px);
+      border: 6px solid black;
+      box-shadow: 16px 16px 0px var(--wd-yellow);
+    }
+    .widget-label {
+      font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+      font-weight: 900;
+      margin: 0 0 20px;
+    }
+    .widget-label :global(#temp),
+    .widget-label :global(#loc) {
+      text-decoration: underline;
+      text-decoration-color: var(--wd-lime);
+      text-decoration-thickness: 6px;
+    }
+    .widget-reactions {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .reaction-bubble {
+      background: white;
+      color: black;
+      border: 4px solid black;
+      border-radius: 99px;
+      padding: 10px 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+    }
+    .widget-caption {
+      font-size: 0.95rem;
+      opacity: 0.7;
+      margin: 0;
     }
 
-    .footer-minimal {
-        margin-top: 150px; padding: 40px 0; border-top: 8px solid black;
-        display: flex; justify-content: space-between; align-items: center;
-        font-weight: 900; text-transform: uppercase; font-size: 0.8rem; opacity: 0.6;
+    /* ---------- Products ---------- */
+    .products { padding-bottom: 100px; }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      border: 6px solid black;
+      border-radius: 40px;
+      padding: 2rem;
+      cursor: pointer;
+      font-family: 'ActayWide', sans-serif;
+      box-shadow: 14px 14px 0px black;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+      background: var(--wd-white);
+    }
+    .product-card:hover {
+      transform: translate(-6px, -6px);
+      box-shadow: 20px 20px 0px black;
+    }
+    .pc-weatherdude { background: var(--wd-pink); }
+    .pc-mountaindude { background: var(--md-gray); color: var(--md-white); }
+    .pc-hungrydude { background: var(--hd-cream); }
+    .product-card.is-dev { opacity: 0.88; filter: saturate(0.85); }
+
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 3px solid currentColor;
+    }
+    .status-live { background: var(--wd-lime); color: black; border-color: black; }
+    .status-dev { background: transparent; }
+
+    .product-name {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+    }
+    .product-pitch { font-weight: 700; line-height: 1.3; opacity: 0.9; }
+    .card-cta { font-weight: 900; text-transform: uppercase; font-size: 0.85rem; margin-top: auto; }
+
+    /* ---------- Product detail overlays ---------- */
+    .product-detail h3 {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+      line-height: 1.05;
+    }
+    .product-detail p { font-size: 1.1rem; line-height: 1.5; font-weight: 500; }
+    .pd-mountaindude { color: var(--md-white); }
+    .pd-hungrydude { color: var(--hd-brown); }
+
+    .store-buttons { display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
+    .store-btn {
+      display: inline-block;
+      padding: 14px 24px;
+      border-radius: 99px;
+      border: 4px solid currentColor;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: inherit;
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 768px) {
-        main { padding: 40px 15px !important; }
-        .card-brutal { min-width: 100%; box-shadow: 15px 15px 0px black; }
-        .footer-minimal { flex-direction: column; gap: 20px; text-align: center; }
-        .top-spacer { height: 80px; }
+    .capture-block { margin-top: 30px; }
+    .capture-block h4 { font-weight: 900; text-transform: uppercase; font-size: 1.1rem; }
+    .capture-form { display: flex; gap: 14px; flex-wrap: wrap; }
+    .capture-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 16px 20px;
+      border-radius: 40px;
+      border: 4px solid currentColor;
+      background: transparent;
+      color: inherit;
+      font-family: 'ActayWide', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+    }
+    .capture-btn {
+      padding: 16px 28px;
+      border-radius: 40px;
+      border: 4px solid black;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'ActayWide', sans-serif;
+    }
+    .wd-btn { background: var(--wd-lime); }
+    .md-btn { background: var(--md-lime); }
+    .hd-btn { background: var(--hd-amber); }
+
+    .form-msg {
+      display: none;
+      margin-top: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      padding: 14px 20px;
+      border-radius: 20px;
+    }
+    .form-msg.ok { background: var(--wd-lime); color: black; }
+    .form-msg.err { background: #e5484d; color: white; }
+
+    /* ---------- Team ---------- */
+    .team { padding-bottom: 100px; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .team-card {
+      border: 6px solid black;
+      border-radius: 40px;
+      padding: 2rem;
+      background: white;
+      box-shadow: 12px 12px 0px black;
+      text-align: center;
+    }
+    .avatar-placeholder {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 5px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      margin: 0 auto 16px;
+    }
+    .avatar-placeholder.small { width: 46px; height: 46px; font-size: 1.1rem; margin: 0; }
+    .team-card h3 { font-size: 1.3rem; font-weight: 900; margin: 0 0 4px; }
+    .team-role { font-weight: 900; text-transform: uppercase; font-size: 0.85rem; opacity: 0.6; margin: 0 0 14px; }
+    .team-bio { font-size: 0.95rem; line-height: 1.4; }
+
+    /* ---------- Contact ---------- */
+    .contact { padding-bottom: 140px; text-align: center; }
+    .contact-email-btn {
+      display: inline-block;
+      background: black;
+      color: white;
+      padding: 22px 50px;
+      border-radius: 99px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      box-shadow: 10px 10px 0px var(--wd-lime);
+      border: 5px solid black;
+    }
+    .founders { margin-top: 70px; }
+    .founders-title { font-weight: 900; text-transform: uppercase; opacity: 0.6; margin-bottom: 20px; }
+    .founders-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .founder-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border: 4px solid black;
+      border-radius: 99px;
+      padding: 10px 20px 10px 10px;
+      text-align: left;
+      box-shadow: 6px 6px 0px black;
+    }
+    .founder-name { font-weight: 900; margin: 0; font-size: 0.95rem; }
+    .founder-role { font-size: 0.75rem; opacity: 0.6; margin: 0; }
+
+    @media (max-width: 900px) {
+      .product-grid, .team-grid { grid-template-columns: 1fr; }
     }
   </style>
 
   <script is:inline>
-    async function updateWeather() { 
-      try { 
+    async function updateWeather() {
+      const locSpan = document.getElementById('loc');
+      const tempSpan = document.getElementById('temp');
+      try {
         const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
         const city = geo.city || 'Bolzano';
-        const locSpan = document.getElementById('loc');
-        if (locSpan) locSpan.innerText = city.toUpperCase();
+        if (locSpan) locSpan.innerText = String(city).toUpperCase();
 
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${geo.latitude}&longitude=${geo.longitude}&current_weather=true`);
         const data = await res.json();
-        const tempSpan = document.getElementById('temp');
-        if (tempSpan) tempSpan.innerText = Math.round(data.current_weather.temperature);
+        if (tempSpan) tempSpan.innerText = String(Math.round(data.current_weather.temperature));
       } catch (e) {
-        document.getElementById('loc').innerText = 'BOLZANO';
+        if (locSpan) locSpan.innerText = 'BOLZANO';
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=46.4983&longitude=11.3548&current_weather=true`)
           .then(r => r.json()).then(data => {
-            document.getElementById('temp').innerText = Math.round(data.current_weather.temperature);
+            if (tempSpan) tempSpan.innerText = String(Math.round(data.current_weather.temperature));
           });
       }
     }
     updateWeather();
-    
-    const form = document.getElementById('waitlist-form');
-    const msg = document.getElementById('form-msg');
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
-      const result = await res.json();
-      msg.style.display = 'block';
-      if (res.ok) {
-        msg.innerText = msg.dataset.success; msg.style.background = '#D0FF00'; msg.style.color = 'black'; form.reset();
-      } else {
-        const isExists = result.error?.includes('already');
-        msg.innerText = isExists ? msg.dataset.exists : msg.dataset.error;
-        msg.style.background = 'red'; msg.style.color = 'white';
-      }
+
+    document.querySelectorAll('.capture-form').forEach((form) => {
+      if (!(form instanceof HTMLFormElement)) return;
+      const msg = form.parentElement ? form.parentElement.querySelector('.form-msg') : null;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const res = await fetch('/api/subscribe', { method: 'POST', body: new FormData(form) });
+        const result = await res.json();
+        if (!(msg instanceof HTMLElement)) return;
+        msg.style.display = 'block';
+        if (res.ok) {
+          msg.innerText = msg.dataset.success || '';
+          msg.classList.add('ok'); msg.classList.remove('err');
+          form.reset();
+        } else {
+          const isExists = result && result.error && result.error.includes('already');
+          msg.innerText = isExists ? (msg.dataset.exists || '') : (msg.dataset.error || '');
+          msg.classList.add('err'); msg.classList.remove('ok');
+        }
+      });
     });
   </script>
 </Layout>

@@ -1,8 +1,8 @@
 ---
-import { languages } from '../i18n/ui';
 import '../styles/global.css';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-const { lang, title = "WeatherDude" } = Astro.props;
+const { lang, title = "DUDES" } = Astro.props;
 ---
 <!doctype html>
 <html lang={lang}>
@@ -20,8 +20,16 @@ const { lang, title = "WeatherDude" } = Astro.props;
             font-display: swap;
         }
         :root {
+            /* WeatherDude */
             --wd-pink: #FF86CE; --wd-lime: #D0FF00;
             --wd-yellow: #FFE100; --wd-white: #FFEAF4;
+            /* MountainDude — from the CoachDude concept guide (dark-mode system) */
+            --md-lime: #E3F265; --md-white: #E7E7E7;
+            --md-purple: #B5A1FE; --md-gray: #202020;
+            /* HungryDude — placeholder palette, no brand assets yet */
+            --hd-amber: #FFB454; --hd-cream: #FFF3E1; --hd-brown: #3A2418;
+            /* DUDES parent brand */
+            --dd-navy: #160A33; --dd-blue: #6C5CE7;
         }
         html, body {
             margin: 0; padding: 0;
@@ -30,22 +38,10 @@ const { lang, title = "WeatherDude" } = Astro.props;
             color: black;
             scroll-behavior: smooth;
         }
-        .lang-dropdown {
-            position: fixed; top: 20px; right: 20px; z-index: 1000;
+        html { scroll-padding-top: 90px; }
+        @media (max-width: 768px) {
+            html { scroll-padding-top: 70px; }
         }
-        .lang-trigger {
-            background: white; border: 5px solid black; padding: 12px 24px;
-            font-weight: 900; border-radius: 99px; box-shadow: 6px 6px 0px black; cursor: pointer;
-            text-transform: uppercase;
-        }
-        .lang-list {
-            display: none; position: absolute; top: 110%; right: 0;
-            background: white; border: 5px solid black; border-radius: 25px;
-            max-height: 250px; overflow-y: auto; box-shadow: 10px 10px 0px black;
-        }
-        .lang-dropdown:hover .lang-list { display: block; }
-        .lang-item { display: block; padding: 15px 30px; color: black; text-decoration: none; font-weight: 900; text-transform: uppercase; }
-        .lang-item:hover { background: var(--wd-lime); }
     </style>
     <!-- Google tag (gtag.js) -->
     <script 
@@ -62,14 +58,7 @@ const { lang, title = "WeatherDude" } = Astro.props;
     </script>
 </head>
 <body class="antialiased overflow-x-hidden">
-    <div class="lang-dropdown">
-        <div class="lang-trigger">🌐 {lang.toUpperCase()} ▼</div>
-        <div class="lang-list">
-            {Object.entries(languages).map(([code, label]) => (
-                <a href={`/${code}/`} class="lang-item">{label}</a>
-            ))}
-        </div>
-    </div>
+    <Header lang={lang} />
     <slot />
     <Footer />
 </body>
