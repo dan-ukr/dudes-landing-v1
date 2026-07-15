@@ -1,12 +1,15 @@
 ---
-// The real logo (public/icons/DudesLogo.svg) was optimized with svgo
-// (1.7MB -> ~59KB; the original had thousands of tiny traced micro-rectangles)
-// and its paths were bucketed by position into pink/lime/blue/yellow quadrant
-// groups plus a static center group (background ring outline + "DUDES"
-// wordmark) — see src/components/dudes-logo-ring.svg. That split is what
-// makes the drag-to-rotate ring and the click-to-reassemble bounce possible.
-// Imported with Vite's `?raw` so the markup is inlined at build time —
-// a plain fs.readFileSync doesn't survive the server-bundle/prerender step.
+// Built from the real separated Figma layers (src/components/logo-parts/) —
+// Pink/Green/Blue/Yellow are the four ring quadrants, each exported at the
+// full shared 794x794 frame so they line up exactly; CenterDudesLogo is the
+// "DUDES" wordmark, cropped to its own bounding box, so it's re-centered by
+// script (see /scripts intent in commit history — merged by a one-off build
+// step, output committed as dudes-logo-ring.svg) onto the shared canvas, with
+// a plain white backing disc added so its mask-cut lettering reads correctly
+// regardless of what's behind it.
+// This structure is what makes both interactions possible: the ring (4
+// quadrants) can rotate as one rigid piece while the center wordmark stays
+// fixed, and each quadrant can independently fly apart and snap back.
 import ringSvg from './dudes-logo-ring.svg?raw';
 
 interface Props {
@@ -37,7 +40,7 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
 
   .dudes-logo :global(.dudes-ring) {
     transform-box: view-box;
-    transform-origin: 603px 603px;
+    transform-origin: 397px 397px;
     transform: rotate(var(--ring-rotation, 0deg));
     cursor: grab;
   }
@@ -48,7 +51,7 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
   .dudes-logo :global(.q-blue),
   .dudes-logo :global(.q-yellow) {
     transform-box: view-box;
-    transform-origin: 603px 603px;
+    transform-origin: 397px 397px;
   }
 
   .dudes-logo :global(.click-hit-area) {
@@ -66,8 +69,8 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
   }
 
   /* Click-to-reassemble: each quadrant flies out to its own corner and
-     snaps back. Re-triggerable — see the script below, which toggles
-     this class off and on so the animation can replay every click. */
+     snaps back. Re-triggerable — the script toggles this class off and
+     on so the animation can replay every click. */
   .dudes-logo :global(.dudes-ring.bounce .q-pink)   { animation: dudes-bounce-pink 1.1s cubic-bezier(.34,1.56,.64,1); }
   .dudes-logo :global(.dudes-ring.bounce .q-lime)   { animation: dudes-bounce-lime 1.1s cubic-bezier(.34,1.56,.64,1); }
   .dudes-logo :global(.dudes-ring.bounce .q-blue)   { animation: dudes-bounce-blue 1.1s cubic-bezier(.34,1.56,.64,1); }
@@ -75,19 +78,19 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
 
   @keyframes dudes-bounce-pink {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    35%, 55% { transform: translate(-120px, -120px) rotate(-10deg); }
+    35%, 55% { transform: translate(-80px, -80px) rotate(-10deg); }
   }
   @keyframes dudes-bounce-lime {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    35%, 55% { transform: translate(120px, -120px) rotate(10deg); }
+    35%, 55% { transform: translate(80px, -80px) rotate(10deg); }
   }
   @keyframes dudes-bounce-blue {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    35%, 55% { transform: translate(120px, 120px) rotate(-10deg); }
+    35%, 55% { transform: translate(80px, 80px) rotate(-10deg); }
   }
   @keyframes dudes-bounce-yellow {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    35%, 55% { transform: translate(-120px, 120px) rotate(10deg); }
+    35%, 55% { transform: translate(-80px, 80px) rotate(10deg); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -130,8 +133,11 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
     }
     ring.addEventListener('animationend', () => ring.classList.remove('bounce'));
 
+    // click-hit-area radius is ~260/397 of the canvas half-width (see the merge
+    // script that built dudes-logo-ring.svg — inner disc r=245.91 + margin)
+    const CLICK_RATIO = 260 / 397;
+
     if (prefersReduced) {
-      // Still allow the click-to-reassemble party trick, just skip the drag-rotate.
       wrap.querySelector('.click-hit-area')?.addEventListener('click', triggerBounce);
       return;
     }
@@ -142,7 +148,7 @@ const { size = 'clamp(200px, 42vw, 340px)', static: isStatic = false, class: cla
       const ratio = d / halfW;
       downPos = { x: e.clientX, y: e.clientY };
       downTime = Date.now();
-      if (ratio <= 260 / 603) {
+      if (ratio <= CLICK_RATIO) {
         mode = 'click';
       } else if (ratio <= 1.05) {
         mode = 'rotate';
