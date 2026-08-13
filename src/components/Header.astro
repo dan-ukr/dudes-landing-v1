@@ -7,10 +7,15 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = ui[lang as keyof typeof ui];
+
+// On the homepage itself, keep the smooth in-page scroll-to-top. Anywhere
+// else (e.g. the weather-dna quiz), the word should actually take you home.
+const isHomepage = Astro.url.pathname === `/${lang}/` || Astro.url.pathname === `/${lang}`;
+const brandHref = isHomepage ? '#top' : `/${lang}/`;
 ---
 
 <header class="dudes-header">
-  <a href="#top" class="brand-word" aria-label="DUDES — back to top">DUDES</a>
+  <a href={brandHref} class="brand-word" aria-label="DUDES — back to home">DUDES</a>
 
   <nav class="anchor-nav">
     <a href="#products">{t['nav.products']}</a>
