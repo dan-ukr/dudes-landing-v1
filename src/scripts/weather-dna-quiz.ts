@@ -7,10 +7,14 @@ type GeocodeResult = { label: string; lat: number; lon: number };
 const state = {
   homeCity: null as { name: string; lat: number; lon: number } | null,
   pastCities: [] as { name: string; lat: number; lon: number }[],
-  layering1to5: 3,
 };
 
-const discomfort: Record<'rain' | 'snow' | 'wind', number[]> = { rain: [], snow: [], wind: [] };
+const discomfort: Record<'rain' | 'snow' | 'wind' | 'layering', number[]> = {
+  rain: [],
+  snow: [],
+  wind: [],
+  layering: [],
+};
 
 function wireSwipeDeck(onDeckComplete: () => void) {
   const cards = Array.from(document.querySelectorAll<HTMLElement>('.wdna-swipe-card')).sort(
@@ -49,13 +53,18 @@ function wireSwipeDeck(onDeckComplete: () => void) {
       currentX = e.clientX - startX;
       card.style.transform = `translateX(${currentX}px) rotate(${currentX / 20}deg)`;
 
+      // Tint uses color-mix (fully opaque) rather than an rgba() alpha value —
+      // an alpha background makes the whole card see-through as intensity rises,
+      // which is not the intended effect. Only the color should shift; the card
+      // itself must stay opacity: 1 throughout the drag and fly-away.
       const intensity = Math.min(1, Math.abs(currentX) / maxDrag);
+      const tintPct = Math.round(intensity * 40);
       if (currentX > 0) {
-        card.style.backgroundColor = `rgba(34, 197, 94, ${intensity * 0.4})`;
+        card.style.backgroundColor = `color-mix(in srgb, white, #22c55e ${tintPct}%)`;
         if (agreeHint) agreeHint.style.opacity = String(intensity);
         if (disagreeHint) disagreeHint.style.opacity = '0';
       } else if (currentX < 0) {
-        card.style.backgroundColor = `rgba(239, 68, 68, ${intensity * 0.4})`;
+        card.style.backgroundColor = `color-mix(in srgb, white, #ef4444 ${tintPct}%)`;
         if (disagreeHint) disagreeHint.style.opacity = String(intensity);
         if (agreeHint) agreeHint.style.opacity = '0';
       } else {
@@ -68,7 +77,7 @@ function wireSwipeDeck(onDeckComplete: () => void) {
       if (!dragging) return;
       dragging = false;
       const ratio = Math.max(-1, Math.min(1, currentX / maxDrag));
-      const dimension = card.dataset.dimension as 'rain' | 'snow' | 'wind';
+      const dimension = card.dataset.dimension as 'rain' | 'snow' | 'wind' | 'layering';
       discomfort[dimension].push(swipeToDiscomfort(ratio));
       card.style.transition = 'transform 0.2s ease';
       card.style.transform = `translateX(${ratio > 0 ? 400 : -400}px) rotate(${ratio * 20}deg)`;
@@ -105,7 +114,7 @@ async function submitQuiz(lang: string) {
     rainDiscomfort1to5: Math.round(avg(discomfort.rain)),
     snowDiscomfort1to5: Math.round(avg(discomfort.snow)),
     windDiscomfort1to5: Math.round(avg(discomfort.wind)),
-    layering1to5: state.layering1to5,
+    layering1to5: Math.round(avg(discomfort.layering)),
     fit1to5: sliderValue('wdna-slider-fit'),
     lang,
   };
@@ -241,16 +250,6 @@ function init() {
   // input, so "Add another city" just needs to refocus the search field.
   document.querySelector('[data-action="add-past-city"]')?.addEventListener('click', () => {
     (document.getElementById('wdna-past-city-input') as HTMLInputElement).focus();
-  });
-
-  const outerwearOptions = Array.from(document.querySelectorAll<HTMLButtonElement>('.wdna-outerwear-option'));
-  outerwearOptions.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      state.layering1to5 = Number(btn.dataset.layeringValue);
-      outerwearOptions.forEach((other) => {
-        other.dataset.selected = other === btn ? 'true' : 'false';
-      });
-    });
   });
 
   document.querySelector('[data-action="next-from-pastClimates"]')?.addEventListener('click', () => {
