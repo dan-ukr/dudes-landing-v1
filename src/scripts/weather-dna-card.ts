@@ -16,30 +16,42 @@ function init() {
   }
 
   document.getElementById('wdna-download-btn')?.addEventListener('click', async () => {
-    const dataUrl = await renderPng();
-    const link = document.createElement('a');
-    link.download = 'weather-dna.png';
-    link.href = dataUrl;
-    link.click();
+    try {
+      const dataUrl = await renderPng();
+      const link = document.createElement('a');
+      link.download = 'weather-dna.png';
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('weather-dna-card: download failed', err);
+    }
   });
 
   document.getElementById('wdna-share-btn')?.addEventListener('click', async () => {
-    const dataUrl = await renderPng();
-    const blob = await (await fetch(dataUrl)).blob();
-    const file = new File([blob], 'weather-dna.png', { type: 'image/png' });
+    try {
+      const dataUrl = await renderPng();
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], 'weather-dna.png', { type: 'image/png' });
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'My Weather DNA', url: window.location.href });
-      return;
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'My Weather DNA', url: window.location.href });
+        return;
+      }
+
+      // Fallback: download the image and open a prefilled text+link share intent.
+      const link = document.createElement('a');
+      link.download = 'weather-dna.png';
+      link.href = dataUrl;
+      link.click();
+      const shareText = encodeURIComponent(`My Weather DNA result: ${window.location.href}`);
+      window.open(`https://twitter.com/intent/tweet?text=${shareText}`, '_blank', 'noopener');
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        // User cancelled the native share sheet — not a failure, ignore silently.
+        return;
+      }
+      console.error('weather-dna-card: share failed', err);
     }
-
-    // Fallback: download the image and open a prefilled text+link share intent.
-    const link = document.createElement('a');
-    link.download = 'weather-dna.png';
-    link.href = dataUrl;
-    link.click();
-    const shareText = encodeURIComponent(`My Weather DNA result: ${window.location.href}`);
-    window.open(`https://twitter.com/intent/tweet?text=${shareText}`, '_blank', 'noopener');
   });
 }
 
