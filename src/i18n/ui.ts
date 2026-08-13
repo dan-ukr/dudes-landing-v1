@@ -236,6 +236,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'This was a guess.',
     'weatherdna.result.cta.body': 'WeatherDude tracks your real feels-like temperature every single day, and builds outfits from your actual wardrobe — not a one-minute quiz.',
     'weatherdna.result.cta.button': 'Get WeatherDude on Google Play',
+    'weatherdna.result.cta.buttonIos': 'Get WeatherDude on the App Store',
+    'weatherdna.leaderboard.title': 'Top Archetypes Right Now',
+    'weatherdna.leaderboard.people': 'people',
 
     'weatherdna.result.notFound.title': 'This result doesn\'t exist (anymore).',
     'weatherdna.result.notFound.cta': 'Take the test',
@@ -434,7 +437,7 @@ export const ui = {
     'weatherdna.archetype.coastal-drifter.flavor': 'легкий на підйом, вітряний, тяжіє до тепла',
     'weatherdna.archetype.humid-nomad.name': 'Вологий Кочівник',
     'weatherdna.archetype.humid-nomad.flavor': 'витривалий у теплі, вологі, мінливі дні',
-    'weatherdna.archetype.all-weather-sun-warrior.name': 'Сонячний Воїн на Всі Погоди',
+    'weatherdna.archetype.all-weather-sun-warrior.name': 'Сонцелюб Усіх Негод',
     'weatherdna.archetype.all-weather-sun-warrior.flavor': 'дощ чи вітер тобі байдужі, аби було тепло',
 
     'weatherdna.result.hero.trait.thermal': 'Холод ↔ Спека',
@@ -499,6 +502,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'Це було припущення.',
     'weatherdna.result.cta.body': 'WeatherDude стежить за твоєю справжньою температурою «як відчувається» щодня і збирає луки з твого реального гардеробу — а не з тесту на хвилину.',
     'weatherdna.result.cta.button': 'Отримати WeatherDude в Google Play',
+    'weatherdna.result.cta.buttonIos': 'Отримати WeatherDude в App Store',
+    'weatherdna.leaderboard.title': 'Найпопулярніші архетипи зараз',
+    'weatherdna.leaderboard.people': 'осіб',
 
     'weatherdna.result.notFound.title': 'Цього результату більше не існує.',
     'weatherdna.result.notFound.cta': 'Пройти тест',
@@ -735,6 +741,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'To było zgadywanie.',
     'weatherdna.result.cta.body': 'WeatherDude śledzi Twoją prawdziwą temperaturę odczuwalną każdego dnia i buduje stroje z Twojej prawdziwej szafy — a nie z minutowego testu.',
     'weatherdna.result.cta.button': 'Pobierz WeatherDude z Google Play',
+    'weatherdna.result.cta.buttonIos': 'Pobierz WeatherDude z App Store',
+    'weatherdna.leaderboard.title': 'Najpopularniejsze archetypy teraz',
+    'weatherdna.leaderboard.people': 'osób',
 
     'weatherdna.result.notFound.title': 'Tego wyniku już nie ma.',
     'weatherdna.result.notFound.cta': 'Zrób test',
@@ -971,6 +980,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'Questa era solo una stima.',
     'weatherdna.result.cta.body': 'WeatherDude traccia la tua vera temperatura percepita ogni singolo giorno, e costruisce outfit dal tuo guardaroba reale — non da un quiz di un minuto.',
     'weatherdna.result.cta.button': 'Scarica WeatherDude su Google Play',
+    'weatherdna.result.cta.buttonIos': "Scarica WeatherDude sull'App Store",
+    'weatherdna.leaderboard.title': 'Gli archetipi più popolari ora',
+    'weatherdna.leaderboard.people': 'persone',
 
     'weatherdna.result.notFound.title': 'Questo risultato non esiste (più).',
     'weatherdna.result.notFound.cta': 'Fai il test',
@@ -1207,6 +1219,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'Das war eine Schätzung.',
     'weatherdna.result.cta.body': 'WeatherDude trackt deine echte gefühlte Temperatur jeden einzelnen Tag und baut Outfits aus deiner echten Garderobe — nicht aus einem Ein-Minuten-Quiz.',
     'weatherdna.result.cta.button': 'WeatherDude bei Google Play holen',
+    'weatherdna.result.cta.buttonIos': 'WeatherDude im App Store holen',
+    'weatherdna.leaderboard.title': 'Beliebteste Archetypen gerade jetzt',
+    'weatherdna.leaderboard.people': 'Personen',
 
     'weatherdna.result.notFound.title': 'Dieses Ergebnis gibt es (nicht mehr).',
     'weatherdna.result.notFound.cta': 'Test machen',
@@ -1443,6 +1458,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'Esto fue una estimación.',
     'weatherdna.result.cta.body': 'WeatherDude registra tu temperatura de sensación real todos los días, y arma looks con tu armario real — no con un quiz de un minuto.',
     'weatherdna.result.cta.button': 'Conseguir WeatherDude en Google Play',
+    'weatherdna.result.cta.buttonIos': 'Conseguir WeatherDude en App Store',
+    'weatherdna.leaderboard.title': 'Los arquetipos más populares ahora',
+    'weatherdna.leaderboard.people': 'personas',
 
     'weatherdna.result.notFound.title': 'Este resultado ya no existe.',
     'weatherdna.result.notFound.cta': 'Hacer el test',
@@ -1679,6 +1697,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'Isto foi um palpite.',
     'weatherdna.result.cta.body': 'O WeatherDude segue a tua temperatura de sensação real todos os dias, e monta looks a partir do teu guarda-roupa real — não de um quiz de um minuto.',
     'weatherdna.result.cta.button': 'Obter o WeatherDude no Google Play',
+    'weatherdna.result.cta.buttonIos': 'Obter o WeatherDude na App Store',
+    'weatherdna.leaderboard.title': 'Os arquétipos mais populares agora',
+    'weatherdna.leaderboard.people': 'pessoas',
 
     'weatherdna.result.notFound.title': 'Este resultado já não existe.',
     'weatherdna.result.notFound.cta': 'Fazer o teste',
@@ -1915,6 +1936,9 @@ export const ui = {
     'weatherdna.result.cta.title': "C'était une estimation.",
     'weatherdna.result.cta.body': "WeatherDude suit ta vraie température ressentie tous les jours, et construit des tenues à partir de ta vraie garde-robe — pas d'un quiz d'une minute.",
     'weatherdna.result.cta.button': 'Récupérer WeatherDude sur Google Play',
+    'weatherdna.result.cta.buttonIos': "Récupérer WeatherDude sur l'App Store",
+    'weatherdna.leaderboard.title': 'Les archétypes les plus populaires en ce moment',
+    'weatherdna.leaderboard.people': 'personnes',
 
     'weatherdna.result.notFound.title': "Ce résultat n'existe plus.",
     'weatherdna.result.notFound.cta': 'Faire le test',
@@ -2151,6 +2175,9 @@ export const ui = {
     'weatherdna.result.cta.title': 'Гэта было здагадка.',
     'weatherdna.result.cta.body': 'WeatherDude сочыць за тваёй сапраўднай тэмпературай «як адчуваецца» штодня і збірае вобразы з твайго рэальнага гардэроба — а не з тэсту на хвіліну.',
     'weatherdna.result.cta.button': 'Атрымаць WeatherDude у Google Play',
+    'weatherdna.result.cta.buttonIos': 'Атрымаць WeatherDude у App Store',
+    'weatherdna.leaderboard.title': 'Топ архетыпаў прама цяпер',
+    'weatherdna.leaderboard.people': 'чалавек',
 
     'weatherdna.result.notFound.title': 'Гэтага выніку больш не існуе.',
     'weatherdna.result.notFound.cta': 'Прайсці тэст',

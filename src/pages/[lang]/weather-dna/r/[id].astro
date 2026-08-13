@@ -30,6 +30,18 @@ if (!row) {
   Astro.response.status = 404;
 }
 
+// Live leaderboard: which archetypes are landing most often, re-queried on
+// every page view so it stays current as new quiz results come in.
+const leaderboardRows = row
+  ? await DB.prepare(
+      `SELECT archetype_code, COUNT(*) as cnt FROM weather_dna_results GROUP BY archetype_code ORDER BY cnt DESC LIMIT 5`
+    ).all<{ archetype_code: string; cnt: number }>()
+  : null;
+const leaderboard = (leaderboardRows?.results ?? []).map((r) => ({
+  archetype: getArchetype(r.archetype_code),
+  count: r.cnt,
+}));
+
 const archetype = row ? getArchetype(row.archetype_code) : null;
 const topCities: Array<{ name: string; country: string; tempC: number; isLive: boolean }> = row
   ? JSON.parse(row.top_cities_json)
@@ -57,6 +69,19 @@ const thermalParts = row
   ? t['weatherdna.result.hero.trait.thermal'].split('↔').map((s) => s.trim())
   : ['', ''];
 const PIPS = [1, 2, 3, 4, 5];
+
+// Per-axis pip glyphs (stroke-drawn, colored via currentColor so the same
+// path works on both the white/unfilled and black/filled pip backgrounds).
+const ICON_PATHS: Record<string, string> = {
+  snowflake: '<line x1="12" y1="4" x2="12" y2="20"/><line x1="5" y1="8" x2="19" y2="16"/><line x1="19" y1="8" x2="5" y2="16"/>',
+  shield: '<path d="M12 3l7 3v5c0 5-3 8-7 9-4-1-7-4-7-9V6z"/>',
+  flame: '<path d="M12 3c-1 4-6 6-6 11a6 6 0 0 0 12 0c0-2-1-4-2-5 0 2-1 3-2 2 1-3 0-6-2-8z"/>',
+  wind: '<path d="M3 8c3-2 5 1 8 0M3 12c4-2 7 1 11 0M3 16c3-2 5 1 8 0"/>',
+  raindrop: '<path d="M12 3c-3 5-6 9-6 12a6 6 0 0 0 12 0c0-3-3-7-6-12z"/>',
+};
+// Thermal's 5 pips step through distinct glyphs cold->hot; rain/wind reuse
+// one glyph per pip; adaptability stays plain squares (unchanged).
+const THERMAL_ICON_SEQUENCE = ['snowflake', 'snowflake', 'shield', 'flame', 'flame'];
 ---
 
 <Layout lang={lang} title={row && archetype ? t[archetype.nameKey as keyof typeof t] : t['weatherdna.result.notFound.title']}>
@@ -90,7 +115,11 @@ const PIPS = [1, 2, 3, 4, 5];
                 <div class="wdna-trait-row">
                   <span class="wdna-trait-label">{thermalParts[0]}</span>
                   <div class="wdna-pips">
-                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.thermal ? 'is-filled' : ''}`}></span>)}
+                    {PIPS.map((i) => (
+                      <span class={`wdna-pip-icon ${i <= pipCounts.thermal ? 'is-filled' : ''}`}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS[THERMAL_ICON_SEQUENCE[i - 1]]} />
+                      </span>
+                    ))}
                   </div>
                   <span class="wdna-trait-label">{thermalParts[1]}</span>
                 </div>
@@ -104,14 +133,22 @@ const PIPS = [1, 2, 3, 4, 5];
                 <div class="wdna-trait-row">
                   <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.low' as keyof typeof t]}</span>
                   <div class="wdna-pips">
-                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.rain ? 'is-filled' : ''}`}></span>)}
+                    {PIPS.map((i) => (
+                      <span class={`wdna-pip-icon ${i <= pipCounts.rain ? 'is-filled' : ''}`}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS.raindrop} />
+                      </span>
+                    ))}
                   </div>
                   <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.high' as keyof typeof t]}</span>
                 </div>
                 <div class="wdna-trait-row">
                   <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.low' as keyof typeof t]}</span>
                   <div class="wdna-pips">
-                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.wind ? 'is-filled' : ''}`}></span>)}
+                    {PIPS.map((i) => (
+                      <span class={`wdna-pip-icon ${i <= pipCounts.wind ? 'is-filled' : ''}`}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS.wind} />
+                      </span>
+                    ))}
                   </div>
                   <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.high' as keyof typeof t]}</span>
                 </div>
@@ -177,6 +214,28 @@ const PIPS = [1, 2, 3, 4, 5];
           </section>
         )}
 
+        {leaderboard.length > 0 && (
+          <section class="wdna-leaderboard">
+            <h2>{t['weatherdna.leaderboard.title' as keyof typeof t]}</h2>
+            <ul>
+              {leaderboard.map((entry) => (
+                <li>
+                  <img
+                    src={entry.archetype.image}
+                    alt=""
+                    class="wdna-leaderboard-icon"
+                    onerror="this.style.visibility='hidden';"
+                  />
+                  <span class="wdna-leaderboard-name">{t[entry.archetype.nameKey as keyof typeof t]}</span>
+                  <span class="wdna-leaderboard-count">
+                    {entry.count} {t['weatherdna.leaderboard.people' as keyof typeof t]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section class="wdna-cta">
           <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" />
           <span class="wdna-cta-brandname">WeatherDude</span>
@@ -187,7 +246,7 @@ const PIPS = [1, 2, 3, 4, 5];
               {t['weatherdna.result.cta.button']}
             </a>
             <a href="#" class="wdna-cta-btn wdna-cta-btn-ios" aria-disabled="true" onclick="return false;">
-              App Store
+              {t['weatherdna.result.cta.buttonIos' as keyof typeof t]}
             </a>
           </div>
         </section>
@@ -206,17 +265,21 @@ const PIPS = [1, 2, 3, 4, 5];
     .wdna-hero-card[data-bg='pink'] { background: var(--wd-pink); }
     .wdna-hero-card[data-bg='yellow'] { background: var(--wd-yellow); }
     .wdna-hero-card[data-bg='violet'] { background: var(--md-purple); }
-    .wdna-hero-top { flex: 42 1 0; min-height: 0; display: flex; }
-    .wdna-hero-image { width: 100%; height: 100%; display: block; border-radius: 20px; object-fit: cover; }
+    .wdna-hero-top { flex: 42 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+    /* object-fit: contain -- the character art must never be cropped, even
+       if that means letterboxing within this section. */
+    .wdna-hero-image { max-width: 100%; max-height: 100%; display: block; border-radius: 20px; object-fit: contain; }
     .wdna-hero-image-fallback {
       width: 100%; height: 100%; align-items: center; justify-content: center;
       border: 4px dashed black; border-radius: 20px; font-weight: 900; font-size: 1.2rem;
     }
-    .wdna-hero-middle { flex: 28 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
-    .wdna-hero-bottom { flex: 30 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
-    .wdna-hero-brand { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
-    .wdna-hero-logo { height: 18px; }
-    .wdna-hero-brandname { font-style: italic; font-weight: 900; font-size: 0.75rem; }
+    .wdna-hero-middle { flex: 26 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+    /* space-between (not center) so the brand block pins to the true bottom
+       edge of the card, with the trait rows sitting above it. */
+    .wdna-hero-bottom { flex: 32 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+    .wdna-hero-brand { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; }
+    .wdna-hero-logo { height: 30px; }
+    .wdna-hero-brandname { font-style: italic; font-weight: 900; font-size: 1.05rem; }
     .wdna-hero-controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
     .wdna-bg-swatches button { width: 30px; height: 30px; border-radius: 50%; border: 3px solid black; margin-right: 6px; }
     .wdna-cta { text-align: center; margin-top: 60px; padding: 30px; border: 6px solid black; border-radius: 30px; }
@@ -255,17 +318,27 @@ const PIPS = [1, 2, 3, 4, 5];
       display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
     }
 
-    .wdna-traits { display: flex; flex-direction: column; gap: 4px; }
+    .wdna-traits { display: flex; flex-direction: column; gap: 5px; }
     .wdna-trait-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
     .wdna-trait-label {
-      font-size: 0.5rem; font-weight: 800; text-transform: uppercase; line-height: 1.1;
-      width: 42px; flex-shrink: 0;
+      font-size: 0.65rem; font-weight: 800; text-transform: uppercase; line-height: 1.15;
+      width: 50px; flex-shrink: 0;
     }
     .wdna-trait-row .wdna-trait-label:first-child { text-align: right; }
     .wdna-trait-row .wdna-trait-label:last-child { text-align: left; }
     .wdna-pips { display: flex; gap: 3px; flex-shrink: 0; }
-    .wdna-pip { width: 12px; height: 12px; border: 2px solid black; border-radius: 3px; background: white; flex-shrink: 0; }
+    /* Adaptability keeps plain squares. */
+    .wdna-pip { width: 13px; height: 13px; border: 2px solid black; border-radius: 3px; background: white; flex-shrink: 0; }
     .wdna-pip.is-filled { background: black; }
+    /* Thermal/rain/wind use circular icon pips instead -- white bg + black
+       glyph when unfilled, black bg + white glyph when filled. */
+    .wdna-pip-icon {
+      width: 17px; height: 17px; border-radius: 50%; border: 2px solid black;
+      background: white; color: black; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .wdna-pip-icon svg { width: 11px; height: 11px; }
+    .wdna-pip-icon.is-filled { background: black; color: white; }
 
     .wdna-outfit-icons { display: flex; gap: 10px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
     .wdna-outfit-icons img {
@@ -273,6 +346,23 @@ const PIPS = [1, 2, 3, 4, 5];
     }
 
     .wdna-cta-brandname { display: block; font-style: italic; font-weight: 900; font-size: 1.3rem; margin-top: 6px; }
+
+    .wdna-leaderboard { margin-top: 50px; text-align: center; }
+    .wdna-leaderboard ul {
+      list-style: none; padding: 0; margin: 20px auto 0; max-width: 420px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .wdna-leaderboard li {
+      display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+      border: 3px solid black; border-radius: 16px; background: white;
+      box-shadow: 4px 4px 0px black; text-align: left;
+    }
+    .wdna-leaderboard-icon {
+      width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+      border: 2px solid black; flex-shrink: 0; background: var(--wd-lime);
+    }
+    .wdna-leaderboard-name { font-weight: 900; flex: 1; }
+    .wdna-leaderboard-count { font-size: 0.85rem; font-weight: 700; opacity: 0.7; white-space: nowrap; }
   </style>
 
   <script src="../../../../scripts/weather-dna-card.ts"></script>
