@@ -1,11 +1,19 @@
 ---
 import { languages } from '../i18n/ui';
 const { currentLang } = Astro.props;
+
+// Swap only the leading /<lang>/ segment so switching language keeps the
+// visitor on the same page (e.g. the weather-dna quiz or a result permalink)
+// instead of always bouncing them to that language's homepage.
+const restOfPath = Astro.url.pathname.replace(/^\/[a-z]{2}(\/|$)/, '/');
+function localizedHref(lang: string) {
+  return `/${lang}${restOfPath}`;
+}
 ---
 <ul class="lang-dropdown-list">
   {Object.entries(languages).map(([lang, label]) => (
     <li>
-      <a href={`/${lang}/`} class:list={['lang-row', { active: currentLang === lang }]}>
+      <a href={localizedHref(lang)} class:list={['lang-row', { active: currentLang === lang }]}>
         <img src={`/icons/flags/${lang}.svg`} alt="" class="lang-flag" />
         <span>{label}</span>
       </a>

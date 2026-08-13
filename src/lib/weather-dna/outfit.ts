@@ -3,6 +3,9 @@ export type OutfitSlots = {
   bottomKey: string;
   footwearKey: string;
   accessoryKey: string;
+  topLayerIcon: string;
+  bottomIcon: string;
+  footwearIcon: string;
 };
 
 type TempBand = 'cold' | 'cool' | 'mild' | 'hot';
@@ -13,6 +16,25 @@ function tempBand(tempC: number): TempBand {
   if (tempC < 25) return 'mild';
   return 'hot';
 }
+
+const TOP_ICON: Record<TempBand, string> = {
+  cold: '/images/outfit/coat_long.png',
+  cool: '/images/outfit/sweater.png',
+  mild: '/images/outfit/light_jacket.png',
+  hot: '/images/outfit/t-shirt.png',
+};
+const BOTTOM_ICON: Record<TempBand, string> = {
+  cold: '/images/outfit/thermals_bottom.png',
+  cool: '/images/outfit/jeans.png',
+  mild: '/images/outfit/trousers.png',
+  hot: '/images/outfit/shorts.png',
+};
+const FOOTWEAR_ICON: Record<TempBand, string> = {
+  cold: '/images/outfit/boots_high.png',
+  cool: '/images/outfit/sneakers.png',
+  mild: '/images/outfit/sneakers.png',
+  hot: '/images/outfit/sandals.png',
+};
 
 export function composeOutfit(tempC: number, layering1to5: number, fit1to5: number): OutfitSlots {
   const band = tempBand(tempC);
@@ -36,5 +58,8 @@ export function composeOutfit(tempC: number, layering1to5: number, fit1to5: numb
     bottomKey: `weatherdna.outfit.bottom.${band}`,
     footwearKey: `weatherdna.outfit.footwear.${band}`,
     accessoryKey: `weatherdna.outfit.accessory.${accessoryAxis}.${accessoryLevel}`,
+    topLayerIcon: TOP_ICON[band],
+    bottomIcon: BOTTOM_ICON[band],
+    footwearIcon: FOOTWEAR_ICON[band],
   };
 }

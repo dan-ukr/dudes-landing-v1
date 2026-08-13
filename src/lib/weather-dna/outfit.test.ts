@@ -7,6 +7,9 @@ describe('composeOutfit', () => {
     expect(outfit.topLayerKey).toBe('weatherdna.outfit.top.hot');
     expect(outfit.bottomKey).toBe('weatherdna.outfit.bottom.hot');
     expect(outfit.footwearKey).toBe('weatherdna.outfit.footwear.hot');
+    expect(outfit.topLayerIcon).toBe('/images/outfit/t-shirt.png');
+    expect(outfit.bottomIcon).toBe('/images/outfit/shorts.png');
+    expect(outfit.footwearIcon).toBe('/images/outfit/sandals.png');
   });
 
   it('suggests cold-weather slots below 5C', () => {
@@ -14,6 +17,7 @@ describe('composeOutfit', () => {
     expect(outfit.topLayerKey).toBe('weatherdna.outfit.top.cold');
     expect(outfit.bottomKey).toBe('weatherdna.outfit.bottom.cold');
     expect(outfit.footwearKey).toBe('weatherdna.outfit.footwear.cold');
+    expect(outfit.topLayerIcon).toBe('/images/outfit/coat_long.png');
   });
 
   it('suggests mild slots for a typical spring day', () => {
