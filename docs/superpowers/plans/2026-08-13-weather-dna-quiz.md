@@ -1056,7 +1056,7 @@ git commit -m "feat: add temperature-banded outfit suggestion composer"
     'weatherdna.step.pastClimates.title': 'Lived somewhere with very different weather?',
     'weatherdna.step.pastClimates.subtitle': 'Add up to 3 places. Totally optional.',
     'weatherdna.step.pastClimates.add': 'Add another city',
-    'weatherdna.step.pastClimates.skip': 'Skip this',
+    'weatherdna.step.next': 'Continue',
 
     'weatherdna.step.swipe.intro': 'Swipe right if that\'s you, left if it\'s not. How hard you swipe matters.',
     'weatherdna.swipe.rain1': 'I don\'t mind getting caught in the rain without an umbrella.',
@@ -1454,7 +1454,7 @@ const t = ui[lang as keyof typeof ui];
         autocomplete="off"
       />
       <ul id="wdna-home-city-results" class="wdna-city-suggestions"></ul>
-      <button type="button" data-action="next-from-city" disabled>{t['weatherdna.step.sliders.submit']}</button>
+      <button type="button" data-action="next-from-city" disabled>{t['weatherdna.step.next']}</button>
     </section>
     <!-- Note: the Next button also enables on manual typing (see weather-dna-quiz.ts),
          not only on an autocomplete pick — home city is display-only, never used in
@@ -1467,7 +1467,7 @@ const t = ui[lang as keyof typeof ui];
       <ul id="wdna-past-city-results" class="wdna-city-suggestions"></ul>
       <ul id="wdna-past-city-picked"></ul>
       <button type="button" data-action="add-past-city">{t['weatherdna.step.pastClimates.add']}</button>
-      <button type="button" data-action="next-from-pastClimates">{t['weatherdna.step.pastClimates.skip']}</button>
+      <button type="button" data-action="next-from-pastClimates">{t['weatherdna.step.next']}</button>
     </section>
 
     <section class="wdna-step" data-step="swipe"></section>
@@ -1482,7 +1482,7 @@ const t = ui[lang as keyof typeof ui];
     .wdna-city-suggestions li { padding: 10px 14px; border: 3px solid black; border-radius: 14px; margin-bottom: 6px; cursor: pointer; }
   </style>
 
-  <script src="/src/scripts/weather-dna-quiz.ts"></script>
+  <script src="../../../scripts/weather-dna-quiz.ts"></script>
 </Layout>
 ```
 
@@ -1638,16 +1638,32 @@ git commit -m "feat: add weather-dna quiz page shell with city + past-climates s
       <h2>{t['weatherdna.step.sliders.title']}</h2>
 
       <label>{t['weatherdna.step.sliders.summer.label']}</label>
-      <input type="range" id="wdna-slider-summer" min="1" max="5" value="3" />
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.summer.low']}</span>
+        <input type="range" id="wdna-slider-summer" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.summer.high']}</span>
+      </div>
 
       <label>{t['weatherdna.step.sliders.winter.label']}</label>
-      <input type="range" id="wdna-slider-winter" min="1" max="5" value="3" />
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.winter.low']}</span>
+        <input type="range" id="wdna-slider-winter" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.winter.high']}</span>
+      </div>
 
       <label>{t['weatherdna.step.sliders.layering.label']}</label>
-      <input type="range" id="wdna-slider-layering" min="1" max="5" value="3" />
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.layering.low']}</span>
+        <input type="range" id="wdna-slider-layering" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.layering.high']}</span>
+      </div>
 
       <label>{t['weatherdna.step.sliders.fit.label']}</label>
-      <input type="range" id="wdna-slider-fit" min="1" max="5" value="3" />
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.fit.low']}</span>
+        <input type="range" id="wdna-slider-fit" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.fit.high']}</span>
+      </div>
 
       <button type="button" data-action="submit-quiz">{t['weatherdna.step.sliders.submit']}</button>
     </section>
@@ -1664,6 +1680,9 @@ Add to the `<style>` block in the same file:
       box-shadow: 10px 10px 0px black; user-select: none; touch-action: none;
     }
     .wdna-swipe-card[data-done='true'] { display: none; }
+    .wdna-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .wdna-slider-row input[type='range'] { flex: 1; }
+    .wdna-slider-row span { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; opacity: 0.7; white-space: nowrap; }
 ```
 
 - [ ] **Step 2: Extend the client script with swipe-deck drag handling, slider capture, and submit**
@@ -1966,7 +1985,7 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
     .wdna-cta-btn { display: inline-block; margin-top: 16px; padding: 14px 28px; border-radius: 99px; border: 4px solid black; background: var(--wd-lime); font-weight: 900; text-decoration: none; color: black; }
   </style>
 
-  <script src="/src/scripts/weather-dna-card.ts"></script>
+  <script src="../../../../scripts/weather-dna-card.ts"></script>
 </Layout>
 ```
 
