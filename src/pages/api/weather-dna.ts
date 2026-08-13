@@ -11,6 +11,12 @@ function num(v: unknown, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
+function clamp1to5(v: unknown, fallback: number): number {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.min(5, Math.max(1, n));
+}
+
 export const POST: APIRoute = async ({ request, locals }) => {
   let body: Record<string, unknown>;
   try {
@@ -20,15 +26,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const answers: QuizAnswers = {
-    feelWinter1to5: num(body.feelWinter1to5, 3),
-    feelSummer1to5: num(body.feelSummer1to5, 3),
-    rainDiscomfort1to5: num(body.rainDiscomfort1to5, 3),
-    snowDiscomfort1to5: num(body.snowDiscomfort1to5, 3),
-    windDiscomfort1to5: num(body.windDiscomfort1to5, 3),
+    feelWinter1to5: clamp1to5(body.feelWinter1to5, 3),
+    feelSummer1to5: clamp1to5(body.feelSummer1to5, 3),
+    rainDiscomfort1to5: clamp1to5(body.rainDiscomfort1to5, 3),
+    snowDiscomfort1to5: clamp1to5(body.snowDiscomfort1to5, 3),
+    windDiscomfort1to5: clamp1to5(body.windDiscomfort1to5, 3),
     pastClimateCityCount: num(body.pastClimateCityCount, 0),
   };
-  const layering1to5 = num(body.layering1to5, 3);
-  const fit1to5 = num(body.fit1to5, 3);
+  const layering1to5 = clamp1to5(body.layering1to5, 3);
+  const fit1to5 = clamp1to5(body.fit1to5, 3);
   const lang = typeof body.lang === 'string' && body.lang ? body.lang : 'en';
   const homeCity = typeof body.homeCity === 'string' ? body.homeCity : null;
 
