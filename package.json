@@ -18,6 +18,7 @@
 		"@astrojs/sitemap": "3.6.1",
 		"@astrojs/tailwind": "^6.0.2",
 		"astro": "5.16.9",
+		"html-to-image": "^1.11.13",
 		"tailwindcss": "^3.4.19",
 		"typescript": "5.9.3"
 	},
