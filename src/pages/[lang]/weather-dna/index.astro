@@ -1,0 +1,66 @@
+---
+// src/pages/[lang]/weather-dna/index.astro
+export const prerender = true;
+import Layout from '../../../layouts/layout.astro';
+import { ui, languages } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = ui[lang as keyof typeof ui];
+---
+
+<Layout lang={lang} title={t['weatherdna.meta.title']}>
+  <!-- layout.astro only exposes the default slot, not a named "head" slot,
+       so the meta description can't be injected from here without modifying
+       layout.astro. Skipping it for v1, matching [lang]/index.astro which
+       also relies on `title` alone with no per-page description override. -->
+
+  <main class="wdna-quiz">
+    <section class="wdna-step" data-step="intro" data-active="true">
+      <h1>{t['weatherdna.intro.title']}</h1>
+      <p>{t['weatherdna.intro.subtitle']}</p>
+      <button type="button" data-action="start">{t['weatherdna.intro.start']}</button>
+    </section>
+
+    <section class="wdna-step" data-step="city">
+      <h2>{t['weatherdna.step.city.title']}</h2>
+      <input
+        type="text"
+        id="wdna-home-city-input"
+        placeholder={t['weatherdna.step.city.placeholder']}
+        autocomplete="off"
+      />
+      <ul id="wdna-home-city-results" class="wdna-city-suggestions"></ul>
+      <button type="button" data-action="next-from-city" disabled>{t['weatherdna.step.next']}</button>
+    </section>
+    <!-- Note: the Next button also enables on manual typing (see weather-dna-quiz.ts),
+         not only on an autocomplete pick — home city is display-only, never used in
+         scoring, so a geocoder outage must never be able to block the quiz. -->
+
+    <section class="wdna-step" data-step="pastClimates">
+      <h2>{t['weatherdna.step.pastClimates.title']}</h2>
+      <p>{t['weatherdna.step.pastClimates.subtitle']}</p>
+      <input type="text" id="wdna-past-city-input" placeholder={t['weatherdna.step.city.placeholder']} autocomplete="off" />
+      <ul id="wdna-past-city-results" class="wdna-city-suggestions"></ul>
+      <ul id="wdna-past-city-picked"></ul>
+      <button type="button" data-action="add-past-city">{t['weatherdna.step.pastClimates.add']}</button>
+      <button type="button" data-action="next-from-pastClimates">{t['weatherdna.step.next']}</button>
+    </section>
+
+    <section class="wdna-step" data-step="swipe"></section>
+    <section class="wdna-step" data-step="sliders"></section>
+  </main>
+
+  <style>
+    .wdna-quiz { max-width: 600px; margin: 0 auto; padding: 120px 20px 60px; }
+    .wdna-step { display: none; }
+    .wdna-step[data-active='true'] { display: block; }
+    .wdna-city-suggestions { list-style: none; padding: 0; margin: 8px 0; }
+    .wdna-city-suggestions li { padding: 10px 14px; border: 3px solid black; border-radius: 14px; margin-bottom: 6px; cursor: pointer; }
+  </style>
+
+  <script src="../../../scripts/weather-dna-quiz.ts"></script>
+</Layout>
