@@ -93,6 +93,11 @@ function init() {
     pickedList.appendChild(li);
     (document.getElementById('wdna-past-city-input') as HTMLInputElement).value = '';
   });
+  // Picking an autocomplete suggestion already adds the city and clears the
+  // input, so "Add another city" just needs to refocus the search field.
+  document.querySelector('[data-action="add-past-city"]')?.addEventListener('click', () => {
+    (document.getElementById('wdna-past-city-input') as HTMLInputElement).focus();
+  });
 
   document.querySelector('[data-action="next-from-pastClimates"]')?.addEventListener('click', () => showStep('swipe'));
 }
