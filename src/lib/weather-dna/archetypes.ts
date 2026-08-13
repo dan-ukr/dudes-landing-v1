@@ -3,6 +3,7 @@ export type Archetype = {
   slug: string;
   nameKey: string;
   flavorKey: string;
+  descriptionKey: string;
   image: string;
 };
 
@@ -12,6 +13,7 @@ function entry(code: string, slug: string): Archetype {
     slug,
     nameKey: `weatherdna.archetype.${slug}.name`,
     flavorKey: `weatherdna.archetype.${slug}.flavor`,
+    descriptionKey: `weatherdna.archetype.${slug}.description`,
     image: `/images/archetypes/${slug}.png`,
   };
 }

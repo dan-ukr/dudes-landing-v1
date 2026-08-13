@@ -12,7 +12,8 @@ function init() {
   });
 
   async function renderPng(): Promise<string> {
-    return toPng(card, { pixelRatio: 2 });
+    const bg = getComputedStyle(card!).backgroundColor;
+    return toPng(card, { pixelRatio: 2, backgroundColor: bg });
   }
 
   document.getElementById('wdna-download-btn')?.addEventListener('click', async () => {

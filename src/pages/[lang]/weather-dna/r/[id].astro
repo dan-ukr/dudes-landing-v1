@@ -34,9 +34,15 @@ const archetype = row ? getArchetype(row.archetype_code) : null;
 const topCities: Array<{ name: string; country: string; tempC: number; isLive: boolean }> = row
   ? JSON.parse(row.top_cities_json)
   : [];
-const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; accessoryKey: string } | null = row
-  ? JSON.parse(row.outfit_json)
-  : null;
+const outfit: {
+  topLayerKey: string;
+  bottomKey: string;
+  footwearKey: string;
+  accessoryKey: string;
+  topLayerIcon?: string;
+  bottomIcon?: string;
+  footwearIcon?: string;
+} | null = row ? JSON.parse(row.outfit_json) : null;
 ---
 
 <Layout lang={lang} title={row && archetype ? t[archetype.nameKey as keyof typeof t] : t['weatherdna.result.notFound.title']}>
@@ -59,22 +65,37 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
             <div class="wdna-hero-image-fallback" style="display:none;">{t[archetype.nameKey as keyof typeof t]}</div>
             <h1 class="wdna-hero-name">{t[archetype.nameKey as keyof typeof t]}</h1>
 
-            <div class="wdna-bar">
-              <span>{t['weatherdna.result.hero.trait.thermal']}</span>
-              <div class="wdna-bar-track wdna-bar-center"><div class="wdna-bar-fill" style={`width:${row.thermal_score}%`}></div></div>
+            <div class="wdna-gauges">
+              <div class="wdna-gauge wdna-gauge-thermal">
+                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.thermal_score}%, white ${row.thermal_score}% 100%);`}>
+                  <span>❄️🔥</span>
+                </div>
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.thermal']}</span>
+              </div>
+              <div class="wdna-gauge">
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.adaptability.low' as keyof typeof t]}</span>
+                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.adaptability_score}%, white ${row.adaptability_score}% 100%);`}>
+                  <span>🧭</span>
+                </div>
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.adaptability.high' as keyof typeof t]}</span>
+              </div>
+              <div class="wdna-gauge">
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.rain.low' as keyof typeof t]}</span>
+                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.rain_score}%, white ${row.rain_score}% 100%);`}>
+                  <span>☔</span>
+                </div>
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.rain.high' as keyof typeof t]}</span>
+              </div>
+              <div class="wdna-gauge">
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.wind.low' as keyof typeof t]}</span>
+                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.wind_score}%, white ${row.wind_score}% 100%);`}>
+                  <span>💨</span>
+                </div>
+                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.wind.high' as keyof typeof t]}</span>
+              </div>
             </div>
-            <div class="wdna-bar">
-              <span>{t['weatherdna.result.hero.trait.adaptability']}</span>
-              <div class="wdna-bar-track"><div class="wdna-bar-fill" style={`width:${row.adaptability_score}%`}></div></div>
-            </div>
-            <div class="wdna-bar">
-              <span>{t['weatherdna.result.hero.trait.rain']}</span>
-              <div class="wdna-bar-track"><div class="wdna-bar-fill" style={`width:${row.rain_score}%`}></div></div>
-            </div>
-            <div class="wdna-bar">
-              <span>{t['weatherdna.result.hero.trait.wind']}</span>
-              <div class="wdna-bar-track"><div class="wdna-bar-fill" style={`width:${row.wind_score}%`}></div></div>
-            </div>
+
+            <p class="wdna-archetype-description">{t[archetype.descriptionKey as keyof typeof t]}</p>
 
             <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" class="wdna-hero-logo" />
           </div>
@@ -115,6 +136,13 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
         {outfit && (
           <section class="wdna-outfit">
             <h2>{t['weatherdna.result.outfit.title']}</h2>
+            {(outfit.topLayerIcon || outfit.bottomIcon || outfit.footwearIcon) && (
+              <div class="wdna-outfit-icons">
+                {outfit.topLayerIcon && <img src={outfit.topLayerIcon} alt="" />}
+                {outfit.bottomIcon && <img src={outfit.bottomIcon} alt="" />}
+                {outfit.footwearIcon && <img src={outfit.footwearIcon} alt="" />}
+              </div>
+            )}
             <p>
               {t['weatherdna.result.outfit.line']
                 .replace('{top}', t[outfit.topLayerKey as keyof typeof t])
@@ -127,6 +155,7 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
 
         <section class="wdna-cta">
           <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" />
+          <span class="wdna-cta-brandname">WeatherDude</span>
           <h2>{t['weatherdna.result.cta.title']}</h2>
           <p>{t['weatherdna.result.cta.body']}</p>
           <a href={WEATHERDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="wdna-cta-btn">
@@ -146,14 +175,11 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
     .wdna-hero-card[data-bg='pink'] { background: var(--wd-pink); }
     .wdna-hero-card[data-bg='yellow'] { background: var(--wd-yellow); }
     .wdna-hero-card[data-bg='violet'] { background: var(--md-purple); }
-    .wdna-hero-image { width: 100%; max-width: 300px; margin: 0 auto; display: block; }
+    .wdna-hero-image { width: 100%; max-width: 300px; margin: 0 auto; display: block; border-radius: 24px; }
     .wdna-hero-image-fallback {
       width: 100%; max-width: 300px; height: 300px; margin: 0 auto; align-items: center; justify-content: center;
       border: 4px dashed black; border-radius: 20px; font-weight: 900; font-size: 1.4rem;
     }
-    .wdna-bar { text-align: left; margin: 12px 0; font-weight: 900; }
-    .wdna-bar-track { height: 16px; background: white; border: 3px solid black; border-radius: 99px; overflow: hidden; }
-    .wdna-bar-fill { height: 100%; background: black; }
     .wdna-hero-logo { height: 40px; margin-top: 16px; }
     .wdna-hero-controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
     .wdna-bg-swatches button { width: 30px; height: 30px; border-radius: 50%; border: 3px solid black; margin-right: 6px; }
@@ -177,9 +203,39 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
     #wdna-share-btn { background: var(--wd-pink); }
     .wdna-cities, .wdna-outfit { margin-top: 50px; text-align: center; }
     .wdna-cities ul { list-style: none; padding: 0; margin: 20px 0; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-    .wdna-cities li { padding: 10px 20px; border: 3px solid black; border-radius: 14px; font-weight: 700; }
+    .wdna-cities li { padding: 10px 20px; border: 3px solid black; border-radius: 14px; font-weight: 700; background: var(--wd-lime); }
+    .wdna-cities li:nth-child(2) { background: var(--wd-pink); }
+    .wdna-cities li:nth-child(3) { background: var(--wd-yellow); }
     .wdna-typical-note { font-size: 0.8rem; opacity: 0.6; font-weight: 700; }
     .wdna-cta h2 { font-size: clamp(1.4rem, 4vw, 2rem); }
+
+    :global(.site-footer) { display: none; }
+
+    .wdna-result p.wdna-archetype-description {
+      text-align: left; text-transform: none; font-weight: 400; font-size: 1rem;
+      line-height: 1.6; max-width: 46ch; margin: 4px auto 20px;
+    }
+
+    .wdna-gauges { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 20px 0; }
+    .wdna-gauge { display: flex; align-items: center; gap: 8px; }
+    .wdna-gauge-thermal { flex-direction: column; gap: 6px; }
+    .wdna-gauge-circle {
+      width: 70px; height: 70px; border-radius: 50%; border: 4px solid black;
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+      flex-shrink: 0; background: white;
+    }
+    .wdna-gauge-label {
+      font-size: 0.65rem; font-weight: 800; text-transform: uppercase; line-height: 1.2;
+      max-width: 60px; text-align: center;
+    }
+    .wdna-gauge-thermal .wdna-gauge-label { max-width: none; }
+
+    .wdna-outfit-icons { display: flex; gap: 10px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+    .wdna-outfit-icons img {
+      width: 60px; height: 60px; background: white; border: 3px solid black; border-radius: 12px; object-fit: contain;
+    }
+
+    .wdna-cta-brandname { display: block; font-style: italic; font-weight: 900; font-size: 1.3rem; margin-top: 6px; }
   </style>
 
   <script src="../../../../scripts/weather-dna-card.ts"></script>
