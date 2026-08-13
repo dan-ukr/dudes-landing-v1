@@ -24,12 +24,16 @@ export function swipeToDiscomfort(releaseRatio: number): number {
   return Math.round(clamp(3 - r * 2, 1, 5));
 }
 
-// Same shape as bias_engine.py: resist_cold = feel_winter / 3, resist_heat = feel_summer / 3.
+// Winter slider: 1 = "too cold" (bothered by cold, low resistance), 5 = "too
+// hot" (unbothered even in winter, high resistance) -- direct relationship.
 function resistCold(feelWinter1to5: number): number {
   return feelWinter1to5 / 3.0;
 }
+// Summer slider: 1 = "cold even at +30" (unbothered by heat, high resistance),
+// 5 = "too hot" (bothered by heat, low resistance) -- INVERSE relationship,
+// mirrored across the same scale so both axes span [1/3, 5/3].
 function resistHeat(feelSummer1to5: number): number {
-  return feelSummer1to5 / 3.0;
+  return (6 - feelSummer1to5) / 3.0;
 }
 
 const RESIST_MIN = 1 / 3;
