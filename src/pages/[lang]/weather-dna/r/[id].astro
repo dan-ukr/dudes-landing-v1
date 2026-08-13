@@ -1,0 +1,162 @@
+---
+// src/pages/[lang]/weather-dna/r/[id].astro
+// No `export const prerender = true` here — this must stay server-rendered
+// (site default per astro.config.mjs output:"server") since it reads one
+// row from D1 per request.
+import Layout from '../../../../layouts/layout.astro';
+import { ui, languages, PRODUCTS, WEATHERDUDE_GOOGLE_PLAY_URL } from '../../../../i18n/ui';
+import { getArchetype } from '../../../../lib/weather-dna/archetypes';
+
+const { lang, id } = Astro.params;
+const t = ui[(lang as keyof typeof ui) in languages ? (lang as keyof typeof ui) : 'en'];
+
+const { DB } = Astro.locals.runtime.env;
+const row = await DB.prepare(
+  `SELECT archetype_code, thermal_score, adaptability_score, rain_score, wind_score, top_cities_json, outfit_json
+   FROM weather_dna_results WHERE id = ?`
+)
+  .bind(id)
+  .first<{
+    archetype_code: string;
+    thermal_score: number;
+    adaptability_score: number;
+    rain_score: number;
+    wind_score: number;
+    top_cities_json: string;
+    outfit_json: string;
+  }>();
+
+if (!row) {
+  Astro.response.status = 404;
+}
+
+const archetype = row ? getArchetype(row.archetype_code) : null;
+const topCities: Array<{ name: string; country: string; tempC: number; isLive: boolean }> = row
+  ? JSON.parse(row.top_cities_json)
+  : [];
+const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; accessoryKey: string } | null = row
+  ? JSON.parse(row.outfit_json)
+  : null;
+---
+
+<Layout lang={lang} title={row && archetype ? t[archetype.nameKey as keyof typeof t] : t['weatherdna.result.notFound.title']}>
+  <main class="wdna-result">
+    {!row || !archetype ? (
+      <section class="wdna-not-found">
+        <h1>{t['weatherdna.result.notFound.title']}</h1>
+        <a href={`/${lang}/weather-dna/`}>{t['weatherdna.result.notFound.cta']}</a>
+      </section>
+    ) : (
+      <>
+        <section class="wdna-hero-wrap">
+          <div id="wdna-hero-card" class="wdna-hero-card" data-bg="lime">
+            <img
+              src={archetype.image}
+              alt=""
+              class="wdna-hero-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="wdna-hero-image-fallback" style="display:none;">{t[archetype.nameKey as keyof typeof t]}</div>
+            <h1 class="wdna-hero-name">{t[archetype.nameKey as keyof typeof t]}</h1>
+
+            <div class="wdna-bar">
+              <span>{t['weatherdna.result.hero.trait.thermal']}</span>
+              <div class="wdna-bar-track wdna-bar-center"><div class="wdna-bar-fill" style={`width:${row.thermal_score}%`}></div></div>
+            </div>
+            <div class="wdna-bar">
+              <span>{t['weatherdna.result.hero.trait.adaptability']}</span>
+              <div class="wdna-bar-track"><div class="wdna-bar-fill" style={`width:${row.adaptability_score}%`}></div></div>
+            </div>
+            <div class="wdna-bar">
+              <span>{t['weatherdna.result.hero.trait.rain']}</span>
+              <div class="wdna-bar-track"><div class="wdna-bar-fill" style={`width:${row.rain_score}%`}></div></div>
+            </div>
+            <div class="wdna-bar">
+              <span>{t['weatherdna.result.hero.trait.wind']}</span>
+              <div class="wdna-bar-track"><div class="wdna-bar-fill" style={`width:${row.wind_score}%`}></div></div>
+            </div>
+
+            <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" class="wdna-hero-logo" />
+          </div>
+
+          <div class="wdna-hero-controls">
+            <div class="wdna-bg-swatches">
+              <button type="button" data-bg="lime" style="background:var(--wd-lime)"></button>
+              <button type="button" data-bg="pink" style="background:var(--wd-pink)"></button>
+              <button type="button" data-bg="yellow" style="background:var(--wd-yellow)"></button>
+              <button type="button" data-bg="violet" style="background:var(--md-purple)"></button>
+            </div>
+            <button type="button" id="wdna-download-btn">{t['weatherdna.result.hero.download']}</button>
+            <button type="button" id="wdna-share-btn">{t['weatherdna.result.hero.share']}</button>
+            <a href={`/${lang}/weather-dna/`}>{t['weatherdna.result.hero.retake']}</a>
+          </div>
+        </section>
+
+        <section class="wdna-cities">
+          <h2>{t['weatherdna.result.cities.title']}</h2>
+          <ul>
+            {topCities.map((c) => (
+              <li>{c.name}, {c.country} — {Math.round(c.tempC)}°C</li>
+            ))}
+          </ul>
+          {topCities[0] && (
+            <p>
+              {t['weatherdna.result.cities.explanation']
+                .replace('{city}', topCities[0].name)
+                .replace('{temp}', String(Math.round(topCities[0].tempC)))
+                .replace('{flavor}', t[archetype.flavorKey as keyof typeof t])}
+            </p>
+          )}
+        </section>
+
+        {outfit && (
+          <section class="wdna-outfit">
+            <h2>{t['weatherdna.result.outfit.title']}</h2>
+            <p>
+              {t['weatherdna.result.outfit.line']
+                .replace('{top}', t[outfit.topLayerKey as keyof typeof t])
+                .replace('{bottom}', t[outfit.bottomKey as keyof typeof t])
+                .replace('{footwear}', t[outfit.footwearKey as keyof typeof t])
+                .replace('{accessory}', t[outfit.accessoryKey as keyof typeof t])}
+            </p>
+          </section>
+        )}
+
+        <section class="wdna-cta">
+          <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" />
+          <h2>{t['weatherdna.result.cta.title']}</h2>
+          <p>{t['weatherdna.result.cta.body']}</p>
+          <a href={WEATHERDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="wdna-cta-btn">
+            {t['weatherdna.result.cta.button']}
+          </a>
+        </section>
+      </>
+    )}
+  </main>
+
+  <style>
+    .wdna-result { max-width: 700px; margin: 0 auto; padding: 120px 20px 60px; }
+    .wdna-hero-card {
+      position: relative; border: 6px solid black; border-radius: 40px; padding: 30px;
+      box-shadow: 14px 14px 0px black; text-align: center; background: var(--wd-lime);
+    }
+    .wdna-hero-card[data-bg='pink'] { background: var(--wd-pink); }
+    .wdna-hero-card[data-bg='yellow'] { background: var(--wd-yellow); }
+    .wdna-hero-card[data-bg='violet'] { background: var(--md-purple); }
+    .wdna-hero-image { width: 100%; max-width: 300px; margin: 0 auto; display: block; }
+    .wdna-hero-image-fallback {
+      width: 100%; max-width: 300px; height: 300px; margin: 0 auto; align-items: center; justify-content: center;
+      border: 4px dashed black; border-radius: 20px; font-weight: 900; font-size: 1.4rem;
+    }
+    .wdna-bar { text-align: left; margin: 12px 0; font-weight: 900; }
+    .wdna-bar-track { height: 16px; background: white; border: 3px solid black; border-radius: 99px; overflow: hidden; }
+    .wdna-bar-fill { height: 100%; background: black; }
+    .wdna-hero-logo { height: 40px; margin-top: 16px; }
+    .wdna-hero-controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+    .wdna-bg-swatches button { width: 30px; height: 30px; border-radius: 50%; border: 3px solid black; margin-right: 6px; }
+    .wdna-cta { text-align: center; margin-top: 60px; padding: 30px; border: 6px solid black; border-radius: 30px; }
+    .wdna-cta-btn { display: inline-block; margin-top: 16px; padding: 14px 28px; border-radius: 99px; border: 4px solid black; background: var(--wd-lime); font-weight: 900; text-decoration: none; color: black; }
+  </style>
+
+  <script src="../../../../scripts/weather-dna-card.ts"></script>
+</Layout>
