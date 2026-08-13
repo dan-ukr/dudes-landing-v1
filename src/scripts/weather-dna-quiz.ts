@@ -2,14 +2,12 @@
 
 import { swipeToDiscomfort } from '../lib/weather-dna/scoring';
 
-type PhotonFeature = {
-  properties: { name?: string; city?: string; country?: string };
-  geometry: { coordinates: [number, number] }; // [lon, lat]
-};
+type GeocodeResult = { label: string; lat: number; lon: number };
 
 const state = {
   homeCity: null as { name: string; lat: number; lon: number } | null,
   pastCities: [] as { name: string; lat: number; lon: number }[],
+  layering1to5: 3,
 };
 
 const discomfort: Record<'rain' | 'snow' | 'wind', number[]> = { rain: [], snow: [], wind: [] };
@@ -43,10 +41,28 @@ function wireSwipeDeck(onDeckComplete: () => void) {
       startX = e.clientX;
       card.setPointerCapture(e.pointerId);
     }
+    const agreeHint = card.querySelector<HTMLElement>('.wdna-hint-agree');
+    const disagreeHint = card.querySelector<HTMLElement>('.wdna-hint-disagree');
+
     function onPointerMove(e: PointerEvent) {
       if (!dragging) return;
       currentX = e.clientX - startX;
       card.style.transform = `translateX(${currentX}px) rotate(${currentX / 20}deg)`;
+
+      const intensity = Math.min(1, Math.abs(currentX) / maxDrag);
+      if (currentX > 0) {
+        card.style.backgroundColor = `rgba(34, 197, 94, ${intensity * 0.4})`;
+        if (agreeHint) agreeHint.style.opacity = String(intensity);
+        if (disagreeHint) disagreeHint.style.opacity = '0';
+      } else if (currentX < 0) {
+        card.style.backgroundColor = `rgba(239, 68, 68, ${intensity * 0.4})`;
+        if (disagreeHint) disagreeHint.style.opacity = String(intensity);
+        if (agreeHint) agreeHint.style.opacity = '0';
+      } else {
+        card.style.backgroundColor = '';
+        if (agreeHint) agreeHint.style.opacity = '0';
+        if (disagreeHint) disagreeHint.style.opacity = '0';
+      }
     }
     function onPointerUp() {
       if (!dragging) return;
@@ -89,7 +105,7 @@ async function submitQuiz(lang: string) {
     rainDiscomfort1to5: Math.round(avg(discomfort.rain)),
     snowDiscomfort1to5: Math.round(avg(discomfort.snow)),
     windDiscomfort1to5: Math.round(avg(discomfort.wind)),
-    layering1to5: sliderValue('wdna-slider-layering'),
+    layering1to5: state.layering1to5,
     fit1to5: sliderValue('wdna-slider-fit'),
     lang,
   };
@@ -145,12 +161,17 @@ function showStep(step: string) {
   });
 }
 
-async function searchCities(query: string): Promise<PhotonFeature[]> {
+// Routed through our own /api/geocode proxy (Nominatim under the hood) so
+// results come back translated into the site's actual current language —
+// Nominatim supports all 9 site languages via accept-language, unlike Photon
+// which only reliably supports en/de/fr and defaulted to French otherwise.
+async function searchCities(query: string): Promise<GeocodeResult[]> {
   if (query.trim().length < 2) return [];
-  const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&osm_tag=place`);
+  const lang = document.documentElement.lang || 'en';
+  const res = await fetch(`/api/geocode?q=${encodeURIComponent(query)}&lang=${encodeURIComponent(lang)}`);
   if (!res.ok) return [];
-  const data = (await res.json()) as { features: PhotonFeature[] };
-  return data.features ?? [];
+  const data = (await res.json()) as { results: GeocodeResult[] };
+  return data.results ?? [];
 }
 
 function wireCityAutocomplete(inputId: string, resultsId: string, onPick: (city: { name: string; lat: number; lon: number }) => void) {
@@ -160,23 +181,23 @@ function wireCityAutocomplete(inputId: string, resultsId: string, onPick: (city:
 
   input.addEventListener('input', () => {
     clearTimeout(debounceTimer);
+    // 700ms keeps us safely under Nominatim's 1 request/second usage policy
+    // even during fast typing.
     debounceTimer = setTimeout(async () => {
-      const features = await searchCities(input.value);
+      const cities = await searchCities(input.value);
       results.innerHTML = '';
-      for (const f of features) {
-        const label = [f.properties.name, f.properties.country].filter(Boolean).join(', ');
-        if (!label) continue;
+      for (const c of cities) {
+        if (!c.label) continue;
         const li = document.createElement('li');
-        li.textContent = label;
+        li.textContent = c.label;
         li.addEventListener('click', () => {
-          const [lon, lat] = f.geometry.coordinates;
-          onPick({ name: label, lat, lon });
+          onPick({ name: c.label, lat: c.lat, lon: c.lon });
           results.innerHTML = '';
-          input.value = label;
+          input.value = c.label;
         });
         results.appendChild(li);
       }
-    }, 300);
+    }, 700);
   });
 }
 
@@ -220,6 +241,16 @@ function init() {
   // input, so "Add another city" just needs to refocus the search field.
   document.querySelector('[data-action="add-past-city"]')?.addEventListener('click', () => {
     (document.getElementById('wdna-past-city-input') as HTMLInputElement).focus();
+  });
+
+  const outerwearOptions = Array.from(document.querySelectorAll<HTMLButtonElement>('.wdna-outerwear-option'));
+  outerwearOptions.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.layering1to5 = Number(btn.dataset.layeringValue);
+      outerwearOptions.forEach((other) => {
+        other.dataset.selected = other === btn ? 'true' : 'false';
+      });
+    });
   });
 
   document.querySelector('[data-action="next-from-pastClimates"]')?.addEventListener('click', () => {
