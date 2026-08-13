@@ -50,8 +50,53 @@ const t = ui[lang as keyof typeof ui];
       <button type="button" data-action="next-from-pastClimates">{t['weatherdna.step.next']}</button>
     </section>
 
-    <section class="wdna-step" data-step="swipe"></section>
-    <section class="wdna-step" data-step="sliders"></section>
+    <section class="wdna-step" data-step="swipe">
+      <p>{t['weatherdna.step.swipe.intro']}</p>
+      <div id="wdna-swipe-stack" class="wdna-swipe-stack">
+        <div class="wdna-swipe-card" data-dimension="rain" data-order="0">{t['weatherdna.swipe.rain1']}</div>
+        <div class="wdna-swipe-card" data-dimension="rain" data-order="1">{t['weatherdna.swipe.rain2']}</div>
+        <div class="wdna-swipe-card" data-dimension="rain" data-order="2">{t['weatherdna.swipe.rain3']}</div>
+        <div class="wdna-swipe-card" data-dimension="snow" data-order="3">{t['weatherdna.swipe.snow1']}</div>
+        <div class="wdna-swipe-card" data-dimension="snow" data-order="4">{t['weatherdna.swipe.snow2']}</div>
+        <div class="wdna-swipe-card" data-dimension="snow" data-order="5">{t['weatherdna.swipe.snow3']}</div>
+        <div class="wdna-swipe-card" data-dimension="wind" data-order="6">{t['weatherdna.swipe.wind1']}</div>
+        <div class="wdna-swipe-card" data-dimension="wind" data-order="7">{t['weatherdna.swipe.wind2']}</div>
+      </div>
+    </section>
+
+    <section class="wdna-step" data-step="sliders">
+      <h2>{t['weatherdna.step.sliders.title']}</h2>
+
+      <label>{t['weatherdna.step.sliders.summer.label']}</label>
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.summer.low']}</span>
+        <input type="range" id="wdna-slider-summer" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.summer.high']}</span>
+      </div>
+
+      <label>{t['weatherdna.step.sliders.winter.label']}</label>
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.winter.low']}</span>
+        <input type="range" id="wdna-slider-winter" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.winter.high']}</span>
+      </div>
+
+      <label>{t['weatherdna.step.sliders.layering.label']}</label>
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.layering.low']}</span>
+        <input type="range" id="wdna-slider-layering" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.layering.high']}</span>
+      </div>
+
+      <label>{t['weatherdna.step.sliders.fit.label']}</label>
+      <div class="wdna-slider-row">
+        <span>{t['weatherdna.step.sliders.fit.low']}</span>
+        <input type="range" id="wdna-slider-fit" min="1" max="5" value="3" />
+        <span>{t['weatherdna.step.sliders.fit.high']}</span>
+      </div>
+
+      <button type="button" data-action="submit-quiz">{t['weatherdna.step.sliders.submit']}</button>
+    </section>
   </main>
 
   <style>
@@ -60,6 +105,17 @@ const t = ui[lang as keyof typeof ui];
     .wdna-step[data-active='true'] { display: block; }
     .wdna-city-suggestions { list-style: none; padding: 0; margin: 8px 0; }
     .wdna-city-suggestions li { padding: 10px 14px; border: 3px solid black; border-radius: 14px; margin-bottom: 6px; cursor: pointer; }
+    .wdna-swipe-stack { position: relative; height: 320px; }
+    .wdna-swipe-card {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 30px; border: 6px solid black; border-radius: 30px;
+      background: var(--wd-white); font-weight: 900; font-size: 1.3rem; cursor: grab;
+      box-shadow: 10px 10px 0px black; user-select: none; touch-action: none;
+    }
+    .wdna-swipe-card[data-done='true'] { display: none; }
+    .wdna-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .wdna-slider-row input[type='range'] { flex: 1; }
+    .wdna-slider-row span { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; opacity: 0.7; white-space: nowrap; }
   </style>
 
   <script src="../../../scripts/weather-dna-quiz.ts"></script>

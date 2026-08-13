@@ -1,5 +1,7 @@
 // src/scripts/weather-dna-quiz.ts
 
+import { swipeToDiscomfort } from '../lib/weather-dna/scoring';
+
 type PhotonFeature = {
   properties: { name?: string; city?: string; country?: string };
   geometry: { coordinates: [number, number] }; // [lon, lat]
@@ -9,6 +11,99 @@ const state = {
   homeCity: null as { name: string; lat: number; lon: number } | null,
   pastCities: [] as { name: string; lat: number; lon: number }[],
 };
+
+const discomfort: Record<'rain' | 'snow' | 'wind', number[]> = { rain: [], snow: [], wind: [] };
+
+function wireSwipeDeck(onDeckComplete: () => void) {
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.wdna-swipe-card')).sort(
+    (a, b) => Number(a.dataset.order) - Number(b.dataset.order)
+  );
+  let index = 0;
+
+  function activate() {
+    cards.forEach((c, i) => {
+      c.style.zIndex = String(cards.length - i);
+      c.dataset.done = i < index ? 'true' : 'false';
+    });
+    if (index >= cards.length) {
+      onDeckComplete();
+      return;
+    }
+    wireCardDrag(cards[index]);
+  }
+
+  function wireCardDrag(card: HTMLElement) {
+    let startX = 0;
+    let currentX = 0;
+    let dragging = false;
+    const maxDrag = 120;
+
+    function onPointerDown(e: PointerEvent) {
+      dragging = true;
+      startX = e.clientX;
+      card.setPointerCapture(e.pointerId);
+    }
+    function onPointerMove(e: PointerEvent) {
+      if (!dragging) return;
+      currentX = e.clientX - startX;
+      card.style.transform = `translateX(${currentX}px) rotate(${currentX / 20}deg)`;
+    }
+    function onPointerUp() {
+      if (!dragging) return;
+      dragging = false;
+      const ratio = Math.max(-1, Math.min(1, currentX / maxDrag));
+      const dimension = card.dataset.dimension as 'rain' | 'snow' | 'wind';
+      discomfort[dimension].push(swipeToDiscomfort(ratio));
+      card.style.transition = 'transform 0.2s ease';
+      card.style.transform = `translateX(${ratio > 0 ? 400 : -400}px) rotate(${ratio * 20}deg)`;
+      setTimeout(() => {
+        card.style.transition = '';
+        card.style.transform = '';
+        index += 1;
+        activate();
+      }, 200);
+      currentX = 0;
+    }
+
+    card.addEventListener('pointerdown', onPointerDown);
+    card.addEventListener('pointermove', onPointerMove);
+    card.addEventListener('pointerup', onPointerUp);
+  }
+
+  activate();
+}
+
+function avg(nums: number[]): number {
+  if (nums.length === 0) return 3;
+  return nums.reduce((a, b) => a + b, 0) / nums.length;
+}
+
+async function submitQuiz(lang: string) {
+  const sliderValue = (id: string) => Number((document.getElementById(id) as HTMLInputElement).value);
+
+  const payload = {
+    homeCity: state.homeCity?.name ?? null,
+    pastClimateCityCount: state.pastCities.length,
+    feelWinter1to5: sliderValue('wdna-slider-winter'),
+    feelSummer1to5: sliderValue('wdna-slider-summer'),
+    rainDiscomfort1to5: Math.round(avg(discomfort.rain)),
+    snowDiscomfort1to5: Math.round(avg(discomfort.snow)),
+    windDiscomfort1to5: Math.round(avg(discomfort.wind)),
+    layering1to5: sliderValue('wdna-slider-layering'),
+    fit1to5: sliderValue('wdna-slider-fit'),
+    lang,
+  };
+
+  const res = await fetch('/api/weather-dna', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = (await res.json()) as { id?: string };
+  if (data.id) {
+    window.location.href = `/${lang}/weather-dna/r/${data.id}`;
+  }
+}
 
 function $(selector: string): HTMLElement {
   const el = document.querySelector(selector);
@@ -99,7 +194,13 @@ function init() {
     (document.getElementById('wdna-past-city-input') as HTMLInputElement).focus();
   });
 
-  document.querySelector('[data-action="next-from-pastClimates"]')?.addEventListener('click', () => showStep('swipe'));
+  document.querySelector('[data-action="next-from-pastClimates"]')?.addEventListener('click', () => {
+    showStep('swipe');
+    wireSwipeDeck(() => showStep('sliders'));
+  });
+
+  const lang = document.documentElement.lang || 'en';
+  document.querySelector('[data-action="submit-quiz"]')?.addEventListener('click', () => submitQuiz(lang));
 }
 
 init();
