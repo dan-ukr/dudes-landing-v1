@@ -1,6 +1,12 @@
 /**
  * Ported from temperaturebiasmllm/app/services/bias_engine.py predict_day().
  * Same thresholds, same seasonal sine shift, same adaptive-flag deltas.
+ *
+ * Summer slider direction: 1 = "cold even at +30" (unbothered by heat, high
+ * comfort ceiling), 5 = "too hot" (bothered by heat, low ceiling) -- inverse
+ * relationship, confirmed against the real app's field semantics. Winter's
+ * relationship is direct (5 = "too hot" even in winter = unbothered by cold,
+ * low comfort floor) and is unaffected.
  */
 export function comfortBand(
   feelWinter1to5: number,
@@ -9,7 +15,7 @@ export function comfortBand(
   month1to12: number
 ): { tMin: number; tMax: number } {
   let tMin = 12.0 - feelWinter1to5 * 5.0;
-  let tMax = 15.0 + feelSummer1to5 * 3.5;
+  let tMax = 15.0 + (6 - feelSummer1to5) * 3.5;
 
   if (isAdaptive) {
     tMin -= 5.0;
