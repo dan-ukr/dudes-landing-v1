@@ -43,6 +43,20 @@ const outfit: {
   bottomIcon?: string;
   footwearIcon?: string;
 } | null = row ? JSON.parse(row.outfit_json) : null;
+
+const toPips = (score: number) => Math.min(5, Math.max(1, Math.round(score / 20)));
+const pipCounts = row
+  ? {
+      thermal: toPips(row.thermal_score),
+      adaptability: toPips(row.adaptability_score),
+      rain: toPips(row.rain_score),
+      wind: toPips(row.wind_score),
+    }
+  : { thermal: 0, adaptability: 0, rain: 0, wind: 0 };
+const thermalParts = row
+  ? t['weatherdna.result.hero.trait.thermal'].split('↔').map((s) => s.trim())
+  : ['', ''];
+const PIPS = [1, 2, 3, 4, 5];
 ---
 
 <Layout lang={lang} title={row && archetype ? t[archetype.nameKey as keyof typeof t] : t['weatherdna.result.notFound.title']}>
@@ -56,48 +70,58 @@ const outfit: {
       <>
         <section class="wdna-hero-wrap">
           <div id="wdna-hero-card" class="wdna-hero-card" data-bg="lime">
-            <img
-              src={archetype.image}
-              alt=""
-              class="wdna-hero-image"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="wdna-hero-image-fallback" style="display:none;">{t[archetype.nameKey as keyof typeof t]}</div>
-            <h1 class="wdna-hero-name">{t[archetype.nameKey as keyof typeof t]}</h1>
-
-            <div class="wdna-gauges">
-              <div class="wdna-gauge wdna-gauge-thermal">
-                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.thermal_score}%, white ${row.thermal_score}% 100%);`}>
-                  <span>❄️🔥</span>
-                </div>
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.thermal']}</span>
-              </div>
-              <div class="wdna-gauge">
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.adaptability.low' as keyof typeof t]}</span>
-                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.adaptability_score}%, white ${row.adaptability_score}% 100%);`}>
-                  <span>🧭</span>
-                </div>
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.adaptability.high' as keyof typeof t]}</span>
-              </div>
-              <div class="wdna-gauge">
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.rain.low' as keyof typeof t]}</span>
-                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.rain_score}%, white ${row.rain_score}% 100%);`}>
-                  <span>☔</span>
-                </div>
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.rain.high' as keyof typeof t]}</span>
-              </div>
-              <div class="wdna-gauge">
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.wind.low' as keyof typeof t]}</span>
-                <div class="wdna-gauge-circle" style={`background: conic-gradient(black 0% ${row.wind_score}%, white ${row.wind_score}% 100%);`}>
-                  <span>💨</span>
-                </div>
-                <span class="wdna-gauge-label">{t['weatherdna.result.hero.trait.wind.high' as keyof typeof t]}</span>
-              </div>
+            <div class="wdna-hero-top">
+              <img
+                src={archetype.image}
+                alt=""
+                class="wdna-hero-image"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+              <div class="wdna-hero-image-fallback" style="display:none;">{t[archetype.nameKey as keyof typeof t]}</div>
             </div>
 
-            <p class="wdna-archetype-description">{t[archetype.descriptionKey as keyof typeof t]}</p>
+            <div class="wdna-hero-middle">
+              <h1 class="wdna-hero-name">{t[archetype.nameKey as keyof typeof t]}</h1>
+              <p class="wdna-archetype-description">{t[archetype.descriptionKey as keyof typeof t]}</p>
+            </div>
 
-            <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" class="wdna-hero-logo" />
+            <div class="wdna-hero-bottom">
+              <div class="wdna-traits">
+                <div class="wdna-trait-row">
+                  <span class="wdna-trait-label">{thermalParts[0]}</span>
+                  <div class="wdna-pips">
+                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.thermal ? 'is-filled' : ''}`}></span>)}
+                  </div>
+                  <span class="wdna-trait-label">{thermalParts[1]}</span>
+                </div>
+                <div class="wdna-trait-row">
+                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.adaptability.low' as keyof typeof t]}</span>
+                  <div class="wdna-pips">
+                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.adaptability ? 'is-filled' : ''}`}></span>)}
+                  </div>
+                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.adaptability.high' as keyof typeof t]}</span>
+                </div>
+                <div class="wdna-trait-row">
+                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.low' as keyof typeof t]}</span>
+                  <div class="wdna-pips">
+                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.rain ? 'is-filled' : ''}`}></span>)}
+                  </div>
+                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.high' as keyof typeof t]}</span>
+                </div>
+                <div class="wdna-trait-row">
+                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.low' as keyof typeof t]}</span>
+                  <div class="wdna-pips">
+                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.wind ? 'is-filled' : ''}`}></span>)}
+                  </div>
+                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.high' as keyof typeof t]}</span>
+                </div>
+              </div>
+
+              <div class="wdna-hero-brand">
+                <img src={PRODUCTS.weatherdude.logo} alt="WeatherDude" class="wdna-hero-logo" />
+                <span class="wdna-hero-brandname">WeatherDude</span>
+              </div>
+            </div>
           </div>
 
           <div class="wdna-hero-controls">
@@ -158,9 +182,14 @@ const outfit: {
           <span class="wdna-cta-brandname">WeatherDude</span>
           <h2>{t['weatherdna.result.cta.title']}</h2>
           <p>{t['weatherdna.result.cta.body']}</p>
-          <a href={WEATHERDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="wdna-cta-btn">
-            {t['weatherdna.result.cta.button']}
-          </a>
+          <div class="wdna-cta-buttons">
+            <a href={WEATHERDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="wdna-cta-btn">
+              {t['weatherdna.result.cta.button']}
+            </a>
+            <a href="#" class="wdna-cta-btn wdna-cta-btn-ios" aria-disabled="true" onclick="return false;">
+              App Store
+            </a>
+          </div>
         </section>
       </>
     )}
@@ -169,23 +198,31 @@ const outfit: {
   <style>
     .wdna-result { max-width: 700px; margin: 0 auto; padding: 120px 20px 60px; }
     .wdna-hero-card {
-      position: relative; border: 6px solid black; border-radius: 40px; padding: 30px;
+      position: relative; border: 6px solid black; border-radius: 32px;
       box-shadow: 14px 14px 0px black; text-align: center; background: var(--wd-lime);
-      overflow: hidden;
+      overflow: hidden; aspect-ratio: 9 / 16; max-width: 380px; width: 100%; margin: 0 auto;
+      display: flex; flex-direction: column; padding: 18px 18px 12px;
     }
     .wdna-hero-card[data-bg='pink'] { background: var(--wd-pink); }
     .wdna-hero-card[data-bg='yellow'] { background: var(--wd-yellow); }
     .wdna-hero-card[data-bg='violet'] { background: var(--md-purple); }
-    .wdna-hero-image { width: 100%; max-width: 300px; margin: 0 auto; display: block; border-radius: 24px; }
+    .wdna-hero-top { flex: 42 1 0; min-height: 0; display: flex; }
+    .wdna-hero-image { width: 100%; height: 100%; display: block; border-radius: 20px; object-fit: cover; }
     .wdna-hero-image-fallback {
-      width: 100%; max-width: 300px; height: 300px; margin: 0 auto; align-items: center; justify-content: center;
-      border: 4px dashed black; border-radius: 20px; font-weight: 900; font-size: 1.4rem;
+      width: 100%; height: 100%; align-items: center; justify-content: center;
+      border: 4px dashed black; border-radius: 20px; font-weight: 900; font-size: 1.2rem;
     }
-    .wdna-hero-logo { height: 40px; margin-top: 16px; }
+    .wdna-hero-middle { flex: 28 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+    .wdna-hero-bottom { flex: 30 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+    .wdna-hero-brand { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
+    .wdna-hero-logo { height: 18px; }
+    .wdna-hero-brandname { font-style: italic; font-weight: 900; font-size: 0.75rem; }
     .wdna-hero-controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
     .wdna-bg-swatches button { width: 30px; height: 30px; border-radius: 50%; border: 3px solid black; margin-right: 6px; }
     .wdna-cta { text-align: center; margin-top: 60px; padding: 30px; border: 6px solid black; border-radius: 30px; }
     .wdna-cta-btn { display: inline-block; margin-top: 16px; padding: 14px 28px; border-radius: 99px; border: 4px solid black; background: var(--wd-lime); font-weight: 900; text-decoration: none; color: black; }
+    .wdna-cta-buttons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .wdna-cta-btn-ios { background: white; cursor: default; }
 
     .wdna-result h1, .wdna-result h2 {
       font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1.1; margin: 0 0 12px;
@@ -193,7 +230,7 @@ const outfit: {
     .wdna-result h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); }
     .wdna-result h2 { font-size: clamp(1.3rem, 4vw, 1.8rem); text-align: center; }
     .wdna-result p { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
-    .wdna-hero-name { font-size: clamp(1.6rem, 5vw, 2.2rem); margin: 16px 0 20px; }
+    .wdna-hero-card .wdna-hero-name { font-size: clamp(1rem, 6vw, 1.35rem); margin: 0 0 6px; }
     .wdna-not-found { text-align: center; padding: 120px 20px; }
     .wdna-not-found a { display: inline-block; margin-top: 16px; padding: 14px 28px; border-radius: 99px; border: 4px solid black; background: var(--wd-lime); font-weight: 900; text-decoration: none; color: black; }
     .wdna-hero-controls button, .wdna-hero-controls a {
@@ -213,23 +250,22 @@ const outfit: {
     :global(.site-footer) { display: none; }
 
     .wdna-result p.wdna-archetype-description {
-      text-align: left; text-transform: none; font-weight: 400; font-size: 1rem;
-      line-height: 1.6; max-width: 46ch; margin: 4px auto 20px;
+      text-align: center; text-transform: none; font-weight: 400; font-size: 0.72rem;
+      line-height: 1.35; margin: 0 auto; padding: 0 4px;
+      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
     }
 
-    .wdna-gauges { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 20px 0; }
-    .wdna-gauge { display: flex; align-items: center; gap: 8px; }
-    .wdna-gauge-thermal { flex-direction: column; gap: 6px; }
-    .wdna-gauge-circle {
-      width: 70px; height: 70px; border-radius: 50%; border: 4px solid black;
-      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
-      flex-shrink: 0; background: white;
+    .wdna-traits { display: flex; flex-direction: column; gap: 4px; }
+    .wdna-trait-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .wdna-trait-label {
+      font-size: 0.5rem; font-weight: 800; text-transform: uppercase; line-height: 1.1;
+      width: 42px; flex-shrink: 0;
     }
-    .wdna-gauge-label {
-      font-size: 0.65rem; font-weight: 800; text-transform: uppercase; line-height: 1.2;
-      max-width: 60px; text-align: center;
-    }
-    .wdna-gauge-thermal .wdna-gauge-label { max-width: none; }
+    .wdna-trait-row .wdna-trait-label:first-child { text-align: right; }
+    .wdna-trait-row .wdna-trait-label:last-child { text-align: left; }
+    .wdna-pips { display: flex; gap: 3px; flex-shrink: 0; }
+    .wdna-pip { width: 12px; height: 12px; border: 2px solid black; border-radius: 3px; background: white; flex-shrink: 0; }
+    .wdna-pip.is-filled { background: black; }
 
     .wdna-outfit-icons { display: flex; gap: 10px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
     .wdna-outfit-icons img {
