@@ -47,10 +47,15 @@ export function computeTraitScores(answers: QuizAnswers): TraitScores {
   // Thermal lean: 50 = neutral, higher resist_heat relative to resist_cold -> leans heat.
   const thermal = clamp(50 + (rh - rc) * 37.5, 0, 100);
 
-  // Adaptability: average resistance normalized to 0-100, plus a flat bonus per
-  // past-climate city (having lived through more climates widens tolerance).
-  const avgResist = (rc + rh) / 2;
-  const adaptBase = ((avgResist - RESIST_MIN) / RESIST_RANGE) * 100;
+  // Adaptability: bottlenecked by the WEAKER of the two resistances, not their
+  // average — someone maxed out on cold-resistance but minimal on heat-resistance
+  // is a cold specialist, not "moderately adaptable" (averaging the two would
+  // land exactly on the scale's midpoint regardless of how extreme either side
+  // is, since resistCold and resistHeat share the same [1/3, 5/3] range). True
+  // wide adaptability requires being resistant on BOTH ends. Plus a flat bonus
+  // per past-climate city (having lived through more climates widens tolerance).
+  const minResist = Math.min(rc, rh);
+  const adaptBase = ((minResist - RESIST_MIN) / RESIST_RANGE) * 100;
   const adaptability = clamp(adaptBase + answers.pastClimateCityCount * 10, 0, 100);
 
   const rain = clamp(

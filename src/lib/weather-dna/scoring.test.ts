@@ -56,6 +56,21 @@ describe('computeTraitScores', () => {
     expect(three.adaptability).toBeGreaterThan(none.adaptability);
   });
 
+  it('scores a cold specialist as LOW adaptability, not moderate', () => {
+    // Maxed cold-resistance (feelWinter=5) but minimal heat-resistance
+    // (feelSummer=1) is a specialist, not "moderately adaptable" — averaging
+    // the two would land exactly on the scale's midpoint (~50%) regardless of
+    // how extreme either side is, since resistCold and resistHeat share the
+    // same range. Adaptability must be bottlenecked by the weaker side.
+    const coldSpecialist = computeTraitScores({ ...base, feelWinter1to5: 5, feelSummer1to5: 1 });
+    expect(coldSpecialist.adaptability).toBeLessThan(50);
+  });
+
+  it('scores someone resistant on BOTH ends as genuinely wide adaptability', () => {
+    const trueGeneralist = computeTraitScores({ ...base, feelWinter1to5: 5, feelSummer1to5: 5 });
+    expect(trueGeneralist.adaptability).toBeGreaterThan(50);
+  });
+
   it('inverts discomfort into resistance (low discomfort -> high resistance)', () => {
     const comfortable = computeTraitScores({ ...base, rainDiscomfort1to5: 1, snowDiscomfort1to5: 1 });
     const uncomfortable = computeTraitScores({ ...base, rainDiscomfort1to5: 5, snowDiscomfort1to5: 5 });
