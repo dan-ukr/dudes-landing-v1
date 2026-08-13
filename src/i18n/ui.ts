@@ -163,6 +163,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Loose and relaxed',
     'weatherdna.step.sliders.fit.high': 'Structured and put-together',
     'weatherdna.step.sliders.submit': 'See my Weather DNA',
+    'weatherdna.step.sliders.submitError': 'Something went wrong. Please try again.',
 
     'weatherdna.archetype.hygge-nord.name': 'The Hygge Nord',
     'weatherdna.archetype.hygge-nord.flavor': 'a cozy soul who loves the cold as long as it stays calm and dry',
@@ -206,6 +207,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Take the test again',
 
     'weatherdna.result.cities.title': 'Best cities for you right now',
+    'weatherdna.result.cities.typical': 'typical for this time of year',
     'weatherdna.result.cities.explanation': 'Right now, {city} is sitting at {temp}°C — {flavor}, this is about as close to your comfort zone as Europe gets today.',
 
     'weatherdna.result.outfit.title': 'What to wear in your perfect weather',
@@ -369,6 +371,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Вільний і розслаблений',
     'weatherdna.step.sliders.fit.high': 'Структурований і доглянутий',
     'weatherdna.step.sliders.submit': 'Показати мою Погодну ДНК',
+    'weatherdna.step.sliders.submitError': 'Щось пішло не так. Спробуй ще раз.',
 
     'weatherdna.archetype.hygge-nord.name': 'Хюге-Норд',
     'weatherdna.archetype.hygge-nord.flavor': 'затишна душа, яка любить холод, поки він спокійний і сухий',
@@ -412,6 +415,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Пройти тест ще раз',
 
     'weatherdna.result.cities.title': 'Найкращі міста для тебе прямо зараз',
+    'weatherdna.result.cities.typical': 'типово для цієї пори року',
     'weatherdna.result.cities.explanation': 'Прямо зараз у {city} {temp}°C — {flavor}. Це найближче до твоєї зони комфорту, що сьогодні може запропонувати Європа.',
 
     'weatherdna.result.outfit.title': 'Що вдягнути в твою ідеальну погоду',
@@ -575,6 +579,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Luźny i wyluzowany',
     'weatherdna.step.sliders.fit.high': 'Uporządkowany i dopięty',
     'weatherdna.step.sliders.submit': 'Pokaż moje Pogodowe DNA',
+    'weatherdna.step.sliders.submitError': 'Coś poszło nie tak. Spróbuj ponownie.',
 
     'weatherdna.archetype.hygge-nord.name': 'Hygge Nord',
     'weatherdna.archetype.hygge-nord.flavor': 'przytulna dusza, która kocha zimno, dopóki jest spokojnie i sucho',
@@ -618,6 +623,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Zrób test jeszcze raz',
 
     'weatherdna.result.cities.title': 'Najlepsze miasta dla Ciebie właśnie teraz',
+    'weatherdna.result.cities.typical': 'typowo dla tej pory roku',
     'weatherdna.result.cities.explanation': 'Właśnie teraz w {city} jest {temp}°C — {flavor}, to najbliżej Twojej strefy komfortu, co dziś oferuje Europa.',
 
     'weatherdna.result.outfit.title': 'Co założyć w Twojej idealnej pogodzie',
@@ -781,6 +787,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Morbida e rilassata',
     'weatherdna.step.sliders.fit.high': 'Strutturata e curata',
     'weatherdna.step.sliders.submit': 'Scopri il mio Weather DNA',
+    'weatherdna.step.sliders.submitError': 'Qualcosa è andato storto. Riprova.',
 
     'weatherdna.archetype.hygge-nord.name': 'L\'Hygge Nordico',
     'weatherdna.archetype.hygge-nord.flavor': 'un\'anima accogliente che ama il freddo finché è calmo e asciutto',
@@ -824,6 +831,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Rifai il test',
 
     'weatherdna.result.cities.title': 'Le città migliori per te in questo momento',
+    'weatherdna.result.cities.typical': "tipico per questo periodo dell'anno",
     'weatherdna.result.cities.explanation': 'In questo momento, {city} è a {temp}°C — {flavor}, è quanto di più vicino alla tua comfort zone offra oggi l\'Europa.',
 
     'weatherdna.result.outfit.title': 'Cosa indossare nel tuo meteo perfetto',
@@ -987,6 +995,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Locker und entspannt',
     'weatherdna.step.sliders.fit.high': 'Strukturiert und durchgestylt',
     'weatherdna.step.sliders.submit': 'Zeig mir meine Wetter-DNA',
+    'weatherdna.step.sliders.submitError': "Etwas ist schiefgelaufen. Versuch's nochmal.",
 
     'weatherdna.archetype.hygge-nord.name': 'Der Hygge-Nord',
     'weatherdna.archetype.hygge-nord.flavor': 'eine gemütliche Seele, die Kälte liebt, solange sie ruhig und trocken bleibt',
@@ -1030,6 +1039,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Test nochmal machen',
 
     'weatherdna.result.cities.title': 'Die besten Städte für dich gerade jetzt',
+    'weatherdna.result.cities.typical': 'typisch für diese Jahreszeit',
     'weatherdna.result.cities.explanation': 'Gerade jetzt liegt {city} bei {temp}°C — {flavor}, das ist heute so nah an deiner Komfortzone, wie es in Europa nur geht.',
 
     'weatherdna.result.outfit.title': 'Was du bei deinem perfekten Wetter trägst',
@@ -1193,6 +1203,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Suelto y relajado',
     'weatherdna.step.sliders.fit.high': 'Estructurado y prolijo',
     'weatherdna.step.sliders.submit': 'Ver mi Weather DNA',
+    'weatherdna.step.sliders.submitError': 'Algo salió mal. Inténtalo de nuevo.',
 
     'weatherdna.archetype.hygge-nord.name': 'El Hygge Nórdico',
     'weatherdna.archetype.hygge-nord.flavor': 'un alma hogareña que ama el frío mientras se mantenga calmo y seco',
@@ -1236,6 +1247,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Repetir el test',
 
     'weatherdna.result.cities.title': 'Las mejores ciudades para ti ahora mismo',
+    'weatherdna.result.cities.typical': 'típico para esta época del año',
     'weatherdna.result.cities.explanation': 'Ahora mismo, {city} está a {temp}°C — {flavor}, esto es lo más cerca de tu zona de confort que ofrece Europa hoy.',
 
     'weatherdna.result.outfit.title': 'Qué ponerte en tu clima perfecto',
@@ -1399,6 +1411,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Solto e descontraído',
     'weatherdna.step.sliders.fit.high': 'Estruturado e arranjado',
     'weatherdna.step.sliders.submit': 'Ver o meu Weather DNA',
+    'weatherdna.step.sliders.submitError': 'Algo correu mal. Tenta novamente.',
 
     'weatherdna.archetype.hygge-nord.name': 'O Hygge Nórdico',
     'weatherdna.archetype.hygge-nord.flavor': 'uma alma caseira que adora o frio desde que se mantenha calmo e seco',
@@ -1442,6 +1455,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Repetir o teste',
 
     'weatherdna.result.cities.title': 'As melhores cidades para ti agora mesmo',
+    'weatherdna.result.cities.typical': 'típico para esta época do ano',
     'weatherdna.result.cities.explanation': 'Agora mesmo, {city} está a {temp}°C — {flavor}, isto é o mais próximo da tua zona de conforto que a Europa oferece hoje.',
 
     'weatherdna.result.outfit.title': 'O que vestir no teu clima perfeito',
@@ -1605,6 +1619,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Ample et décontractée',
     'weatherdna.step.sliders.fit.high': 'Structurée et soignée',
     'weatherdna.step.sliders.submit': 'Voir mon Weather DNA',
+    'weatherdna.step.sliders.submitError': 'Une erreur est survenue. Réessaye.',
 
     'weatherdna.archetype.hygge-nord.name': 'Le Hygge Nordique',
     'weatherdna.archetype.hygge-nord.flavor': 'une âme cocooning qui adore le froid tant qu\'il reste calme et sec',
@@ -1648,6 +1663,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Refaire le test',
 
     'weatherdna.result.cities.title': 'Les meilleures villes pour toi en ce moment',
+    'weatherdna.result.cities.typical': "typique pour cette période de l'année",
     'weatherdna.result.cities.explanation': "En ce moment, {city} affiche {temp}°C — {flavor}, c'est ce qui se rapproche le plus de ta zone de confort en Europe aujourd'hui.",
 
     'weatherdna.result.outfit.title': 'Quoi porter par ta météo parfaite',
@@ -1811,6 +1827,7 @@ export const ui = {
     'weatherdna.step.sliders.fit.low': 'Вольны і расслаблены',
     'weatherdna.step.sliders.fit.high': 'Структураваны і дагледжаны',
     'weatherdna.step.sliders.submit': 'Паказаць маю Надвор\'евую ДНК',
+    'weatherdna.step.sliders.submitError': 'Нешта пайшло не так. Паспрабуй яшчэ раз.',
 
     'weatherdna.archetype.hygge-nord.name': 'Хюге-Норд',
     'weatherdna.archetype.hygge-nord.flavor': 'утульная душа, якая любіць холад, пакуль ён спакойны і сухі',
@@ -1854,6 +1871,7 @@ export const ui = {
     'weatherdna.result.hero.retake': 'Прайсці тэст яшчэ раз',
 
     'weatherdna.result.cities.title': 'Лепшыя гарады для цябе прама зараз',
+    'weatherdna.result.cities.typical': 'тыпова для гэтай пары года',
     'weatherdna.result.cities.explanation': 'Прама зараз у {city} {temp}°C — {flavor}. Гэта бліжэй за ўсё да тваёй зоны камфорту, што сёння можа прапанаваць Еўропа.',
 
     'weatherdna.result.outfit.title': 'Што апрануць у тваё ідэальнае надвор\'е',

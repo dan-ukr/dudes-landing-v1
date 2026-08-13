@@ -94,14 +94,42 @@ async function submitQuiz(lang: string) {
     lang,
   };
 
-  const res = await fetch('/api/weather-dna', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+  const submitBtn = document.querySelector<HTMLButtonElement>('[data-action="submit-quiz"]');
+  const errorEl = document.getElementById('wdna-submit-error');
+
+  function showError() {
+    if (errorEl) {
+      errorEl.textContent = errorEl.dataset.error || '';
+      errorEl.style.display = 'block';
+    }
+    if (submitBtn) submitBtn.disabled = false;
+  }
+
+  if (errorEl) errorEl.style.display = 'none';
+  if (submitBtn) submitBtn.disabled = true;
+
+  let res: Response;
+  try {
+    res = await fetch('/api/weather-dna', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    showError();
+    return;
+  }
+
+  if (!res.ok) {
+    showError();
+    return;
+  }
+
   const data = (await res.json()) as { id?: string };
   if (data.id) {
     window.location.href = `/${lang}/weather-dna/r/${data.id}`;
+  } else {
+    showError();
   }
 }
 

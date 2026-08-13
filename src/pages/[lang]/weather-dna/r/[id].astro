@@ -96,7 +96,10 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
           <h2>{t['weatherdna.result.cities.title']}</h2>
           <ul>
             {topCities.map((c) => (
-              <li>{c.name}, {c.country} — {Math.round(c.tempC)}°C</li>
+              <li>
+                {c.name}, {c.country} — {Math.round(c.tempC)}°C
+                {!c.isLive && <span class="wdna-typical-note"> ({t['weatherdna.result.cities.typical']})</span>}
+              </li>
             ))}
           </ul>
           {topCities[0] && (
@@ -175,6 +178,7 @@ const outfit: { topLayerKey: string; bottomKey: string; footwearKey: string; acc
     .wdna-cities, .wdna-outfit { margin-top: 50px; text-align: center; }
     .wdna-cities ul { list-style: none; padding: 0; margin: 20px 0; display: flex; flex-direction: column; gap: 10px; align-items: center; }
     .wdna-cities li { padding: 10px 20px; border: 3px solid black; border-radius: 14px; font-weight: 700; }
+    .wdna-typical-note { font-size: 0.8rem; opacity: 0.6; font-weight: 700; }
     .wdna-cta h2 { font-size: clamp(1.4rem, 4vw, 2rem); }
   </style>
 

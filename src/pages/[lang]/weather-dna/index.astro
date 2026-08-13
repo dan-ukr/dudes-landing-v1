@@ -96,6 +96,7 @@ const t = ui[lang as keyof typeof ui];
       </div>
 
       <button type="button" data-action="submit-quiz">{t['weatherdna.step.sliders.submit']}</button>
+      <p id="wdna-submit-error" class="wdna-submit-error" data-error={t['weatherdna.step.sliders.submitError']} style="display:none;"></p>
     </section>
   </main>
 
@@ -147,6 +148,10 @@ const t = ui[lang as keyof typeof ui];
     }
     .wdna-quiz button:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 7px 7px 0px black; }
     .wdna-quiz button:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+    .wdna-submit-error {
+      margin-top: 16px; padding: 14px 20px; border-radius: 20px;
+      background: #e5484d; color: white; font-weight: 900; text-transform: uppercase;
+    }
     .wdna-quiz button[data-action='add-past-city'] { background: white; margin-right: 12px; }
     .wdna-quiz #wdna-past-city-picked { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; }
     .wdna-quiz #wdna-past-city-picked li { padding: 8px 14px; border: 3px solid black; border-radius: 99px; font-weight: 700; font-size: 0.9rem; background: var(--wd-yellow); }
