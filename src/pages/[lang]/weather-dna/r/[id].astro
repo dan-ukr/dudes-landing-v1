@@ -37,6 +37,24 @@ const leaderboardRows = row
       `SELECT archetype_code, COUNT(*) as cnt FROM weather_dna_results GROUP BY archetype_code ORDER BY cnt DESC LIMIT 5`
     ).all<{ archetype_code: string; cnt: number }>()
   : null;
+// Slavic-style 3-way plural (1 / 2-4 / 5+, with the usual 11-14 exception)
+// for ua/pl/be; everyone else just gets singular vs plural.
+const SLAVIC_PLURAL_LANGS = new Set(['ua', 'pl', 'be']);
+function pluralizePeople(count: number): string {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (SLAVIC_PLURAL_LANGS.has(lang ?? 'en')) {
+    if (mod10 === 1 && mod100 !== 11) return t['weatherdna.leaderboard.person' as keyof typeof t];
+    if (mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14)) {
+      return t['weatherdna.leaderboard.peopleFew' as keyof typeof t];
+    }
+    return t['weatherdna.leaderboard.peopleMany' as keyof typeof t];
+  }
+  return count === 1
+    ? t['weatherdna.leaderboard.person' as keyof typeof t]
+    : t['weatherdna.leaderboard.peopleMany' as keyof typeof t];
+}
+
 const leaderboard = (leaderboardRows?.results ?? []).map((r) => ({
   archetype: getArchetype(r.archetype_code),
   count: r.cnt,
@@ -105,52 +123,64 @@ const THERMAL_ICON_SEQUENCE = ['snowflake', 'snowflake', 'shield', 'flame', 'fla
               <div class="wdna-hero-image-fallback" style="display:none;">{t[archetype.nameKey as keyof typeof t]}</div>
             </div>
 
-            <div class="wdna-hero-middle">
+            <div class="wdna-hero-middle" id="wdna-hero-middle">
               <h1 class="wdna-hero-name">{t[archetype.nameKey as keyof typeof t]}</h1>
-              <p class="wdna-archetype-description">{t[archetype.descriptionKey as keyof typeof t]}</p>
+              <p class="wdna-archetype-description" id="wdna-archetype-description">{t[archetype.descriptionKey as keyof typeof t]}</p>
             </div>
 
             <div class="wdna-hero-bottom">
               <div class="wdna-traits">
-                <div class="wdna-trait-row">
-                  <span class="wdna-trait-label">{thermalParts[0]}</span>
-                  <div class="wdna-pips">
-                    {PIPS.map((i) => (
-                      <span class={`wdna-pip-icon ${i <= pipCounts.thermal ? 'is-filled' : ''}`}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS[THERMAL_ICON_SEQUENCE[i - 1]]} />
-                      </span>
-                    ))}
+                <div class="wdna-trait-group">
+                  <span class="wdna-trait-name">{t['weatherdna.result.hero.trait.thermal.name' as keyof typeof t]}</span>
+                  <div class="wdna-trait-row">
+                    <span class="wdna-trait-label">{thermalParts[0]}</span>
+                    <div class="wdna-pips">
+                      {PIPS.map((i) => (
+                        <span class={`wdna-pip-icon ${i <= pipCounts.thermal ? 'is-filled' : ''}`}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS[THERMAL_ICON_SEQUENCE[i - 1]]} />
+                        </span>
+                      ))}
+                    </div>
+                    <span class="wdna-trait-label">{thermalParts[1]}</span>
                   </div>
-                  <span class="wdna-trait-label">{thermalParts[1]}</span>
                 </div>
-                <div class="wdna-trait-row">
-                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.adaptability.low' as keyof typeof t]}</span>
-                  <div class="wdna-pips">
-                    {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.adaptability ? 'is-filled' : ''}`}></span>)}
+                <div class="wdna-trait-group">
+                  <span class="wdna-trait-name">{t['weatherdna.result.hero.trait.adaptability.name' as keyof typeof t]}</span>
+                  <div class="wdna-trait-row">
+                    <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.adaptability.low' as keyof typeof t]}</span>
+                    <div class="wdna-pips">
+                      {PIPS.map((i) => <span class={`wdna-pip ${i <= pipCounts.adaptability ? 'is-filled' : ''}`}></span>)}
+                    </div>
+                    <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.adaptability.high' as keyof typeof t]}</span>
                   </div>
-                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.adaptability.high' as keyof typeof t]}</span>
                 </div>
-                <div class="wdna-trait-row">
-                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.low' as keyof typeof t]}</span>
-                  <div class="wdna-pips">
-                    {PIPS.map((i) => (
-                      <span class={`wdna-pip-icon ${i <= pipCounts.rain ? 'is-filled' : ''}`}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS.raindrop} />
-                      </span>
-                    ))}
+                <div class="wdna-trait-group">
+                  <span class="wdna-trait-name">{t['weatherdna.result.hero.trait.rain.name' as keyof typeof t]}</span>
+                  <div class="wdna-trait-row">
+                    <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.low' as keyof typeof t]}</span>
+                    <div class="wdna-pips">
+                      {PIPS.map((i) => (
+                        <span class={`wdna-pip-icon ${i <= pipCounts.rain ? 'is-filled' : ''}`}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS.raindrop} />
+                        </span>
+                      ))}
+                    </div>
+                    <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.high' as keyof typeof t]}</span>
                   </div>
-                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.rain.high' as keyof typeof t]}</span>
                 </div>
-                <div class="wdna-trait-row">
-                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.low' as keyof typeof t]}</span>
-                  <div class="wdna-pips">
-                    {PIPS.map((i) => (
-                      <span class={`wdna-pip-icon ${i <= pipCounts.wind ? 'is-filled' : ''}`}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS.wind} />
-                      </span>
-                    ))}
+                <div class="wdna-trait-group">
+                  <span class="wdna-trait-name">{t['weatherdna.result.hero.trait.wind.name' as keyof typeof t]}</span>
+                  <div class="wdna-trait-row">
+                    <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.low' as keyof typeof t]}</span>
+                    <div class="wdna-pips">
+                      {PIPS.map((i) => (
+                        <span class={`wdna-pip-icon ${i <= pipCounts.wind ? 'is-filled' : ''}`}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICON_PATHS.wind} />
+                        </span>
+                      ))}
+                    </div>
+                    <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.high' as keyof typeof t]}</span>
                   </div>
-                  <span class="wdna-trait-label">{t['weatherdna.result.hero.trait.wind.high' as keyof typeof t]}</span>
                 </div>
               </div>
 
@@ -228,7 +258,7 @@ const THERMAL_ICON_SEQUENCE = ['snowflake', 'snowflake', 'shield', 'flame', 'fla
                   />
                   <span class="wdna-leaderboard-name">{t[entry.archetype.nameKey as keyof typeof t]}</span>
                   <span class="wdna-leaderboard-count">
-                    {entry.count} {t['weatherdna.leaderboard.people' as keyof typeof t]}
+                    {entry.count} {pluralizePeople(entry.count)}
                   </span>
                 </li>
               ))}
@@ -265,7 +295,7 @@ const THERMAL_ICON_SEQUENCE = ['snowflake', 'snowflake', 'shield', 'flame', 'fla
     .wdna-hero-card[data-bg='pink'] { background: var(--wd-pink); }
     .wdna-hero-card[data-bg='yellow'] { background: var(--wd-yellow); }
     .wdna-hero-card[data-bg='violet'] { background: var(--md-purple); }
-    .wdna-hero-top { flex: 42 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+    .wdna-hero-top { flex: 36 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
     /* object-fit: contain -- the character art must never be cropped, even
        if that means letterboxing within this section. */
     .wdna-hero-image { max-width: 100%; max-height: 100%; display: block; border-radius: 20px; object-fit: contain; }
@@ -273,7 +303,7 @@ const THERMAL_ICON_SEQUENCE = ['snowflake', 'snowflake', 'shield', 'flame', 'fla
       width: 100%; height: 100%; align-items: center; justify-content: center;
       border: 4px dashed black; border-radius: 20px; font-weight: 900; font-size: 1.2rem;
     }
-    .wdna-hero-middle { flex: 26 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+    .wdna-hero-middle { flex: 32 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
     /* space-between (not center) so the brand block pins to the true bottom
        edge of the card, with the trait rows sitting above it. */
     .wdna-hero-bottom { flex: 32 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
@@ -312,13 +342,21 @@ const THERMAL_ICON_SEQUENCE = ['snowflake', 'snowflake', 'shield', 'flame', 'fla
 
     :global(.site-footer) { display: none; }
 
+    /* No line-clamp here on purpose -- the description must always show in
+       full, in every language, never truncated with an ellipsis. A small
+       client-side script (weather-dna-card.ts) shrinks this element's font
+       size just enough to fit its allotted space if a translation runs
+       long; it never cuts text. */
     .wdna-result p.wdna-archetype-description {
       text-align: center; text-transform: none; font-weight: 400; font-size: 0.72rem;
-      line-height: 1.35; margin: 0 auto; padding: 0 4px;
-      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
+      line-height: 1.32; margin: 0 auto; padding: 0 4px;
     }
 
-    .wdna-traits { display: flex; flex-direction: column; gap: 5px; }
+    .wdna-traits { display: flex; flex-direction: column; gap: 6px; }
+    .wdna-trait-group { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .wdna-trait-name {
+      font-size: 0.52rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; opacity: 0.55;
+    }
     .wdna-trait-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
     .wdna-trait-label {
       font-size: 0.65rem; font-weight: 800; text-transform: uppercase; line-height: 1.15;

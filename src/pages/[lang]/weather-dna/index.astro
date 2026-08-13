@@ -195,15 +195,18 @@ const t = ui[lang as keyof typeof ui];
     /* The slider must never shrink to make room for label text — labels wrap
        (even one word per line) before the track is allowed to compress. */
     .wdna-slider-row input[type='range'] { flex: 1 1 auto; min-width: 100px; }
+    /* Wrap only at word boundaries -- a word may sit alone on its own line,
+       but it is never split mid-word. If a single word still doesn't fit,
+       shrink the font for that language rather than break the word. */
     .wdna-slider-row span {
-      font-size: 0.75rem; font-weight: 900; text-transform: uppercase; opacity: 0.7;
-      white-space: normal; word-break: break-word; text-align: center;
-      flex: 0 1 60px;
+      font-size: 0.72rem; font-weight: 900; text-transform: uppercase; opacity: 0.7;
+      white-space: normal; word-break: normal; overflow-wrap: normal; hyphens: none;
+      text-align: center; flex: 0 1 68px;
     }
 
     @media (max-width: 480px) {
       .wdna-quiz { padding-top: 80px; }
-      .wdna-slider-row span { font-size: 0.6rem; flex-basis: 44px; }
+      .wdna-slider-row span { font-size: 0.58rem; flex-basis: 52px; }
     }
 
     .wdna-quiz h1 {
