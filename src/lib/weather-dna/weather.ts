@@ -42,8 +42,7 @@ export async function fetchLiveTemps(
 export function rankCities(
   cities: City[],
   liveTemps: Map<string, number>,
-  tMin: number,
-  tMax: number,
+  idealTemp: number,
   month1to12: number,
   count: number
 ): RankedCity[] {
@@ -51,7 +50,7 @@ export function rankCities(
     const live = liveTemps.get(city.name);
     const isLive = typeof live === 'number';
     const tempC = isLive ? (live as number) : estimateTypicalTempC(city.typicalJulyC, city.typicalJanC, month1to12);
-    return { city, tempC, isLive, score: comfortScore(tempC, tMin, tMax) };
+    return { city, tempC, isLive, score: comfortScore(tempC, idealTemp) };
   });
   ranked.sort((a, b) => b.score - a.score);
   return ranked.slice(0, count);

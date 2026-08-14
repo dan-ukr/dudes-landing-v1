@@ -100,12 +100,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const archetype = getArchetype(code);
 
     const month = new Date().getMonth() + 1;
-    const band = comfortBand(answers.feelWinter1to5, answers.feelSummer1to5, isAdaptive(scores), month);
+    const band = comfortBand(answers.feelWinter1to5, answers.feelSummer1to5, isAdaptive(scores), month, scores.thermal);
 
     const liveTemps = await getLiveTempsCached(CITIES);
-    const topCities = rankCities(CITIES, liveTemps, band.tMin, band.tMax, month, 3);
+    const topCities = rankCities(CITIES, liveTemps, band.idealTemp, month, 3);
 
-    const outfit = composeOutfit(topCities[0]?.tempC ?? (band.tMin + band.tMax) / 2, layering1to5, fit1to5);
+    const outfit = composeOutfit(topCities[0]?.tempC ?? band.idealTemp, layering1to5, fit1to5);
 
     const id = crypto.randomUUID().replace(/-/g, '').slice(0, 10);
 

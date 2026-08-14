@@ -38,26 +38,39 @@ describe('fetchLiveTemps', () => {
 });
 
 describe('rankCities', () => {
-  it('picks the cities closest to the comfort band center, using live temps when present', () => {
+  it('picks the city closest to the ideal temp, using live temps when present', () => {
     const live = new Map([
-      ['A', 25], // comfort center is (5+15)/2=10 -> far
+      ['A', 25], // ideal temp is 10 -> far
       ['B', 5], // close-ish
-      ['C', 10], // exact center
+      ['C', 10], // exact match
     ]);
-    const ranked = rankCities(CITIES, live, 5, 15, 7, 3);
+    const ranked = rankCities(CITIES, live, 10, 7, 3);
     expect(ranked[0].city.name).toBe('C');
     expect(ranked[0].isLive).toBe(true);
   });
 
   it('falls back to the typical seasonal estimate when a city has no live temp', () => {
     const live = new Map<string, number>(); // nothing live
-    const ranked = rankCities(CITIES, live, 5, 15, 7, 3);
+    const ranked = rankCities(CITIES, live, 10, 7, 3);
     for (const r of ranked) expect(r.isLive).toBe(false);
     expect(ranked).toHaveLength(3);
   });
 
   it('respects the requested count', () => {
-    const ranked = rankCities(CITIES, new Map(), 5, 15, 7, 2);
+    const ranked = rankCities(CITIES, new Map(), 10, 7, 2);
     expect(ranked).toHaveLength(2);
+  });
+
+  it('ranks a hot city above a mild one when the ideal temp is skewed hot', () => {
+    // A is the hottest city in the fixture (typicalJulyC=30). With a
+    // heat-skewed ideal (e.g. 29C), it must outrank a mild city like C
+    // even though a plain-midpoint approach might have preferred C.
+    const live = new Map([
+      ['A', 29],
+      ['B', 12],
+      ['C', 20],
+    ]);
+    const ranked = rankCities(CITIES, live, 29, 7, 3);
+    expect(ranked[0].city.name).toBe('A');
   });
 });
