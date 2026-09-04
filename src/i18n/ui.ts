@@ -18,9 +18,9 @@ export const PRODUCTS = {
   hungrydude: { name: 'HungryDude', status: 'dev' as const, logo: '/icons/HungryDudeLogo.svg' },
 };
 
-// Real store link (provided). iOS app doesn't exist yet, so its button renders
-// as a disabled "coming soon" chip instead of a dead/fake link.
+// Real store links (provided).
 export const WEATHERDUDE_GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.weatherdude.app';
+export const WEATHERDUDE_APP_STORE_URL = 'https://apps.apple.com/it/app/weatherdude/id6764145207?l=en-GB';
 
 // Concrete numbers aren't language-dependent, so they live here rather than
 // duplicated (and risking drift) across all 9 translation dicts.
@@ -73,7 +73,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': "WeatherDude builds a private comfort model just for you — trained on your own wardrobe photos and daily mood check-ins, not the public forecast. The more you use it, the sharper it gets, calibrated to your comfort, not the average person's temperature scale.",
     'products.weatherdude.detail.why': "Weather apps optimize for forecast accuracy, not for you. Nobody else is training a private comfort model from your actual wardrobe and how you personally feel — and that loop only gets harder to copy the longer you use it.",
     'products.weatherdude.store.googleplay': 'Get it on Google Play',
-    'products.weatherdude.store.iosSoon': 'Coming to iOS soon',
+    'products.weatherdude.store.appstore': 'Get it on the App Store',
 
     'products.mountaindude.pitch': 'An AI coach that watches how you move — and corrects it.',
     'products.mountaindude.detail.headline': 'MountainDude coaches your technique, not a generic rep count.',
@@ -319,7 +319,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': 'WeatherDude будує приватну модель комфорту саме для тебе — на основі фото твого гардеробу та щоденних відміток настрою, а не публічного прогнозу. Що більше ти користуєшся, то точніше він відчуває саме тебе, а не середню людину.',
     'products.weatherdude.detail.why': 'Погодні додатки оптимізують точність прогнозу, а не тебе. Ніхто інший не тренує приватну модель комфорту на твоєму реальному гардеробі й твоєму особистому відчутті — і що довше ти користуєшся, то важче це скопіювати.',
     'products.weatherdude.store.googleplay': 'Завантажити в Google Play',
-    'products.weatherdude.store.iosSoon': 'Скоро на iOS',
+    'products.weatherdude.store.appstore': 'Завантажити в App Store',
 
     'products.mountaindude.pitch': 'ШІ-тренер, який бачить, як ти рухаєшся — і виправляє це.',
     'products.mountaindude.detail.headline': 'MountainDude тренує твою техніку, а не рахує повторення.',
@@ -564,7 +564,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': 'WeatherDude buduje prywatny model komfortu tylko dla ciebie — na bazie zdjęć twojej szafy i codziennych ocen samopoczucia, a nie publicznej prognozy. Im więcej go używasz, tym lepiej rozumie właśnie ciebie, nie przeciętnego użytkownika.',
     'products.weatherdude.detail.why': 'Aplikacje pogodowe optymalizują dokładność prognozy, nie ciebie. Nikt inny nie trenuje prywatnego modelu komfortu na twojej prawdziwej szafie i twoim odczuciu — a im dłużej używasz, tym trudniej to skopiować.',
     'products.weatherdude.store.googleplay': 'Pobierz z Google Play',
-    'products.weatherdude.store.iosSoon': 'Wkrótce na iOS',
+    'products.weatherdude.store.appstore': 'Pobierz z App Store',
 
     'products.mountaindude.pitch': 'Trener AI, który widzi, jak się ruszasz — i to koryguje.',
     'products.mountaindude.detail.headline': 'MountainDude trenuje twoją technikę, nie liczy powtórzeń.',
@@ -809,7 +809,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': "WeatherDude costruisce un modello di comfort privato solo per te — allenato sulle foto del tuo guardaroba e sui check-in quotidiani della percezione del meteo, non sulle previsioni pubbliche. Più lo usi, più diventa preciso per te, non per la persona media.",
     'products.weatherdude.detail.why': 'Le app meteo ottimizzano la precisione della previsione, non te. Nessun altro allena un modello di comfort privato sul tuo vero guardaroba e su come ti senti tu — e più lo usi, più diventa difficile da copiare.',
     'products.weatherdude.store.googleplay': 'Scarica su Google Play',
-    'products.weatherdude.store.iosSoon': 'In arrivo su iOS',
+    'products.weatherdude.store.appstore': "Scarica su App Store",
 
     'products.mountaindude.pitch': 'Un coach IA che osserva come ti muovi — e ti corregge.',
     'products.mountaindude.detail.headline': 'MountainDude allena la tua tecnica, non un generico conteggio di ripetizioni.',
@@ -1054,7 +1054,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': 'WeatherDude baut ein privates Komfortmodell nur für dich — trainiert mit Fotos deiner Garderobe und täglichen Stimmungs-Check-ins, nicht mit der öffentlichen Vorhersage. Je mehr du es nutzt, desto genauer wird es für dich, nicht für den Durchschnitt.',
     'products.weatherdude.detail.why': 'Wetter-Apps optimieren auf Vorhersagegenauigkeit, nicht auf dich. Niemand sonst trainiert ein privates Komfortmodell aus deiner echten Garderobe und deinem persönlichen Gefühl — und je länger du es nutzt, desto schwerer wird es zu kopieren.',
     'products.weatherdude.store.googleplay': 'Bei Google Play holen',
-    'products.weatherdude.store.iosSoon': 'Bald für iOS',
+    'products.weatherdude.store.appstore': 'Im App Store holen',
 
     'products.mountaindude.pitch': 'Ein KI-Coach, der sieht, wie du dich bewegst — und es korrigiert.',
     'products.mountaindude.detail.headline': 'MountainDude trainiert deine Technik, nicht eine generische Wiederholungszahl.',
@@ -1299,7 +1299,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': 'WeatherDude construye un modelo de confort privado solo para ti — entrenado con fotos de tu propio armario y check-ins diarios de humor, no con el pronóstico público. Cuanto más lo usas, más preciso se vuelve para ti, no para la persona promedio.',
     'products.weatherdude.detail.why': 'Las apps del tiempo optimizan la precisión del pronóstico, no a ti. Nadie más entrena un modelo de confort privado con tu armario real y cómo te sientes tú — y cuanto más lo usas, más difícil es de copiar.',
     'products.weatherdude.store.googleplay': 'Consíguelo en Google Play',
-    'products.weatherdude.store.iosSoon': 'Próximamente en iOS',
+    'products.weatherdude.store.appstore': 'Consíguelo en App Store',
 
     'products.mountaindude.pitch': 'Un coach de IA que ve cómo te mueves — y lo corrige.',
     'products.mountaindude.detail.headline': 'MountainDude entrena tu técnica, no un conteo genérico de repeticiones.',
@@ -1544,7 +1544,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': 'O WeatherDude constrói um modelo de conforto privado só para ti — treinado com fotos do teu guarda-roupa e check-ins diários de humor, não com a previsão pública. Quanto mais o usas, mais preciso fica para ti, não para a pessoa média.',
     'products.weatherdude.detail.why': 'As apps de meteorologia otimizam a precisão da previsão, não a ti. Mais ninguém treina um modelo de conforto privado a partir do teu guarda-roupa real e de como TU te sentes — e quanto mais o usas, mais difícil fica de copiar.',
     'products.weatherdude.store.googleplay': 'Obter no Google Play',
-    'products.weatherdude.store.iosSoon': 'Brevemente no iOS',
+    'products.weatherdude.store.appstore': 'Obter na App Store',
 
     'products.mountaindude.pitch': 'Um coach de IA que vê como te moves — e corrige.',
     'products.mountaindude.detail.headline': 'O MountainDude treina a tua técnica, não uma contagem genérica de repetições.',
@@ -1751,18 +1751,18 @@ export const ui = {
     'nav.team': 'Équipe',
     'nav.contact': 'Contacts',
 
-    'hero.kicker': "L'IA QUI APPREND QUI T'ES",
+    'hero.kicker': "L'IA QUI APPREND QUI TU ES",
 
-    'motto.headline': 'Ta vie, calibrée pour toi — pas pour la personne moyenne.',
-    'motto.subline': 'Il n\'y a pas de solution universelle. DUDES apprend comment TOI tu ressens, bouges et manges vraiment — pas comment tu \'devrais\' te sens conformément à les algorithmes entraînés sur tout le monde.',
+    'motto.headline': 'Ta vie, calibrée pour toi — pas pour n\'importe qui.',
+    'motto.subline': 'Il n\'y a pas de solution universelle. DUDES apprend comment TOI tu ressens, bouges et manges vraiment — pas comment tu \'devrais\' te sentir conformément à des algorithmes entraînés sur tout le monde.',
 
-    'explainer.title': 'Comment on fonctionne vraiment',
+    'explainer.title': 'Comment ça fonctionne',
     'explainer.ai.title': "L'IA, utilisée honnêtement",
-    'explainer.ai.body': "La plupart des applis collent «IA» pour paraître modernes — un seul modèle générique, qui te moyenne dans une foule. Nous utilisons l'IA pour une seule tâche : apprendre TES schémas individuels à partir de TES propres données et avis. Si une fonctionnalité ne rend pas le produit plus personnalisé, on ne la publie pas juste pour dire qu'on a de l'IA.",
+    'explainer.ai.body': "La plupart des applis collent «IA» pour paraître modernes — un seul modèle générique, qui te perds dans une foule. Nous utilisons l'IA pour une seule tâche : apprendre TES schémas individuels à partir de TES propres données et de TES propresavis. L'IA sert uniquement à personnaliser ton expérience, à rien d'autre!",
     'explainer.pricing.title': 'Pourquoi on fait payer, et pour quoi',
-    'explainer.pricing.body': "Le plan gratuit couvre l'essentiel, pour que tu ressentes la personnalisation toi-même avant de payer un centime. Le Premium paie seulement le coût réel de faire tourner un modèle privé par utilisateur — on ne verrouille pas les fonctions essentielles de notres applis. Tu payes pour que ton propre modèle continue de s'améliorer, pas pour notre marketing.",
+    'explainer.pricing.body': "Le plan gratuit couvre l'essentiel, pour que tu ressentes la personnalisation avant de payer quoi que ce soit. Le Premium rémunère seulement le coût réel de faire tourner un modèle privé par un utilisateur — on ne verrouille pas les fonctions essentielles de nos applis. Tu payes pour que ton modèle continue de s'améliorer, pas pour notre marketing.",
     'explainer.hiring.title': 'On cherche toujours des Dudes',
-    'explainer.hiring.body': "On est une petite équipe qui construit vite, et on est toujours ouverts à parler avec des gens qui veulent faire la meme chose — n'importe quel rôle. Si c'est toi, envoi-nous un message plus bas.",
+    'explainer.hiring.body': "On est une petite équipe qui travaille vite, et on est toujours ouverts à la discussion avec des gens qui veulent faire comme nous — dans n'importe quel rôle. Si c'est toi, envoie-nous un message plus bas.",
 
     'products.title': 'Découvre les Dudes',
     'products.subtitle': 'Un moteur de personnalisation. Trois instruments, calibrés pour toi.',
@@ -1784,12 +1784,12 @@ export const ui = {
 
     'products.weatherdude.pitch': 'Ton biais de temps, résolu. Les tenues construites avec ta vraie garde-robe.',
     'products.weatherdude.detail.headline': 'WeatherDude apprend ce que TOI tu ressens, pas la météo.',
-    'products.weatherdude.detail.inspiration': "15°C n'est pas la même chose pour tout le monde. Pour l'un c'est glacial, pour l'autre c'est parfait — mais les applis météo traitent encore ça comme une seule vérité.",
-    'products.weatherdude.detail.objectives': 'Donner à chaque utilisateur son propre sentiment de température et une tenue construite à partir de sa vraie garde-robe — pas une prévision générique.',
-    'products.weatherdude.detail.personalization': "WeatherDude construit un modèle de confort rien que pour toi — entraîné sur les photos de ta garde-robe et tes check-ins de sentiment quotidiens, pas sur la météo publique. Plus tu l'utilises, plus il devient précis pour toi.",
-    'products.weatherdude.detail.why': "Les applis météo optimisent la précision de la prévision, pas toi. Personne d'autre n'entraîne un modèle de confort privé à partir de ta vraie garde-robe et de ce que TOI tu ressens — et plus tu l'utilises, plus c'est dur à copier.",
+    'products.weatherdude.detail.inspiration': "15°C n'est pas la même chose pour tout le monde. Pour certains c'est glacial, pour d'autres c'est parfait — mais les applis météo traitent encore ça comme une vérité absolue.",
+    'products.weatherdude.detail.objectives': 'Donner à chaque utilisateur son propre sentiment de température et proposer une tenue construite à partir de sa vraie garde-robe — pas une prévision générique.',
+    'products.weatherdude.detail.personalization': "WeatherDude construit un modèle de confort rien que pour toi — entraîné sur les photos de ta garde-robe et tes ressentis quotidiens, pas sur la météo publique. Plus tu l'utilises, plus il devient précis pour toi.",
+    'products.weatherdude.detail.why': "Les applis météo optimisent la précision de la prévision. Personne d'autre n'entraîne un modèle de confort privé à partir de ta vraie garde-robe et de ce que TOI tu ressens — et plus tu l'utilises, plus c'est dur à copier.",
     'products.weatherdude.store.googleplay': 'Disponible sur Google Play',
-    'products.weatherdude.store.iosSoon': 'Bientôt sur iOS',
+    'products.weatherdude.store.appstore': "Disponible sur l'App Store",
 
     'products.mountaindude.pitch': 'Un coach IA qui voit comment tu bouges — et le corrige.',
     'products.mountaindude.detail.headline': 'MountainDude entraîne ta technique, pas un comptage de répétitions générique.',
@@ -1802,11 +1802,11 @@ export const ui = {
     'products.mountaindude.notify.btn': 'Préviens-moi',
 
     'products.hungrydude.pitch': "Garde un œil sur ce qu'il y a dans ton frigo, et obtiens des recettes et une liste de courses construites autour de ça — avant son expiration.",
-    'products.hungrydude.detail.headline': 'HungryDude sait ton vrai frigo et tes vrais goûts, pas une boîte de recettes génériques.',
-    'products.hungrydude.detail.inspiration': "La nourriture se périme avant que tu te souviennes qu'elle est là, et les applis de recettes donnent encore le même plat à tout le monde — sans savoir ce qu'il y a vraiment bien pour ton goût.",
-    'products.hungrydude.detail.objectives': "Savoir qu'il y a dans ton frigo en temps réel, utiliser les ingrédients disponibles avant leur expiration, et transformer ton propre garde-manger — plus tes goûts, allergies et objectifs caloriques — en recettes et en liste de courses.",
-    'products.hungrydude.detail.personalization': "L'onboarding apprend tes habitudes d'achat, tes préférences de cuisine et de repas, le comptage des calories et tes allergies. Ajoute ce qu'il y a vraiment dans ton frigo ou scanne le ticket de caisse après l'achat, et l'IA de HungryDude surveille les dates de péremption, suggère des recettes depuis ton propre garde-manger, tes recettes sauvegardées ou un catalogue web, et construit ta liste de courses hebdomadaire. Le Premium va plus loin avec des recettes faites uniquement avec ce que tu as déjà, plus un planificateur de repas complet.",
-    'products.hungrydude.detail.why': "La plupart des applis alimentaires recommandent des recettes sans savoir qu'il y a dans ta cuisine ni quand ça périme. HungryDude est construit pour t'aider de cuisiner plus reasonablement consernant tes habitutes et tes goûts personnelles, pas d'une base de données de recettes générique.",
+    'products.hungrydude.detail.headline': 'HungryDude connait ton vrai frigo et tes vrais goûts, pas une livre de recettes génériques.',
+    'products.hungrydude.detail.inspiration': "La nourriture se périme avant que tu te souviennes ce qu'elle est là, et les applis de recettes donnent encore le même plat à tout le monde — sans savoir ce qu'il y a vraiment bien pour ton goût.",
+    'products.hungrydude.detail.objectives': "Savoir ce qu'il y a dans ton frigo en temps réel, utiliser les ingrédients disponibles avant leur expiration, et transformer ton propre garde-manger — plus tes goûts, allergies et objectifs caloriques — en recettes et en listes de courses.",
+    'products.hungrydude.detail.personalization': "Au démarrage, l'IA apprend tes habitudes d'achat, tes préférences de cuisine et de repas, le comptage des calories et tes allergies. Ajoute ce qu'il y a vraiment dans ton frigo ou scanne le ticket de caisse après l'achat, et l'IA de HungryDude surveille les dates de péremption, suggère des recettes depuis ton propre garde-manger, tes recettes sauvegardées ou un catalogue web, et construit ta liste de courses hebdomadaire. Le Premium va plus loin avec des recettes faites uniquement avec ce que tu as déjà, plus un planificateur de repas complet.",
+    'products.hungrydude.detail.why': "La plupart des applis alimentaires recommandent des recettes sans savoir qu'il y a dans ta cuisine ni quand ça périme. HungryDude est construit pour t'aider à cuisiner plus reasonnablement en tenant compte de tes habitudes et de tes goûts personnels, pas d'une base de données de recettes générique.",
     'products.hungrydude.notify.title': 'Sois informé en premier quand ce sera prêt.',
     'products.hungrydude.notify.placeholder': 'Ton e-mail...',
     'products.hungrydude.notify.btn': 'Préviens-moi',
@@ -2034,7 +2034,7 @@ export const ui = {
     'products.weatherdude.detail.personalization': 'WeatherDude будуе прыватную мадэль камфорту менавіта для цябе — на аснове фота твайго гардэроба і штодзённых адзнак настрою, а не публічнага прагнозу. Чым больш ты карыстаешся, тым дакладней ён адчувае менавіта цябе, а не сярэдняга чалавека.',
     'products.weatherdude.detail.why': 'Надвор\'евыя дадаткі аптымізуюць дакладнасць прагнозу, а не цябе. Ніхто іншы не трэніруе прыватную мадэль камфорту на тваім рэальным гардэробе і тваім асабістым адчуванні — і чым даўжэй ты карыстаешся, тым цяжэй гэта скапіяваць.',
     'products.weatherdude.store.googleplay': 'Спампаваць у Google Play',
-    'products.weatherdude.store.iosSoon': 'Хутка на iOS',
+    'products.weatherdude.store.appstore': 'Спампаваць у App Store',
 
     'products.mountaindude.pitch': 'ШІ-трэнер, які бачыць, як ты рухаешся — і выпраўляе гэта.',
     'products.mountaindude.detail.headline': 'MountainDude трэніруе тваю тэхніку, а не лічыць паўторы.',

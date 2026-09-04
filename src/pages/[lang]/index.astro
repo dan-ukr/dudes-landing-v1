@@ -4,7 +4,7 @@ import Layout from '../../layouts/layout.astro';
 import Modal from '../../components/Modal.astro';
 import DudesLogo from '../../components/DudesLogo.astro';
 import SocialIcon from '../../components/SocialIcon.astro';
-import { ui, languages, PRODUCTS, WEATHERDUDE_GOOGLE_PLAY_URL, WEATHERDUDE_STATS } from '../../i18n/ui';
+import { ui, languages, PRODUCTS, WEATHERDUDE_GOOGLE_PLAY_URL, WEATHERDUDE_APP_STORE_URL, WEATHERDUDE_STATS } from '../../i18n/ui';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -221,7 +221,7 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
 
       <div class="store-buttons">
         <a href={WEATHERDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="store-btn">{t['products.weatherdude.store.googleplay']}</a>
-        <span class="store-btn store-btn-disabled" aria-disabled="true" title="iOS app still in development">{t['products.weatherdude.store.iosSoon']}</span>
+        <a href={WEATHERDUDE_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="store-btn">{t['products.weatherdude.store.appstore']}</a>
       </div>
     </div>
   </Modal>
@@ -494,12 +494,6 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       color: inherit;
       font-size: 0.9rem;
     }
-    .store-btn-disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      border-style: dashed;
-    }
-
     .capture-block { margin-top: 30px; }
     .capture-block h4 { font-weight: 900; text-transform: uppercase; font-size: 1.1rem; }
     .capture-form { display: flex; gap: 14px; flex-wrap: wrap; }
