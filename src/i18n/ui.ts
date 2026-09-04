@@ -20,7 +20,7 @@ export const PRODUCTS = {
 
 // Real store links (provided).
 export const WEATHERDUDE_GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.weatherdude.app';
-export const WEATHERDUDE_APP_STORE_URL = 'https://apps.apple.com/it/app/weatherdude/id6764145207?l=en-GB';
+export const WEATHERDUDE_APP_STORE_URL = 'https://apps.apple.com/it/app/weatherdude/id6764145207';
 
 // Concrete numbers aren't language-dependent, so they live here rather than
 // duplicated (and risking drift) across all 9 translation dicts.
