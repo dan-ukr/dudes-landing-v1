@@ -26,7 +26,7 @@ export const WEATHERDUDE_APP_STORE_URL = 'https://apps.apple.com/it/app/weatherd
 // duplicated (and risking drift) across all 9 translation dicts.
 export const WEATHERDUDE_STATS = {
   launched: '09.07.2026',
-  users: '3250 (upd. 22.07.2026)',
+  users: '10750 (upd. 29.09.2026)',
 };
 
 export const ui = {
