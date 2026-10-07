@@ -8,7 +8,7 @@
   </head>
   <body>
     <h1>Privacy Policy</h1>
-  <p>Updated at 2026-09-28</p>
+  <p>Updated at 2026-10-04</p>
 
   <p>MusicDude (“we,” “our,” or “us”) is operated by DUDES and is committed to protecting your privacy. This Privacy
     Policy explains how your personal information is collected, used and disclosed by MusicDude.</p>
@@ -33,21 +33,31 @@
   <h1>What Information Do We Collect?</h1>
   <ul>
     <li><strong>Your account:</strong> email address, first name if you give one, your password (stored only as a
-      one-way hash), your app language, your chosen communication style and your time zone offset. If you sign in with
-      Google or Apple, we store only their account identifier, never a password from them.</li>
-    <li><strong>Your music:</strong> the tracks you add — library files you import, a Spotify or Apple data export, playlist
-      links you paste, songs you search and add, your Spotify Liked Songs if you connect Spotify inside the app, your
-      Apple Music library if you import it on iPhone (read on your device), and playlists you import from Spotify or
-      Apple Music through ListenBrainz.
-      The Spotify connection runs on your device: you log in to Spotify's own web page, and your Spotify password and
-      session never reach our servers.</li>
+      one-way hash), your app language, your chosen communication style, your handle if you pick one, and your time zone
+      offset. If you sign in with Google or Apple, we store only their account identifier, never a password from them.
+      We also record when you confirmed that you are 16 or older at sign-up and, if you choose the “18+” communication
+      style, when and from which app version you confirmed that you are 18 or older.</li>
+    <li><strong>Your music:</strong> the tracks you add — library files you import (such as a file made with
+      TuneMyMusic, or a Spotify or Apple data export), playlist links you paste, songs you search and add, your Apple
+      Music library if you import it on iPhone (read on your device), and playlists you import from Spotify or Apple
+      Music through ListenBrainz. MusicDude never asks for your Spotify or Apple Music password. If you use TuneMyMusic
+      to make a file of your library, you log in to your music service on TuneMyMusic's own website, an independent
+      service with its own privacy policy; we receive only the resulting list of tracks.</li>
     <li><strong>Your listening, only if you turn on Live listening:</strong> on Android, with the Notification access
       you grant, the title and artist of what plays in your media apps and when; on iPhone, what plays in the Music app
       and your Music library's play counts; and, if you connect ListenBrainz, the Spotify listens ListenBrainz
       records for you. You can turn these off at any time in your device settings or in the app.</li>
+    <li><strong>Mood moments, only if you turn on care check-ins or right-moment notifications:</strong> when Live
+      listening notices a moment in a listening session — a run of one mood, a change of mood, or one song on loop — we
+      record that moment (its kind, the mood and when the session started), so the matching notification is sent only
+      once. If neither switch is on, the moods of your sessions are not recorded.</li>
+    <li><strong>How you respond to recommendations:</strong> when you play a recommended track for 15 seconds or more,
+      open it in your music service, skip it, save it, or tap “More of this” or “Not for me”, we log that together
+      with the recommendation it belongs to, and use it to improve recommendations.</li>
     <li><strong>Your taste profile</strong>, computed on our servers from that music: eras, regions, languages, moods and
       similar descriptors.</li>
-    <li><strong>Social features you use:</strong> your friend code, the friends you add, and playlists you create.</li>
+    <li><strong>Social features you use:</strong> your friend code, the friends you add, playlists you create, your
+      game results and league standings, and the gigs you mark “I'm going”.</li>
     <li><strong>Location, only when you ask:</strong> an event search uses your position or the city you type and does
       not store it. If you turn on event alerts, we keep an area rounded to about 10 km, or the city you chose, and
       delete it when you turn alerts off.</li>
@@ -64,6 +74,7 @@
     <li>To send the notifications you turned on: the daily song, listening check-ins and event alerts. Each has its own
       switch in the app.</li>
     <li>To write the short descriptions in the app (see “AI-written descriptions” below).</li>
+    <li>To improve recommendations, from how you respond to them.</li>
     <li>To process subscriptions and restore purchases.</li>
     <li>To keep the Service secure and working.</li>
   </ul>
@@ -72,20 +83,32 @@
 
   <h1>What Your Friends Can See</h1>
   <p>When you compare with a friend, they see a taste comparison: shared and different eras, regions, languages and
-    genres, a match percentage and blend playlists. Your listening moods, your listening times and your individual
-    plays are never shown to anyone else.</p>
+    genres, a match percentage and blend playlists. Your listening moods, your mood moments, your listening times and
+    your individual plays are never shown to anyone else.</p>
+  <ul>
+    <li><strong>Games:</strong> individual tracks from your library can appear in your friends' games (for example
+      “Whose Track Is It?”), unless you turn this off in Profile.</li>
+    <li><strong>Gigs:</strong> the gigs you mark “I'm going” are visible to your friends, unless you turn this off in
+      Profile. It is on by default.</li>
+    <li><strong>Weekly leagues:</strong> other players in your league see your handle and your points, never your email.
+      Friends may see your first name instead of your handle.</li>
+  </ul>
 
   <h1>AI-written descriptions</h1>
   <p>Some short texts in the app are written by an AI model from aggregated facts about your taste (for example
     “mostly the nineties, indie rock, English and Spanish”). These facts are sent through OpenRouter to Google's Gemini
     models without your name, email or any identifier. The texts contain no numbers and never describe your health,
     mental state or life events. If you use Belarusian, these texts are shown in Ukrainian.</p>
+  <p>To tell which language a song is sung in, we may look up its lyrics on LRCLIB and, when that is not enough, send
+    the song's title and artist through OpenRouter to a Google Gemini model. This concerns songs in the catalogue, not
+    you: no name, email or identifier is sent. Lyrics are used only to detect the language and are not stored.</p>
 
   <h1>Do we share the information we collect with third parties?</h1>
   <p>Only with processors that run the Service for us, each receiving only what its task needs:</p>
   <ul>
     <li>Supabase (database) and Render (servers) host the Service.</li>
-    <li>OpenRouter and Google receive aggregated taste facts, without identifiers, to write descriptions.</li>
+    <li>OpenRouter and Google receive aggregated taste facts, without identifiers, to write descriptions, and song
+      titles and artist names to detect a song's language.</li>
     <li>Ticketmaster receives the city you search, or your position when you use it, to find events.</li>
     <li>Deezer, Apple iTunes, MusicBrainz, Wikidata and LRCLIB receive track and artist names to look up music
       information; MusicBrainz may also receive the city you search. None of them learn who you are.</li>
@@ -105,8 +128,9 @@
     remember only a one-way code for each event already sent to you.</p>
 
   <h1>How Long Do We Keep Your Information?</h1>
-  <p>Your data is kept while your account exists. Deleting your account (Profile → Delete account) removes your
-    profile, library, plays, taste profile, friends, playlists, alerts and notification tokens from our database
+  <p>Your data is kept while your account exists. Mood moments and your responses to recommendations are kept until you
+    delete your account. Deleting your account (Profile → Delete account) removes your profile, library, plays, taste
+    profile, mood moments, friends, playlists, game results, alerts and notification tokens from our database
     immediately. Copies in our hosting providers' routine backups expire on their own schedule.</p>
 
   <h1>How Do We Protect Your Information?</h1>
@@ -122,9 +146,11 @@
   <p>If you are in the European Economic Area, we process your data on these legal bases:</p>
   <ul>
     <li>Contract: to provide the Service you signed up for.</li>
-    <li>Consent: for Live listening, notifications and location-based event features, each of which you can withdraw at
-      any time in the app or your device settings.</li>
-    <li>Legitimate interest: to keep the Service secure and working.</li>
+    <li>Consent: for Live listening, notifications (including care check-ins and right-moment notifications, and the
+      mood moments they record) and location-based event features, each of which you can withdraw at any time in the
+      app or your device settings.</li>
+    <li>Legitimate interest: to keep the Service secure and working, to improve recommendations from how you respond to
+      them, and to show friends your tracks in games and the gigs you plan to attend, both of which you can turn off.</li>
   </ul>
 
   <h1>Your Rights</h1>
@@ -134,10 +160,11 @@
     with a supervisory authority — in Italy, the Garante per la protezione dei dati personali.</p>
 
   <h1>Kids' Privacy</h1>
-  <p>MusicDude is not intended for children under 14. We do not knowingly collect personal data from anyone under 14.
-    If you are a parent or guardian and you are aware that your child has provided us with personal data, please
-    contact us and we will delete it. The “18+” communication style, which uses swearing, is only available to users
-    who confirm they are adults.</p>
+  <p>MusicDude is not intended for anyone under 16. Creating an account requires confirming that you are 16 or older,
+    and we do not knowingly collect personal data from anyone under 16. If you are a parent or guardian and you are
+    aware that your child has provided us with personal data, please contact us and we will delete it. The “18+”
+    communication style, which uses swearing, is only available to users who confirm they are 18 or older; we record
+    when, and from which app version, that confirmation was given.</p>
 
   <h1>Subscriptions and Payments</h1>
   <p>Subscriptions are purchased through Google Play or the Apple App Store and managed by RevenueCat. Your payment
