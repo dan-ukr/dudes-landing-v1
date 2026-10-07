@@ -14,19 +14,26 @@ export const languages = {
 // product names are never translated, and status drives which CTA renders.
 export const PRODUCTS = {
   weatherdude: { name: 'WeatherDude', status: 'live' as const, logo: '/icons/WeatherDudeLogo.svg' },
-  mountaindude: { name: 'MountainDude', status: 'dev' as const, logo: '/icons/MountainDudeLogo.svg' },
+  musicdude: { name: 'MusicDude', status: 'soon' as const, logo: '/icons/MusicDudeLogo.png' },
   hungrydude: { name: 'HungryDude', status: 'dev' as const, logo: '/icons/HungryDudeLogo.svg' },
 };
 
 // Real store links (provided).
 export const WEATHERDUDE_GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.weatherdude.app';
 export const WEATHERDUDE_APP_STORE_URL = 'https://apps.apple.com/it/app/weatherdude/id6764145207';
+export const MUSICDUDE_GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.musicdude.app';
+export const MUSICDUDE_APP_STORE_URL = 'https://apps.apple.com/app/id6819865197';
+export const MUSICDUDE_PRIVACY_URL = '/musicdude_privacy_policy';
+export const MUSICDUDE_TERMS_URL = '/musicdude_terms_and_conditions';
 
 // Concrete numbers aren't language-dependent, so they live here rather than
 // duplicated (and risking drift) across all 9 translation dicts.
 export const WEATHERDUDE_STATS = {
   launched: '09.07.2026',
   users: '10750 (upd. 29.09.2026)',
+};
+export const MUSICDUDE_STATS = {
+  releaseDate: '22.10',
 };
 
 export const ui = {
@@ -38,7 +45,7 @@ export const ui = {
     'hero.kicker': 'AI THAT LEARNS YOU',
 
     'motto.headline': 'Your life, calibrated to you — not the average person.',
-    'motto.subline': "One size fits none. DUDES learns how YOU actually feel, move, and eat — not the average person in the room.",
+    'motto.subline': "One size fits none. DUDES learns how YOU actually feel, listen, and eat — not the average person in the room.",
 
     'explainer.title': 'How We Actually Work',
     'explainer.ai.title': 'AI, used honestly',
@@ -53,6 +60,7 @@ export const ui = {
     'products.cta.viewDetails': 'See how it personalizes you',
     'products.status.live': 'Live',
     'products.status.dev': 'In Development',
+    'products.status.soon': "Coming soon",
 
     'detail.section.inspiration': 'Inspiration',
     'detail.section.objectives': 'Main Objectives',
@@ -63,6 +71,7 @@ export const ui = {
 
     'stats.launched': 'Launched',
     'stats.users': 'Users',
+    'stats.releaseDate': "Release date",
     'stats.revenue': 'Revenue',
     'stats.tba': 'TBA',
 
@@ -75,15 +84,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Get it on Google Play',
     'products.weatherdude.store.appstore': 'Get it on the App Store',
 
-    'products.mountaindude.pitch': 'An AI coach that watches how you move — and corrects it.',
-    'products.mountaindude.detail.headline': 'MountainDude coaches your technique, not a generic rep count.',
-    'products.mountaindude.detail.inspiration': 'Training without professional guidance leads to bad technique, stalled progress, lost motivation, and real injury risk.',
-    'products.mountaindude.detail.objectives': 'An AI coach that helps you become a better athlete through continuous learning — not just a rep counter.',
-    'products.mountaindude.detail.personalization': "MountainDude analyzes your own photos and videos and builds a training plan around how YOUR body actually moves — not a one-size-fits-all program. Feedback before, during, and after every workout, tuned to you.",
-    'products.mountaindude.detail.why': 'Most fitness apps count reps and sets the same way for everyone. Few actually watch how you personally move and correct it — that takes computer vision tuned to an individual body, not a generic template.',
-    'products.mountaindude.notify.title': 'Be first to train with it.',
-    'products.mountaindude.notify.placeholder': 'Your best email...',
-    'products.mountaindude.notify.btn': 'Notify me',
+    'products.musicdude.pitch': "Your music taste compass. See your library as a galaxy and get songs picked for the right moment.",
+    'products.musicdude.detail.headline': "MusicDude maps your taste, not the charts.",
+    'products.musicdude.detail.inspiration': "Streaming apps know what you play, but they never show you your own taste. And your taste is a map of moods, languages, countries and decades — not a flat playlist.",
+    'products.musicdude.detail.objectives': "Import your library from Spotify, Apple Music or your own files and see your taste as a galaxy: moods, energy, languages, countries, decades and genres. Discover your eras — the chapters of your listening life. Play music games (Daily Drop, Era Guesser, Where's it from?, weekly leagues, Eurovision and Grammys specials) and find concerts that match your taste. In 11 languages.",
+    'products.musicdude.detail.personalization': "Ask for music in your own words — “like this but calmer, from the nineties” — and get songs picked for the right moment, each with a reason why. Compare taste with friends: your match %, what you share, and songs to send each other. Then turn it all into shareable story cards.",
+    'products.musicdude.detail.why': "Streaming services recommend to keep you inside their catalogue. MusicDude works across your whole library and explains every pick — the more you listen, the more it reflects you, not the average listener. Premium comes with a 14-day free trial.",
+    'products.musicdude.legal.privacy': "Privacy policy",
+    'products.musicdude.legal.terms': "Terms & conditions",
 
     'products.hungrydude.pitch': "Track what's in your fridge, get recipes and a grocery list built around it — before anything spoils.",
     'products.hungrydude.detail.headline': 'HungryDude tracks your real fridge, not a generic recipe box.',
@@ -284,7 +292,7 @@ export const ui = {
     'hero.kicker': 'ШІ, ЯКИЙ ВИВЧАЄ ТЕБЕ',
 
     'motto.headline': 'Твоє життя, налаштоване під тебе, а не під середню людину.',
-    'motto.subline': 'Один розмір не пасує нікому. DUDES вчиться, як ТОБІ насправді тепло, як ТИ рухаєшся і що ТИ їси — а не середньостатистична людина поруч.',
+    'motto.subline': 'Один розмір не пасує нікому. DUDES вчиться, як ТОБІ насправді тепло, що ТИ слухаєш і що ТИ їси — а не середньостатистична людина поруч.',
 
     'explainer.title': 'Як ми насправді працюємо',
     'explainer.ai.title': 'ШІ, чесно',
@@ -299,6 +307,7 @@ export const ui = {
     'products.cta.viewDetails': 'Дивись, як це підлаштовується під тебе',
     'products.status.live': 'Працює',
     'products.status.dev': 'У розробці',
+    'products.status.soon': "Скоро",
 
     'detail.section.inspiration': 'Натхнення',
     'detail.section.objectives': 'Головні цілі',
@@ -309,6 +318,7 @@ export const ui = {
 
     'stats.launched': 'Запуск',
     'stats.users': 'Користувачі',
+    'stats.releaseDate': "Дата релізу",
     'stats.revenue': 'Дохід',
     'stats.tba': 'Оголосимо пізніше',
 
@@ -321,15 +331,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Завантажити в Google Play',
     'products.weatherdude.store.appstore': 'Завантажити в App Store',
 
-    'products.mountaindude.pitch': 'ШІ-тренер, який бачить, як ти рухаєшся — і виправляє це.',
-    'products.mountaindude.detail.headline': 'MountainDude тренує твою техніку, а не рахує повторення.',
-    'products.mountaindude.detail.inspiration': 'Тренування без професійного супроводу веде до неправильної техніки, застою в прогресі, втрати мотивації і реального ризику травм.',
-    'products.mountaindude.detail.objectives': 'ШІ-тренер, який допомагає стати кращим атлетом через постійне навчання — а не просто рахує повторення.',
-    'products.mountaindude.detail.personalization': 'MountainDude аналізує твої фото й відео та будує план тренувань під те, як рухається саме ТВОЄ тіло — а не універсальну програму. Фідбек до, під час і після кожного тренування, під тебе.',
-    'products.mountaindude.detail.why': "Більшість фітнес-додатків рахують повторення й підходи однаково для всіх. Мало хто справді дивиться, як рухаєшся саме ти, і виправляє це — а це вимагає комп'ютерного зору, налаштованого на конкретне тіло, а не шаблон.",
-    'products.mountaindude.notify.title': 'Будь першим, хто потренується з ним.',
-    'products.mountaindude.notify.placeholder': 'Твій найкращий імейл...',
-    'products.mountaindude.notify.btn': 'Повідом мене',
+    'products.musicdude.pitch': "Твій музичний компас смаку. Побач свою бібліотеку як галактику й отримуй пісні саме під момент.",
+    'products.musicdude.detail.headline': "MusicDude показує твій смак, а не чарти.",
+    'products.musicdude.detail.inspiration': "Стримінги знають, що ти слухаєш, але ніколи не показують тобі твій власний смак. А він — це мапа настроїв, мов, країн і десятиліть, а не плаский плейлист.",
+    'products.musicdude.detail.objectives': "Імпортуй бібліотеку зі Spotify, Apple Music чи власних файлів і побач свій смак як галактику: настрої, енергію, мови, країни, десятиліття й жанри. Відкрий свої ери — розділи твого музичного життя. Грай у музичні ігри (Daily Drop, Era Guesser, Where's it from?, щотижневі ліги, спецвипуски до Євробачення та Grammy) і знаходь концерти під свій смак. 11 мов.",
+    'products.musicdude.detail.personalization': "Проси музику своїми словами — «як це, але спокійніше, з дев’яностих» — і отримуй пісні під правильний момент, кожну з поясненням чому. Порівнюй смак із друзями: відсоток збігу, що у вас спільного, і пісні, які варто надіслати одне одному. А все це перетворюй на сторіз-картки, якими легко поділитися.",
+    'products.musicdude.detail.why': "Стримінги рекомендують так, щоб утримати тебе у своєму каталозі. MusicDude працює з усією твоєю бібліотекою та пояснює кожен вибір — і що більше ти слухаєш, то точніше він відображає саме тебе, а не середнього слухача. Premium — з 14-денним безкоштовним пробним періодом.",
+    'products.musicdude.legal.privacy': "Політика конфіденційності",
+    'products.musicdude.legal.terms': "Умови використання",
 
     'products.hungrydude.pitch': 'Стеж, що є в холодильнику, і отримуй рецепти та список покупок під це — поки нічого не зіпсувалося.',
     'products.hungrydude.detail.headline': 'HungryDude стежить за твоїм реальним холодильником, а не за типовою коробкою з рецептами.',
@@ -529,7 +538,7 @@ export const ui = {
     'hero.kicker': 'AI, KTÓRE POZNAJE CIEBIE',
 
     'motto.headline': 'Twoje życie, dopasowane do ciebie — nie do przeciętnego człowieka.',
-    'motto.subline': 'Jeden rozmiar nie pasuje do nikogo. DUDES uczy się, jak TY naprawdę czujesz, ruszasz się i jesz — a nie jak przeciętny człowiek obok.',
+    'motto.subline': 'Jeden rozmiar nie pasuje do nikogo. DUDES uczy się, jak TY naprawdę czujesz, słuchasz i jesz — a nie jak przeciętny człowiek obok.',
 
     'explainer.title': 'Jak naprawdę działamy',
     'explainer.ai.title': 'AI, uczciwie',
@@ -544,6 +553,7 @@ export const ui = {
     'products.cta.viewDetails': 'Zobacz, jak dopasowuje się do ciebie',
     'products.status.live': 'Działa',
     'products.status.dev': 'W budowie',
+    'products.status.soon': "Wkrótce",
 
     'detail.section.inspiration': 'Inspiracja',
     'detail.section.objectives': 'Główne cele',
@@ -554,6 +564,7 @@ export const ui = {
 
     'stats.launched': 'Premiera',
     'stats.users': 'Użytkownicy',
+    'stats.releaseDate': "Data premiery",
     'stats.revenue': 'Przychód',
     'stats.tba': 'Wkrótce',
 
@@ -566,15 +577,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Pobierz z Google Play',
     'products.weatherdude.store.appstore': 'Pobierz z App Store',
 
-    'products.mountaindude.pitch': 'Trener AI, który widzi, jak się ruszasz — i to koryguje.',
-    'products.mountaindude.detail.headline': 'MountainDude trenuje twoją technikę, nie liczy powtórzeń.',
-    'products.mountaindude.detail.inspiration': 'Trening bez profesjonalnego wsparcia prowadzi do złej techniki, zastoju, utraty motywacji i realnego ryzyka kontuzji.',
-    'products.mountaindude.detail.objectives': 'Trener AI, który pomaga ci stać się lepszym sportowcem dzięki ciągłemu uczeniu się — nie tylko liczy powtórzenia.',
-    'products.mountaindude.detail.personalization': 'MountainDude analizuje twoje zdjęcia i wideo i buduje plan treningowy dopasowany do tego, jak porusza się TWOJE ciało — nie uniwersalny program. Feedback przed, w trakcie i po każdym treningu, skrojony pod ciebie.',
-    'products.mountaindude.detail.why': 'Większość aplikacji fitness liczy powtórzenia i serie tak samo dla wszystkich. Mało która naprawdę patrzy, jak ty się ruszasz, i to koryguje — to wymaga wizji komputerowej dopasowanej do konkretnego ciała, nie szablonu.',
-    'products.mountaindude.notify.title': 'Potrenuj z nim jako pierwszy.',
-    'products.mountaindude.notify.placeholder': 'Twój e-mail...',
-    'products.mountaindude.notify.btn': 'Powiadom mnie',
+    'products.musicdude.pitch': "Twój kompas muzycznego gustu. Zobacz swoją bibliotekę jako galaktykę i dostawaj piosenki dobrane do chwili.",
+    'products.musicdude.detail.headline': "MusicDude mapuje twój gust, a nie listy przebojów.",
+    'products.musicdude.detail.inspiration': "Serwisy streamingowe wiedzą, czego słuchasz, ale nigdy nie pokazują ci twojego gustu. A twój gust to mapa nastrojów, języków, krajów i dekad — nie płaska playlista.",
+    'products.musicdude.detail.objectives': "Zaimportuj bibliotekę ze Spotify, Apple Music lub własnych plików i zobacz swój gust jako galaktykę: nastroje, energię, języki, kraje, dekady i gatunki. Odkryj swoje ery — rozdziały twojego muzycznego życia. Graj w muzyczne gry (Daily Drop, Era Guesser, Where's it from?, cotygodniowe ligi, specjalne edycje na Eurowizję i Grammy) i znajduj koncerty pasujące do twojego gustu. 11 języków.",
+    'products.musicdude.detail.personalization': "Proś o muzykę własnymi słowami — „jak to, ale spokojniejsze, z lat dziewięćdziesiątych” — i dostawaj piosenki na właściwą chwilę, każdą z wyjaśnieniem dlaczego. Porównuj gust ze znajomymi: procent dopasowania, co was łączy i piosenki, które warto sobie wysłać. A wszystko zamieniaj w karty do udostępnienia w stories.",
+    'products.musicdude.detail.why': "Serwisy streamingowe polecają tak, żeby zatrzymać cię w swoim katalogu. MusicDude działa na całej twojej bibliotece i tłumaczy każdy wybór — im więcej słuchasz, tym lepiej odzwierciedla ciebie, a nie przeciętnego słuchacza. Premium z 14-dniowym darmowym okresem próbnym.",
+    'products.musicdude.legal.privacy': "Polityka prywatności",
+    'products.musicdude.legal.terms': "Regulamin",
 
     'products.hungrydude.pitch': 'Śledź, co masz w lodówce, i dostawaj przepisy oraz listę zakupów zbudowaną wokół tego — zanim coś się zepsuje.',
     'products.hungrydude.detail.headline': 'HungryDude śledzi twoją prawdziwą lodówkę, nie generyczną książkę przepisów.',
@@ -774,7 +784,7 @@ export const ui = {
     'hero.kicker': "L'IA CHE IMPARA CHI SEI",
 
     'motto.headline': 'La tua vita, calibrata su di te — non sulla persona media.',
-    'motto.subline': 'Una taglia non va bene per nessuno. DUDES impara come TU ti senti, ti muovi e mangi davvero — non come la persona media accanto a te.',
+    'motto.subline': 'Una taglia non va bene per nessuno. DUDES impara come TU ti senti, ascolti e mangi davvero — non come la persona media accanto a te.',
 
     'explainer.title': 'Come lavoriamo',
     'explainer.ai.title': 'IA, usata onestamente',
@@ -789,6 +799,7 @@ export const ui = {
     'products.cta.viewDetails': 'Scopri come si personalizza in base a te',
     'products.status.live': 'Live',
     'products.status.dev': 'In sviluppo',
+    'products.status.soon': "In arrivo",
 
     'detail.section.inspiration': 'Ispirazione',
     'detail.section.objectives': 'Obiettivi principali',
@@ -799,6 +810,7 @@ export const ui = {
 
     'stats.launched': 'Lancio',
     'stats.users': 'Utenti',
+    'stats.releaseDate': "Data di uscita",
     'stats.revenue': 'Ricavi',
     'stats.tba': 'Da annunciare',
 
@@ -811,15 +823,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Scarica su Google Play',
     'products.weatherdude.store.appstore': "Scarica su App Store",
 
-    'products.mountaindude.pitch': 'Un coach IA che osserva come ti muovi — e ti corregge.',
-    'products.mountaindude.detail.headline': 'MountainDude allena la tua tecnica, non un generico conteggio di ripetizioni.',
-    'products.mountaindude.detail.inspiration': 'Allenarsi senza una guida professionale porta a tecnica scorretta, progressi bloccati, motivazione persa e un vero rischio di infortuni.',
-    'products.mountaindude.detail.objectives': "Un coach IA che ti aiuta a diventare un atleta migliore attraverso l'apprendimento continuo — non solo un contatore di ripetizioni.",
-    'products.mountaindude.detail.personalization': 'MountainDude analizza le tue foto e i tuoi video e costruisce un piano di allenamento su come si muove davvero il TUO corpo — non un programma standard. Feedback prima, durante e dopo ogni allenamento, su misura per te.',
-    'products.mountaindude.detail.why': 'La maggior parte delle app fitness conta ripetizioni e serie allo stesso modo per tutti. Poche osservano davvero come ti muovi tu e lo correggono — serve una visione artificiale calibrata su un corpo individuale, non un modello generico.',
-    'products.mountaindude.notify.title': 'Sii il primo ad allenarti con lui.',
-    'products.mountaindude.notify.placeholder': 'La tua email...',
-    'products.mountaindude.notify.btn': 'Avvisami',
+    'products.musicdude.pitch': "La bussola del tuo gusto musicale. Guarda la tua libreria come una galassia e ricevi canzoni scelte per il momento giusto.",
+    'products.musicdude.detail.headline': "MusicDude mappa il tuo gusto, non le classifiche.",
+    'products.musicdude.detail.inspiration': "Le app di streaming sanno cosa ascolti, ma non ti mostrano mai il tuo gusto. Che è una mappa di umori, lingue, paesi e decenni — non una playlist piatta.",
+    'products.musicdude.detail.objectives': "Importa la tua libreria da Spotify, Apple Music o dai tuoi file e guarda il tuo gusto come una galassia: umori, energia, lingue, paesi, decenni e generi. Scopri le tue ere, i capitoli della tua vita d'ascolto. Gioca ai giochi musicali (Daily Drop, Era Guesser, Where's it from?, leghe settimanali, speciali Eurovision e Grammy) e trova concerti adatti al tuo gusto. In 11 lingue.",
+    'products.musicdude.detail.personalization': "Chiedi musica con parole tue — “come questa ma più calma, degli anni Novanta” — e ricevi canzoni per il momento giusto, ognuna con il suo perché. Confronta il tuo gusto con gli amici: percentuale di affinità, cosa avete in comune e canzoni da mandarvi. Poi trasforma tutto in card da condividere nelle storie.",
+    'products.musicdude.detail.why': "Le app di streaming consigliano per tenerti nel loro catalogo. MusicDude lavora su tutta la tua libreria e spiega ogni scelta: più ascolti, più rispecchia te, non l'ascoltatore medio. Premium con 14 giorni di prova gratuita.",
+    'products.musicdude.legal.privacy': "Informativa sulla privacy",
+    'products.musicdude.legal.terms': "Termini e condizioni",
 
     'products.hungrydude.pitch': 'Tieni traccia di cosa hai in frigo e ottieni ricette e una lista della spesa costruite intorno a quello — prima che qualcosa vada a male.',
     'products.hungrydude.detail.headline': 'HungryDude tiene traccia del tuo vero frigo, non di uno scatolone di ricette generiche.',
@@ -1019,7 +1030,7 @@ export const ui = {
     'hero.kicker': 'KI, DIE DICH KENNENLERNT',
 
     'motto.headline': 'Dein Leben, kalibriert auf dich — nicht auf den Durchschnitt.',
-    'motto.subline': 'Eine Größe passt niemandem. DUDES lernt, wie DU dich wirklich fühlst, bewegst und isst — nicht der Durchschnittsmensch neben dir.',
+    'motto.subline': 'Eine Größe passt niemandem. DUDES lernt, wie DU dich wirklich fühlst, hörst und isst — nicht der Durchschnittsmensch neben dir.',
 
     'explainer.title': 'So arbeiten wir wirklich',
     'explainer.ai.title': 'KI, ehrlich eingesetzt',
@@ -1034,6 +1045,7 @@ export const ui = {
     'products.cta.viewDetails': 'Sieh, wie es sich auf dich einstellt',
     'products.status.live': 'Live',
     'products.status.dev': 'In Entwicklung',
+    'products.status.soon': "Demnächst",
 
     'detail.section.inspiration': 'Inspiration',
     'detail.section.objectives': 'Hauptziele',
@@ -1044,6 +1056,7 @@ export const ui = {
 
     'stats.launched': 'Launch',
     'stats.users': 'Nutzer',
+    'stats.releaseDate': "Erscheinungsdatum",
     'stats.revenue': 'Umsatz',
     'stats.tba': 'Folgt',
 
@@ -1056,15 +1069,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Bei Google Play holen',
     'products.weatherdude.store.appstore': 'Im App Store holen',
 
-    'products.mountaindude.pitch': 'Ein KI-Coach, der sieht, wie du dich bewegst — und es korrigiert.',
-    'products.mountaindude.detail.headline': 'MountainDude trainiert deine Technik, nicht eine generische Wiederholungszahl.',
-    'products.mountaindude.detail.inspiration': 'Training ohne professionelle Anleitung führt zu falscher Technik, stockendem Fortschritt, verlorener Motivation und echtem Verletzungsrisiko.',
-    'products.mountaindude.detail.objectives': 'Ein KI-Coach, der dir hilft, durch kontinuierliches Lernen ein besserer Athlet zu werden — nicht nur Wiederholungen zu zählen.',
-    'products.mountaindude.detail.personalization': 'MountainDude analysiert deine eigenen Fotos und Videos und baut einen Trainingsplan darauf auf, wie sich DEIN Körper wirklich bewegt — kein Standardprogramm. Feedback vor, während und nach jedem Workout, auf dich zugeschnitten.',
-    'products.mountaindude.detail.why': 'Die meisten Fitness-Apps zählen Wiederholungen und Sätze für alle gleich. Kaum eine schaut wirklich, wie DU dich bewegst, und korrigiert es — das braucht Computer Vision, die auf einen individuellen Körper abgestimmt ist, keine Vorlage.',
-    'products.mountaindude.notify.title': 'Sei der Erste, der damit trainiert.',
-    'products.mountaindude.notify.placeholder': 'Deine E-Mail...',
-    'products.mountaindude.notify.btn': 'Benachrichtige mich',
+    'products.musicdude.pitch': "Dein Kompass für Musikgeschmack. Sieh deine Bibliothek als Galaxie und bekomm Songs, die zum Moment passen.",
+    'products.musicdude.detail.headline': "MusicDude kartiert deinen Geschmack, nicht die Charts.",
+    'products.musicdude.detail.inspiration': "Streaming-Apps wissen, was du hörst, zeigen dir aber nie deinen eigenen Geschmack. Dabei ist er eine Karte aus Stimmungen, Sprachen, Ländern und Jahrzehnten — keine flache Playlist.",
+    'products.musicdude.detail.objectives': "Importiere deine Bibliothek aus Spotify, Apple Music oder eigenen Dateien und sieh deinen Geschmack als Galaxie: Stimmungen, Energie, Sprachen, Länder, Jahrzehnte und Genres. Entdecke deine Ären — die Kapitel deines Hörlebens. Spiel Musikspiele (Daily Drop, Era Guesser, Where's it from?, wöchentliche Ligen, Eurovision- und Grammy-Specials) und finde Konzerte, die zu deinem Geschmack passen. In 11 Sprachen.",
+    'products.musicdude.detail.personalization': "Wünsch dir Musik in deinen eigenen Worten — „wie das hier, nur ruhiger, aus den Neunzigern“ — und bekomm Songs für den richtigen Moment, jeweils mit Begründung. Vergleich deinen Geschmack mit Freunden: Match in %, was ihr teilt und Songs, die ihr euch schicken solltet. Und mach aus allem teilbare Story-Karten.",
+    'products.musicdude.detail.why': "Streaming-Dienste empfehlen, um dich in ihrem Katalog zu halten. MusicDude arbeitet mit deiner ganzen Bibliothek und erklärt jede Empfehlung — je mehr du hörst, desto mehr spiegelt es dich wider, nicht den Durchschnittshörer. Premium mit 14 Tagen kostenloser Testphase.",
+    'products.musicdude.legal.privacy': "Datenschutzerklärung",
+    'products.musicdude.legal.terms': "AGB",
 
     'products.hungrydude.pitch': 'Behalte im Blick, was in deinem Kühlschrank ist, und bekomm Rezepte und eine Einkaufsliste, die genau darauf aufbauen — bevor etwas schlecht wird.',
     'products.hungrydude.detail.headline': 'HungryDude verfolgt deinen echten Kühlschrank, nicht eine generische Rezeptbox.',
@@ -1264,7 +1276,7 @@ export const ui = {
     'hero.kicker': 'IA QUE APRENDE DE TI',
 
     'motto.headline': 'Tu vida, calibrada para ti — no para la persona promedio.',
-    'motto.subline': 'Una talla no le queda a nadie. DUDES aprende cómo TÚ sientes, te mueves y comes de verdad — no la persona promedio que tienes al lado.',
+    'motto.subline': 'Una talla no le queda a nadie. DUDES aprende cómo TÚ sientes, escuchas y comes de verdad — no la persona promedio que tienes al lado.',
 
     'explainer.title': 'Cómo trabajamos de verdad',
     'explainer.ai.title': 'IA, usada honestamente',
@@ -1279,6 +1291,7 @@ export const ui = {
     'products.cta.viewDetails': 'Mira cómo se personaliza para ti',
     'products.status.live': 'En vivo',
     'products.status.dev': 'En desarrollo',
+    'products.status.soon': "Muy pronto",
 
     'detail.section.inspiration': 'Inspiración',
     'detail.section.objectives': 'Objetivos principales',
@@ -1289,6 +1302,7 @@ export const ui = {
 
     'stats.launched': 'Lanzamiento',
     'stats.users': 'Usuarios',
+    'stats.releaseDate': "Fecha de lanzamiento",
     'stats.revenue': 'Ingresos',
     'stats.tba': 'Por anunciar',
 
@@ -1301,15 +1315,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Consíguelo en Google Play',
     'products.weatherdude.store.appstore': 'Consíguelo en App Store',
 
-    'products.mountaindude.pitch': 'Un coach de IA que ve cómo te mueves — y lo corrige.',
-    'products.mountaindude.detail.headline': 'MountainDude entrena tu técnica, no un conteo genérico de repeticiones.',
-    'products.mountaindude.detail.inspiration': 'Entrenar sin guía profesional lleva a mala técnica, progreso estancado, pérdida de motivación y un riesgo real de lesiones.',
-    'products.mountaindude.detail.objectives': 'Un coach de IA que te ayuda a ser mejor atleta mediante aprendizaje continuo — no solo a contar repeticiones.',
-    'products.mountaindude.detail.personalization': 'MountainDude analiza tus propias fotos y vídeos y arma un plan de entrenamiento según cómo se mueve realmente TU cuerpo — no un programa genérico. Feedback antes, durante y después de cada entrenamiento, hecho a tu medida.',
-    'products.mountaindude.detail.why': 'La mayoría de las apps fitness cuentan repeticiones y series igual para todos. Casi ninguna observa realmente cómo te mueves tú y lo corrige — eso requiere visión artificial ajustada a un cuerpo individual, no una plantilla genérica.',
-    'products.mountaindude.notify.title': 'Sé el primero en entrenar con él.',
-    'products.mountaindude.notify.placeholder': 'Tu email...',
-    'products.mountaindude.notify.btn': 'Avísame',
+    'products.musicdude.pitch': "La brújula de tu gusto musical. Mira tu biblioteca como una galaxia y recibe canciones elegidas para el momento justo.",
+    'products.musicdude.detail.headline': "MusicDude mapea tu gusto, no las listas de éxitos.",
+    'products.musicdude.detail.inspiration': "Las apps de streaming saben qué escuchas, pero nunca te muestran tu gusto. Y tu gusto es un mapa de estados de ánimo, idiomas, países y décadas, no una playlist plana.",
+    'products.musicdude.detail.objectives': "Importa tu biblioteca desde Spotify, Apple Music o tus propios archivos y mira tu gusto como una galaxia: estados de ánimo, energía, idiomas, países, décadas y géneros. Descubre tus eras, los capítulos de tu vida musical. Juega a juegos musicales (Daily Drop, Era Guesser, Where's it from?, ligas semanales, especiales de Eurovisión y los Grammy) y encuentra conciertos a tu medida. En 11 idiomas.",
+    'products.musicdude.detail.personalization': "Pide música con tus propias palabras —«como esta, pero más tranquila, de los noventa»— y recibe canciones para el momento justo, cada una con su porqué. Compara tu gusto con amigos: porcentaje de afinidad, lo que compartes con cada uno y canciones para intercambiar. Y conviértelo todo en tarjetas para compartir en stories.",
+    'products.musicdude.detail.why': "Los servicios de streaming recomiendan para mantenerte en su catálogo. MusicDude trabaja con toda tu biblioteca y explica cada elección: cuanto más escuchas, más se parece a ti, no al oyente promedio. Premium con 14 días de prueba gratis.",
+    'products.musicdude.legal.privacy': "Política de privacidad",
+    'products.musicdude.legal.terms': "Términos y condiciones",
 
     'products.hungrydude.pitch': 'Controla qué tienes en la nevera y consigue recetas y una lista de la compra armada en torno a eso — antes de que algo se eche a perder.',
     'products.hungrydude.detail.headline': 'HungryDude sigue tu nevera real, no una caja de recetas genéricas.',
@@ -1509,7 +1522,7 @@ export const ui = {
     'hero.kicker': 'IA QUE APRENDE SOBRE TI',
 
     'motto.headline': 'A tua vida, calibrada para ti — não para a pessoa média.',
-    'motto.subline': 'Um tamanho não serve a ninguém. A DUDES aprende como TU realmente te sentes, te moves e comes — não a pessoa média ao teu lado.',
+    'motto.subline': 'Um tamanho não serve a ninguém. A DUDES aprende como TU realmente te sentes, ouves e comes — não a pessoa média ao teu lado.',
 
     'explainer.title': 'Como trabalhamos, na realidade',
     'explainer.ai.title': 'IA, usada com honestidade',
@@ -1524,6 +1537,7 @@ export const ui = {
     'products.cta.viewDetails': 'Vê como se personaliza para ti',
     'products.status.live': 'Ao vivo',
     'products.status.dev': 'Em desenvolvimento',
+    'products.status.soon': "Em breve",
 
     'detail.section.inspiration': 'Inspiração',
     'detail.section.objectives': 'Principais objetivos',
@@ -1534,6 +1548,7 @@ export const ui = {
 
     'stats.launched': 'Lançamento',
     'stats.users': 'Utilizadores',
+    'stats.releaseDate': "Data de lançamento",
     'stats.revenue': 'Receita',
     'stats.tba': 'A anunciar',
 
@@ -1546,15 +1561,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Obter no Google Play',
     'products.weatherdude.store.appstore': 'Obter na App Store',
 
-    'products.mountaindude.pitch': 'Um coach de IA que vê como te moves — e corrige.',
-    'products.mountaindude.detail.headline': 'O MountainDude treina a tua técnica, não uma contagem genérica de repetições.',
-    'products.mountaindude.detail.inspiration': 'Treinar sem orientação profissional leva a má técnica, progresso estagnado, perda de motivação e risco real de lesões.',
-    'products.mountaindude.detail.objectives': 'Um coach de IA que te ajuda a tornar-te um atleta melhor através de aprendizagem contínua — não apenas a contar repetições.',
-    'products.mountaindude.detail.personalization': 'O MountainDude analisa as tuas próprias fotos e vídeos e monta um plano de treino conforme o TEU corpo se move de verdade — não um programa genérico. Feedback antes, durante e depois de cada treino, feito à tua medida.',
-    'products.mountaindude.detail.why': 'A maioria das apps de fitness conta repetições e séries da mesma forma para todos. Poucas observam realmente como TU te moves e corrigem isso — isso exige visão computacional ajustada a um corpo individual, não um modelo genérico.',
-    'products.mountaindude.notify.title': 'Sê o primeiro a treinar com ele.',
-    'products.mountaindude.notify.placeholder': 'O teu e-mail...',
-    'products.mountaindude.notify.btn': 'Avisa-me',
+    'products.musicdude.pitch': "A bússola do teu gosto musical. Vê a tua biblioteca como uma galáxia e recebe músicas escolhidas para o momento certo.",
+    'products.musicdude.detail.headline': "O MusicDude mapeia o teu gosto, não os tops.",
+    'products.musicdude.detail.inspiration': "As apps de streaming sabem o que ouves, mas nunca te mostram o teu gosto. E ele é um mapa de estados de espírito, línguas, países e décadas — não uma playlist plana.",
+    'products.musicdude.detail.objectives': "Importa a tua biblioteca do Spotify, Apple Music ou dos teus próprios ficheiros e vê o teu gosto como uma galáxia: estados de espírito, energia, línguas, países, décadas e géneros. Descobre as tuas eras, os capítulos da tua vida musical. Joga jogos musicais (Daily Drop, Era Guesser, Where's it from?, ligas semanais, especiais da Eurovisão e dos Grammy) e encontra concertos à medida do teu gosto. Em 11 línguas.",
+    'products.musicdude.detail.personalization': "Pede música por palavras tuas — «como esta, mas mais calma, dos anos noventa» — e recebe músicas para o momento certo, cada uma com o seu porquê. Compara o teu gosto com amigos: percentagem de compatibilidade, o que partilham e músicas para trocarem. E transforma tudo em cartões para partilhar nas stories.",
+    'products.musicdude.detail.why': "Os serviços de streaming recomendam para te manter no catálogo deles. O MusicDude trabalha com toda a tua biblioteca e explica cada escolha — quanto mais ouves, mais te reflete a ti, não o ouvinte médio. Premium com 14 dias de teste gratuito.",
+    'products.musicdude.legal.privacy': "Política de privacidade",
+    'products.musicdude.legal.terms': "Termos e condições",
 
     'products.hungrydude.pitch': 'Acompanha o que tens no frigorífico e recebe receitas e uma lista de compras construída à volta disso — antes que algo se estrague.',
     'products.hungrydude.detail.headline': 'O HungryDude segue o teu frigorífico real, não uma caixa de receitas genéricas.',
@@ -1754,7 +1768,7 @@ export const ui = {
     'hero.kicker': "L'IA QUI APPREND QUI TU ES",
 
     'motto.headline': 'Ta vie, calibrée pour toi — pas pour n\'importe qui.',
-    'motto.subline': 'Il n\'y a pas de solution universelle. DUDES apprend comment TOI tu ressens, bouges et manges vraiment — pas comment tu \'devrais\' te sentir conformément à des algorithmes entraînés sur tout le monde.',
+    'motto.subline': 'Il n\'y a pas de solution universelle. DUDES apprend comment TOI tu ressens, écoutes et manges vraiment — pas comment tu \'devrais\' te sentir conformément à des algorithmes entraînés sur tout le monde.',
 
     'explainer.title': 'Comment ça fonctionne',
     'explainer.ai.title': "L'IA, utilisée honnêtement",
@@ -1769,6 +1783,7 @@ export const ui = {
     'products.cta.viewDetails': 'Vois comment l\'appli se calibre sur toi',
     'products.status.live': 'En ligne',
     'products.status.dev': 'En développement',
+    'products.status.soon': "Bientôt",
 
     'detail.section.inspiration': 'Inspiration',
     'detail.section.objectives': 'Objectifs principaux',
@@ -1779,6 +1794,7 @@ export const ui = {
 
     'stats.launched': 'Lancement',
     'stats.users': 'Utilisateurs',
+    'stats.releaseDate': "Date de sortie",
     'stats.revenue': 'Revenus',
     'stats.tba': 'À annoncer',
 
@@ -1791,15 +1807,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Disponible sur Google Play',
     'products.weatherdude.store.appstore': "Disponible sur l'App Store",
 
-    'products.mountaindude.pitch': 'Un coach IA qui voit comment tu bouges — et le corrige.',
-    'products.mountaindude.detail.headline': 'MountainDude entraîne ta technique, pas un comptage de répétitions générique.',
-    'products.mountaindude.detail.inspiration': "S'entraîner sans encadrement professionnel mène à une mauvaise technique, une progression bloquée, une motivation perdue et un vrai risque de blessure.",
-    'products.mountaindude.detail.objectives': "Un coach IA qui t'aide à devenir un meilleur athlète grâce à un apprentissage continu — pas juste un compteur de répétitions.",
-    'products.mountaindude.detail.personalization': "MountainDude analyse tes propres photos et vidéos et construit un plan d'entraînement selon la façon dont TON corps bouge vraiment — pas un programme standard. Feedback avant, pendant et après chaque séance, taillé pour toi.",
-    'products.mountaindude.detail.why': "La plupart des apps fitness comptent les répétitions et les séries de la même façon pour tout le monde. Peu observent vraiment comment TOI tu bouges pour le corriger — ça demande une vision par ordinateur calibrée sur un corps individuel, pas un modèle générique.",
-    'products.mountaindude.notify.title': "Sois le premier à t'entraîner avec lui.",
-    'products.mountaindude.notify.placeholder': 'Ton e-mail...',
-    'products.mountaindude.notify.btn': 'Préviens-moi',
+    'products.musicdude.pitch': "La boussole de ton goût musical. Vois ta bibliothèque comme une galaxie et reçois des morceaux choisis pour le bon moment.",
+    'products.musicdude.detail.headline': "MusicDude cartographie ton goût, pas les charts.",
+    'products.musicdude.detail.inspiration': "Les applis de streaming savent ce que tu écoutes, mais ne te montrent jamais ton goût. Pourtant, c'est une carte d'humeurs, de langues, de pays et de décennies — pas une playlist plate.",
+    'products.musicdude.detail.objectives': "Importe ta bibliothèque depuis Spotify, Apple Music ou tes propres fichiers et vois ton goût comme une galaxie : humeurs, énergie, langues, pays, décennies et genres. Découvre tes ères, les chapitres de ta vie musicale. Joue à des jeux musicaux (Daily Drop, Era Guesser, Where's it from?, ligues hebdomadaires, spéciaux Eurovision et Grammy) et trouve des concerts qui collent à ton goût. En 11 langues.",
+    'products.musicdude.detail.personalization': "Demande de la musique avec tes propres mots — « comme ça, mais plus calme, des années 90 » — et reçois des morceaux pour le bon moment, chacun avec son pourquoi. Compare ton goût avec tes amis : pourcentage de compatibilité, ce que vous partagez et des morceaux à vous envoyer. Puis transforme tout ça en cartes à partager en story.",
+    'products.musicdude.detail.why': "Les services de streaming recommandent pour te garder dans leur catalogue. MusicDude travaille avec toute ta bibliothèque et explique chaque choix : plus tu écoutes, plus il te ressemble à toi, pas à l'auditeur moyen. Premium avec 14 jours d'essai gratuit.",
+    'products.musicdude.legal.privacy': "Politique de confidentialité",
+    'products.musicdude.legal.terms': "Conditions générales",
 
     'products.hungrydude.pitch': "Garde un œil sur ce qu'il y a dans ton frigo, et obtiens des recettes et une liste de courses construites autour de ça — avant son expiration.",
     'products.hungrydude.detail.headline': 'HungryDude connait ton vrai frigo et tes vrais goûts, pas une livre de recettes génériques.',
@@ -1999,7 +2014,7 @@ export const ui = {
     'hero.kicker': 'ШІ, ЯКІ ВЫВУЧАЕ ЦЯБЕ',
 
     'motto.headline': 'Тваё жыццё, наладжанае пад цябе, а не пад сярэдняга чалавека.',
-    'motto.subline': 'Адзін памер не падыходзіць нікому. DUDES вучыцца, як ТАБЕ сапраўды цёпла, як ТЫ рухаешся і што ТЫ ясі — а не сярэдняму чалавеку побач.',
+    'motto.subline': 'Адзін памер не падыходзіць нікому. DUDES вучыцца, як ТАБЕ сапраўды цёпла, што ТЫ слухаеш і што ТЫ ясі — а не сярэдняму чалавеку побач.',
 
     'explainer.title': 'Як мы сапраўды працуем',
     'explainer.ai.title': 'ШІ, сумленна',
@@ -2014,6 +2029,7 @@ export const ui = {
     'products.cta.viewDetails': 'Паглядзі, як гэта наладжваецца пад цябе',
     'products.status.live': 'Працуе',
     'products.status.dev': 'У распрацоўцы',
+    'products.status.soon': "Хутка",
 
     'detail.section.inspiration': 'Натхненне',
     'detail.section.objectives': 'Галоўныя мэты',
@@ -2024,6 +2040,7 @@ export const ui = {
 
     'stats.launched': 'Запуск',
     'stats.users': 'Карыстальнікі',
+    'stats.releaseDate': "Дата рэлізу",
     'stats.revenue': 'Даход',
     'stats.tba': 'Абвесцім пазней',
 
@@ -2036,15 +2053,14 @@ export const ui = {
     'products.weatherdude.store.googleplay': 'Спампаваць у Google Play',
     'products.weatherdude.store.appstore': 'Спампаваць у App Store',
 
-    'products.mountaindude.pitch': 'ШІ-трэнер, які бачыць, як ты рухаешся — і выпраўляе гэта.',
-    'products.mountaindude.detail.headline': 'MountainDude трэніруе тваю тэхніку, а не лічыць паўторы.',
-    'products.mountaindude.detail.inspiration': 'Трэніроўкі без прафесійнага суправаджэння вядуць да няправільнай тэхнікі, застою ў прагрэсе, страты матывацыі і рэальнай рызыкі траўмаў.',
-    'products.mountaindude.detail.objectives': 'ШІ-трэнер, які дапамагае стаць лепшым атлетам праз пастаяннае навучанне — а не проста лічыць паўторы.',
-    'products.mountaindude.detail.personalization': 'MountainDude аналізуе твае фота і відэа і будуе план трэніровак пад тое, як рухаецца менавіта ТВАЁ цела — а не універсальную праграму. Фідбэк да, падчас і пасля кожнай трэніроўкі, пад цябе.',
-    'products.mountaindude.detail.why': "Большасць фітнес-дадаткаў лічаць паўторы і падыходы аднолькава для ўсіх. Мала хто сапраўды глядзіць, як рухаешся менавіта ты, і выпраўляе гэта — а гэта патрабуе камп'ютарнага зроку, наладжанага на канкрэтнае цела, а не шаблон.",
-    'products.mountaindude.notify.title': 'Будзь першым, хто патрэніруецца з ім.',
-    'products.mountaindude.notify.placeholder': 'Твой лепшы імейл...',
-    'products.mountaindude.notify.btn': 'Паведамі мне',
+    'products.musicdude.pitch': "Твой компас музычнага густу. Пабач сваю бібліятэку як галактыку і атрымлівай песні якраз пад момант.",
+    'products.musicdude.detail.headline': "MusicDude паказвае твой густ, а не чарты.",
+    'products.musicdude.detail.inspiration': "Стрымінгі ведаюць, што ты слухаеш, але ніколі не паказваюць табе твой уласны густ. А ён — гэта мапа настрояў, моў, краін і дзесяцігоддзяў, а не плоскі плэйліст.",
+    'products.musicdude.detail.objectives': "Імпартуй бібліятэку са Spotify, Apple Music або ўласных файлаў і пабач свой густ як галактыку: настроі, энергію, мовы, краіны, дзесяцігоддзі і жанры. Адкрый свае эры — раздзелы твайго музычнага жыцця. Гуляй у музычныя гульні (Daily Drop, Era Guesser, Where's it from?, штотыднёвыя лігі, спецвыпускі да Еўрабачання і Grammy) і знаходзь канцэрты пад свой густ. 11 моў.",
+    'products.musicdude.detail.personalization': "Прасі музыку сваімі словамі — «як гэта, але спакайней, з дзевяностых» — і атрымлівай песні пад патрэбны момант, кожную з тлумачэннем чаму. Параўноўвай густ з сябрамі: адсотак супадзення, што ў вас агульнага, і песні, якія варта адправіць адно аднаму. А ўсё гэта ператварай у сторыз-карткі, якімі лёгка падзяліцца.",
+    'products.musicdude.detail.why': "Стрымінгі рэкамендуюць так, каб утрымаць цябе ў сваім каталогу. MusicDude працуе з усёй тваёй бібліятэкай і тлумачыць кожны выбар — чым больш ты слухаеш, тым дакладней ён адлюстроўвае менавіта цябе, а не сярэдняга слухача. Premium — з 14-дзённым бясплатным пробным перыядам.",
+    'products.musicdude.legal.privacy': "Палітыка прыватнасці",
+    'products.musicdude.legal.terms': "Умовы выкарыстання",
 
     'products.hungrydude.pitch': 'Сачы, што ёсць у халадзільніку, і атрымлівай рэцэпты і спіс пакупак пад гэта — пакуль нічога не сапсавалася.',
     'products.hungrydude.detail.headline': 'HungryDude сочыць за тваім рэальным халадзільнікам, а не за тыповай скрынкай з рэцэптамі.',

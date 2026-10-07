@@ -13,6 +13,12 @@ export default {
         'md-white': '#E7E7E7',
         'md-purple': '#B5A1FE',
         'md-gray': '#202020',
+        // MusicDude — app tokens
+        'mu-canvas': '#080B12',
+        'mu-surface': '#111722',
+        'mu-text': '#F4F7FF',
+        'mu-blue': '#3781FC',
+        'mu-blue-light': '#59C7FF',
         // HungryDude — placeholder palette, no brand assets yet (see plan)
         'hd-amber': '#FFB454',
         'hd-cream': '#FFF3E1',

@@ -4,7 +4,7 @@ import Layout from '../../layouts/layout.astro';
 import Modal from '../../components/Modal.astro';
 import DudesLogo from '../../components/DudesLogo.astro';
 import SocialIcon from '../../components/SocialIcon.astro';
-import { ui, languages, PRODUCTS, WEATHERDUDE_GOOGLE_PLAY_URL, WEATHERDUDE_APP_STORE_URL, WEATHERDUDE_STATS } from '../../i18n/ui';
+import { ui, languages, PRODUCTS, WEATHERDUDE_GOOGLE_PLAY_URL, WEATHERDUDE_APP_STORE_URL, WEATHERDUDE_STATS, MUSICDUDE_GOOGLE_PLAY_URL, MUSICDUDE_APP_STORE_URL, MUSICDUDE_PRIVACY_URL, MUSICDUDE_TERMS_URL, MUSICDUDE_STATS } from '../../i18n/ui';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -98,11 +98,11 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
             <span class="card-cta">{t['products.cta.viewDetails']} →</span>
           </button>
 
-          <button class="product-card pc-mountaindude is-dev" onclick="document.getElementById('modal-mountaindude').showModal()">
-            <span class="status-badge status-dev">{t['products.status.dev']}</span>
-            <span class="product-logo-wrap"><img src={PRODUCTS.mountaindude.logo} alt="" class="product-logo" /></span>
-            <span class="product-name">{PRODUCTS.mountaindude.name}</span>
-            <span class="product-pitch">{t['products.mountaindude.pitch']}</span>
+          <button class="product-card pc-musicdude" onclick="document.getElementById('modal-musicdude').showModal()">
+            <span class="status-badge status-soon">{t['products.status.soon']}</span>
+            <span class="product-logo-wrap"><img src={PRODUCTS.musicdude.logo} alt="" class="product-logo" /></span>
+            <span class="product-name">{PRODUCTS.musicdude.name}</span>
+            <span class="product-pitch">{t['products.musicdude.pitch']}</span>
             <span class="card-cta">{t['products.cta.viewDetails']} →</span>
           </button>
 
@@ -226,33 +226,34 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
     </div>
   </Modal>
 
-  <Modal id="modal-mountaindude" title={PRODUCTS.mountaindude.name} fullscreen accent="var(--md-gray)" accentText="var(--md-white)">
-    <div class="product-detail pd-mountaindude">
-      <span class="detail-logo-wrap"><img src={PRODUCTS.mountaindude.logo} alt="" class="detail-logo" /></span>
-      <p class="detail-tagline">{t['products.mountaindude.detail.headline']}</p>
+  <Modal id="modal-musicdude" title={PRODUCTS.musicdude.name} fullscreen accent="var(--mu-canvas)" accentText="var(--mu-text)">
+    <div class="product-detail pd-musicdude">
+      <span class="detail-logo-wrap"><img src={PRODUCTS.musicdude.logo} alt="" class="detail-logo" /></span>
+      <p class="detail-tagline">{t['products.musicdude.detail.headline']}</p>
 
       {detailSections.map((section) => (
         <div class="detail-section">
           <h4>{t[`detail.section.${section}` as keyof typeof t]}</h4>
-          <p>{t[`products.mountaindude.detail.${section}` as keyof typeof t]}</p>
+          <p>{t[`products.musicdude.detail.${section}` as keyof typeof t]}</p>
         </div>
       ))}
 
       <div class="detail-section stats-section">
         <h4>{t['detail.section.stats']}</h4>
-        <p class="stats-soon">{t['detail.section.comingSoon']}</p>
+        <div class="stats-grid">
+          <div class="stat"><span class="stat-label">{t['stats.releaseDate']}</span><span class="stat-value">{MUSICDUDE_STATS.releaseDate}</span></div>
+        </div>
       </div>
 
-      <div class="capture-block">
-        <h4>{t['products.mountaindude.notify.title']}</h4>
-        <form class="capture-form">
-          <input type="email" name="email" placeholder={t['products.mountaindude.notify.placeholder']} class="capture-input" required />
-          <input type="hidden" name="lang" value={lang} />
-          <input type="hidden" name="product" value="mountaindude" />
-          <button type="submit" class="capture-btn md-btn">{t['products.mountaindude.notify.btn']}</button>
-        </form>
-        <div class="form-msg" data-success={t['form.success']} data-error={t['form.error']} data-exists={t['form.exists']}></div>
+      <div class="store-buttons">
+        <a href={MUSICDUDE_GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" class="store-btn">{t['products.weatherdude.store.googleplay']}</a>
+        <a href={MUSICDUDE_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="store-btn">{t['products.weatherdude.store.appstore']}</a>
       </div>
+
+      <p class="legal-links">
+        <a href={MUSICDUDE_PRIVACY_URL} target="_blank" rel="noopener">{t['products.musicdude.legal.privacy']}</a>
+        <a href={MUSICDUDE_TERMS_URL} target="_blank" rel="noopener">{t['products.musicdude.legal.terms']}</a>
+      </p>
     </div>
   </Modal>
 
@@ -402,7 +403,12 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       box-shadow: 20px 20px 0px black;
     }
     .pc-weatherdude { background: var(--wd-pink); }
-    .pc-mountaindude { background: var(--md-gray); color: var(--md-white); }
+    .pc-musicdude { background: var(--mu-canvas); color: var(--mu-text); }
+    .pc-musicdude .card-cta { color: var(--mu-blue-light); }
+    /* MusicDude's logo is a full square app-icon tile, so it skips the white padded frame. */
+    .pc-musicdude .product-logo-wrap, .pd-musicdude .detail-logo-wrap { padding: 0; background: transparent; }
+    .pc-musicdude .product-logo { height: 64px; border-radius: 18px; }
+    .pd-musicdude .detail-logo { height: 88px; border-radius: 22px; }
     .pc-hungrydude { background: var(--hd-coffee); color: var(--hd-cream); }
     .product-card.is-dev { opacity: 0.9; }
 
@@ -432,6 +438,7 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
     }
     .status-live { background: var(--wd-lime); color: black; border-color: black; }
     .status-dev { background: transparent; }
+    .status-soon { background: var(--mu-blue); color: var(--mu-text); border-color: var(--mu-blue); }
 
     .product-name {
       font-size: clamp(1.6rem, 4vw, 2.2rem);
@@ -474,7 +481,10 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       margin: 0 0 8px;
     }
     .detail-section p { font-size: 1.1rem; line-height: 1.5; font-weight: 500; margin: 0; }
-    .pd-mountaindude { color: var(--md-white); }
+    .pd-musicdude { color: var(--mu-text); }
+    .pd-musicdude .store-btn { border-color: var(--mu-blue); }
+    .legal-links { display: flex; gap: 20px; flex-wrap: wrap; margin: 0 0 32px; font-size: 0.9rem; font-weight: 700; }
+    .legal-links a { color: var(--mu-blue-light); }
     .pd-hungrydude { color: var(--hd-cream); }
 
     .stats-grid { display: flex; gap: 24px; flex-wrap: wrap; }
@@ -518,7 +528,6 @@ const detailSections = ['inspiration', 'objectives', 'personalization', 'why'] a
       color: black;
     }
     .wd-btn { background: var(--wd-lime); }
-    .md-btn { background: var(--md-lime); }
     .hd-btn { background: var(--hd-amber); }
 
     .form-msg {
