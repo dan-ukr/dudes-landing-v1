@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>MusicDude — your music taste, mapped</title>
+  <meta name="description" content="MusicDude listens to the music you already love and draws it as a sky: your portrait, your eras, the song for this moment, games, friends and gigs.">
+  <link rel="icon" href="/images/musicdude/logo.png">
+  <style>
+    @font-face { font-family: "Wix Madefor Display"; src: url("/fonts/musicdude/WixMadeforDisplay-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+    @font-face { font-family: "Inter"; src: url("/fonts/musicdude/Inter-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+
+    :root {
+      /* The app's own palette. The eight blues are the constellation's mood grade, low to high. */
+      --night: #080B12;
+      --surface: #111722;
+      --raised: #1B2433;
+      --line: #2D3A50;
+      --paper: #F4F7FF;
+      --slate: #A6B4CB;
+      --muted: #7F91AE;
+      --g0: #071D49; --g1: #103B8F; --g2: #1951FC; --g3: #3781FC;
+      --g4: #00A6FF; --g5: #59C7FF; --g6: #97DDFF; --g7: #CBEFFD;
+      --amber: #F2C46D;
+      --display: "Wix Madefor Display", "Segoe UI", system-ui, sans-serif;
+      --body: "Inter", "Segoe UI", system-ui, sans-serif;
+      --col: 34rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0; background: var(--night); color: var(--paper);
+      font: 400 1.0625rem/1.6 var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--g6); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--g5); outline-offset: 3px; border-radius: 6px; }
+    img { display: block; max-width: 100%; }
+
+    /* ---------- The sky: one canvas that redraws itself for every chapter ---------- */
+    .sky-wrap { position: fixed; inset: 0 0 0 auto; width: 50vw; pointer-events: none; z-index: 0; }
+    #sky { width: 100%; height: 100%; display: block; }
+    .sky-caption {
+      position: absolute; right: 2.5rem; bottom: 2rem; max-width: 20rem; text-align: right;
+      font-size: .875rem; color: var(--muted); transition: opacity .4s;
+    }
+
+    main { position: relative; z-index: 1; }
+
+    /* ---------- Hero ---------- */
+    .hero { min-height: 100svh; display: grid; align-content: end; padding: 2.5rem clamp(1.25rem, 5vw, 5rem) 4.5rem; }
+    /* The dude himself: big, with the wordmark beside him. */
+    .brand { display: flex; align-items: center; gap: 1.1rem; margin-bottom: 2.25rem;
+      font: 700 clamp(1.5rem, 2.4vw, 2rem)/1 var(--display); color: var(--paper); }
+    .brand img { width: clamp(5rem, 9vw, 7.5rem); height: auto; aspect-ratio: 1; border-radius: 26%;
+      box-shadow: 0 0 0 1px rgba(203,239,253,.12), 0 18px 60px rgba(25,81,252,.35); }
+    .end-logo { width: clamp(6rem, 12vw, 9rem); height: auto; aspect-ratio: 1; border-radius: 26%; margin-bottom: 2rem;
+      box-shadow: 0 0 0 1px rgba(203,239,253,.12), 0 18px 60px rgba(25,81,252,.35); }
+    .hero h1 {
+      margin: 0; max-width: 11ch;
+      font: 700 clamp(3rem, 7.5vw, 6.5rem)/.94 var(--display); letter-spacing: -.035em;
+    }
+    .hero p { max-width: 30rem; margin: 1.75rem 0 0; color: var(--slate); font-size: 1.1875rem; }
+    .stores { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.25rem; }
+    .store {
+      display: inline-flex; align-items: center; gap: .6rem; padding: .85rem 1.3rem; border-radius: 999px;
+      font: 700 1rem/1 var(--display); text-decoration: none;
+    }
+    .store.live { background: var(--g2); color: #fff; }
+    .store.soon { border: 1px solid var(--line); color: var(--slate); }
+
+    /* ---------- Chapters ---------- */
+    .chapter { min-height: 100svh; display: grid; align-content: center; padding: 6rem clamp(1.25rem, 5vw, 5rem); }
+    .chapter > div { max-width: var(--col); }
+    .chapter h2 {
+      margin: 0 0 1.25rem; font: 700 clamp(2.25rem, 5vw, 3.75rem)/1.02 var(--display); letter-spacing: -.025em;
+    }
+    .chapter p { margin: 0 0 1rem; color: var(--slate); }
+    .chapter p.lead { color: var(--paper); font-size: 1.1875rem; }
+    .why {
+      margin-top: 1.75rem; padding-left: 1rem; border-left: 2px solid var(--g2);
+      color: var(--paper); font-size: 1rem;
+    }
+    .why b { font-family: var(--display); }
+    ul.facts { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: .55rem; }
+    ul.facts li { position: relative; padding-left: 1.4rem; color: var(--slate); }
+    ul.facts li::before {
+      content: ""; position: absolute; left: 0; top: .6em; width: .5rem; height: .5rem; border-radius: 50%;
+      background: var(--g4);
+    }
+    .shots { display: flex; gap: 1rem; margin-top: 2.25rem; align-items: flex-start; }
+    .shots img { width: min(15rem, 44vw); height: auto; border-radius: 1.4rem; border: 1px solid var(--line); background: var(--surface); }
+    .shots img + img { margin-top: 2.5rem; }
+    .amber { color: var(--amber); }
+
+    /* A phone notification, drawn: the "Right now" push as it lands. */
+    .notif {
+      display: flex; gap: .85rem; align-items: flex-start; margin: 1.75rem 0 1.5rem; max-width: 26rem;
+      padding: .9rem 1rem; border-radius: 1.25rem;
+      background: rgba(27,36,51,.86); border: 1px solid rgba(242,196,109,.45);
+      box-shadow: 0 0 0 6px rgba(242,196,109,.06);
+    }
+    .notif img { width: 2.4rem; height: 2.4rem; border-radius: .6rem; flex: none; }
+    .notif p { margin: 0; }
+    .notif-app { font-size: .8125rem; color: var(--muted); display: flex; justify-content: space-between; }
+    .notif-title { font: 700 1rem/1.3 var(--display); color: var(--paper); margin-top: .15rem !important; }
+    .notif-body { font-size: .9375rem; color: var(--slate); }
+    .quote {
+      margin: 1.5rem 0 0; padding: 1rem 1.25rem; border-radius: 1rem; background: var(--surface); border: 1px solid var(--line);
+      font-family: var(--display); font-size: 1.125rem; color: var(--paper);
+    }
+
+    /* ---------- Five voices ---------- */
+    .voices { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 1.25rem; }
+    .voices button {
+      appearance: none; border: 1px solid var(--line); background: transparent; color: var(--slate);
+      padding: .55rem 1rem; border-radius: 999px; font: 400 .9375rem/1 var(--body); cursor: pointer;
+    }
+    .voices button[aria-pressed="true"] { background: var(--g7); border-color: var(--g7); color: var(--night); }
+    .voice-out { min-height: 9rem; }
+    .voice-out .big { font: 700 clamp(1.9rem, 4vw, 2.75rem)/1.08 var(--display); letter-spacing: -.02em; margin: 0 0 .75rem; }
+    .voice-out p { margin: 0; }
+
+    /* ---------- Plans and promises ---------- */
+    .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    .plans h3 { margin: 0 0 .5rem; font: 700 1.25rem/1.2 var(--display); }
+    .plans p { font-size: .9688rem; }
+    .end { min-height: 90svh; display: grid; align-content: center; padding: 6rem clamp(1.25rem, 5vw, 5rem); }
+    .end h2 { margin: 0; max-width: 12ch; font: 700 clamp(2.75rem, 7vw, 5.5rem)/.98 var(--display); letter-spacing: -.03em; }
+    footer { padding: 2rem clamp(1.25rem, 5vw, 5rem) 3rem; color: var(--muted); font-size: .875rem; }
+    footer a { color: var(--slate); }
+
+    /* Text sits on the left half; on small screens the sky becomes a band behind the top of the screen. */
+    @media (max-width: 900px) {
+      .sky-wrap { inset: 0; width: 100vw; height: 46svh; }
+      .sky-caption { display: none; }
+      .chapter, .end { min-height: auto; padding-top: 48svh; padding-bottom: 3rem; }
+      .chapter > div, .end > div {
+        background: linear-gradient(to bottom, rgba(8,11,18,0) 0, var(--night) 3rem);
+        padding-top: 3rem; margin-top: -3rem;
+      }
+      .hero { min-height: auto; align-content: start; padding-top: 47svh; }
+      .hero > div {
+        background: linear-gradient(to bottom, rgba(8,11,18,0) 0, var(--night) 2.5rem);
+        padding-top: 2.5rem; margin-top: -2.5rem; position: relative;
+      }
+      .plans { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky-wrap" aria-hidden="true">
+    <canvas id="sky"></canvas>
+    <div class="sky-caption" id="sky-caption"></div>
+  </div>
+
+  <main>
+    <section class="hero" data-sky="hero" data-caption="Every dot is a song. Across: calm to energetic. Up: dark to light. The shade is the mood.">
+      <div id="top">
+        <div class="brand"><img src="/images/musicdude/logo.png" alt="MusicDude logo"><span>MusicDude</span></div>
+        <h1>Your music taste, mapped.</h1>
+        <p>MusicDude listens to the songs you already love and draws them as a sky: every song a star, placed by how it sounds. Then it uses that map to send you the song for this moment while you listen, and to find your eras, your people and your gigs.</p>
+        <div class="stores">
+          <a class="store live" href="https://play.google.com/store/apps/details?id=com.musicdude.app">Get it on Google Play</a>
+          <span class="store soon">App Store soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="import" data-caption="Before: thousands of songs, no shape yet.">
+      <div>
+        <h2>Bring the music you already have</h2>
+        <p class="lead">Years of liked songs and playlists are already a diary. MusicDude starts from them, not from a quiz.</p>
+        <ul class="facts">
+          <li>Your whole Spotify or Apple Music library, through TuneMyMusic, in a couple of taps</li>
+          <li>Streaming history exports, with the date of every play</li>
+          <li>Playlist and album links, ListenBrainz, or songs searched by hand</li>
+          <li>Or just listen: on Android, it builds your portrait from what you play</li>
+        </ul>
+        <p class="why"><b>Why it matters.</b> Nothing to rebuild and nothing to rate. The taste you already have is the starting point.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="listen" data-caption="Each song gets measured: mood, energy, brightness.">
+      <div>
+        <h2>It listens, song by song</h2>
+        <p class="lead">An audio model listens to a 30-second clip of every song in your library.</p>
+        <ul class="facts">
+          <li>Mood, energy, brightness and the instruments you can hear</li>
+          <li>The language of the vocals, found by separating the voice from the music</li>
+          <li>The artist's country and the song's era, from open music databases</li>
+        </ul>
+        <p class="why"><b>Why it matters.</b> When something can't be measured, it says "unknown". Nothing is guessed, so the map you get is honest.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="portrait" data-caption="Your constellation. The outline is your space.">
+      <div>
+        <h2>Your portrait</h2>
+        <p class="lead">Your taste as a picture: a constellation of every song, and the outline of the space you live in.</p>
+        <p>Next to it: your moods, eras, the countries your music comes from on a world map, your languages and genres, and a short story about what it all says about you. Tap any part to open exactly those songs.</p>
+        <div class="shots">
+          <img src="/images/musicdude/screen-portrait.webp" alt="The Portrait screen with the constellation of a library" loading="lazy" width="720" height="1560">
+          <img src="/images/musicdude/card-my-sound.webp" alt="A My sound story card: Indie rock, 2010s, Ukrainian" loading="lazy" width="720" height="1280">
+        </div>
+        <p class="why"><b>Why it matters.</b> Most apps tell you what you played. This shows who you are as a listener, in one image you can share.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="eras" data-caption="Your eras: the cloud moves when your life does.">
+      <div>
+        <h2>Your eras</h2>
+        <p class="lead">Your listening history, cut into the stretches where your music changed.</p>
+        <p>Every era gets a name you can change, its defining artists, its top five songs, a monthly chapter, and its own little sky. Then drag through all of them on one map and watch the dots drift and the outline reshape, year by year.</p>
+        <div class="shots">
+          <img src="/images/musicdude/card-era.webp" alt="A My era story card: The Kyiv nights, March 2023 to January 2024" loading="lazy" width="720" height="1280">
+        </div>
+        <p class="why"><b>Why it matters.</b> Music is how people remember where they were. Your eras give those years a shape and a name.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="now" data-caption="One song for this moment.">
+      <div>
+        <h2>One song for right now</h2>
+        <p class="lead">You don't have to open the app. While you listen, MusicDude notices when your music settles into a mood, and sends you <span class="amber">one</span> song for that moment.</p>
+        <div class="notif" role="img" aria-label="Example notification: Right now. Late-night and melancholic. Teardrop by Massive Attack fits this moment.">
+          <img src="/images/musicdude/logo.png" alt="">
+          <div>
+            <p class="notif-app">MusicDude <span>now</span></p>
+            <p class="notif-title">Right now: late-night and melancholic</p>
+            <p class="notif-body">"Teardrop" by Massive Attack fits this moment. Tap to play.</p>
+          </div>
+        </div>
+        <p>It works from what you're actually playing in Spotify, YouTube Music, Apple Music or any other player. It stays in the language and scene you're in: a run of Ukrainian rap gets Ukrainian rap, not a random hit. It's one song, with a line on why it was chosen, never a playlist of fifty. And it only comes when there's a real moment: silence is the normal state.</p>
+        <p>The same listening keeps your portrait current by itself, no imports needed.</p>
+        <p class="why"><b>Why it matters.</b> Choosing is the hard part. The right song, arriving at the moment you need it, is the thing no feed can do.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="day" data-caption="Five songs a day, steered by you.">
+      <div>
+        <h2>A song for today</h2>
+        <p class="lead">Five songs a day, drawn from what you really played in the last 24 hours.</p>
+        <p>"More of this" brings a close relative. "Change the vibe" goes somewhere else and keeps that song away. Alongside it, daily picks: some close to your taste, some further out, for discovering.</p>
+        <div class="shots">
+          <img src="/images/musicdude/card-song.webp" alt="A Song for today story card: Running Up That Hill by Kate Bush" loading="lazy" width="720" height="1280">
+        </div>
+        <p class="why"><b>Why it matters.</b> Every answer teaches it. The more you steer, the closer the picks get.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="library" data-caption="Sorted by how close each song is to your mood.">
+      <div>
+        <h2>Your library, sorted by how you feel</h2>
+        <p class="lead">Filter by language, mood, era, region, tempo and more. Then sort by the one thing no other app can: how close each song sounds to your current mood, as a <span class="amber">percentage</span>.</p>
+        <ul class="facts">
+          <li>Discover the whole catalogue through the same filters, each song with its match to your taste</li>
+          <li>Ask for music in your own words: "like this, but calmer, from the nineties"</li>
+          <li>Build playlists and send them to Spotify or Apple Music</li>
+          <li>Tell it what never to recommend: a language, a region, a genre</li>
+          <li>Remove one song or a whole group, and the portrait recalibrates at once</li>
+        </ul>
+        <div class="shots">
+          <img src="/images/musicdude/screen-ask.webp" alt="Ask for music: like this but calmer, from the nineties" loading="lazy" width="720" height="1560">
+        </div>
+        <p class="why"><b>Why it matters.</b> A big library is only useful if you can find the right song in it. This makes it searchable by feeling.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="games" data-caption="Five rounds. How well do you know your own music?">
+      <div>
+        <h2>Games made of your music</h2>
+        <p class="lead">Short games built from your own library: guess the era, the mood, the artist, where a song is from, whether it's even yours.</p>
+        <ul class="facts">
+          <li>A Daily Drop every day, and a streak with freezes for the days you skip</li>
+          <li>A weekly league: climb from Vinyl to Cassette, CD and Gold Record</li>
+          <li>Specials around the big nights: Eurovision, the Grammys, the Super Bowl</li>
+        </ul>
+        <div class="shots">
+          <img src="/images/musicdude/card-league.webp" alt="A weekly league story card: number 3 of 50, Gold Record league" loading="lazy" width="720" height="1280">
+        </div>
+        <p class="why"><b>Why it matters.</b> Two minutes a day, and you hear your own music with fresh ears.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="friends" data-caption="Two skies. Where they overlap is what you share.">
+      <div>
+        <h2>Your people</h2>
+        <p class="lead">Put your sky next to a friend's and see the match in one number.</p>
+        <p>What you share, where you split, the songs you'd send each other. Challenge them to swipe the same ten songs and find out who knows whose taste. Then blend both libraries into one playlist.</p>
+        <div class="shots">
+          <img src="/images/musicdude/card-match.webp" alt="A taste match story card: 87 percent" loading="lazy" width="720" height="1280">
+        </div>
+        <p class="why"><b>Why it matters.</b> Friends see your taste, never your moods. You share the music, not the diary.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="gigs" data-caption="Gigs near you, ranked by your taste.">
+      <div>
+        <h2>Gigs that fit your taste</h2>
+        <p class="lead">Upcoming concerts near you, sorted by how well each artist matches your sky.</p>
+        <p>See which friends are going, add a gig to your calendar, play a few songs before you buy, and get an alert when a matching artist announces a show nearby. Alerts keep only a rounded area of about 10 km, never your exact location.</p>
+        <div class="shots">
+          <img src="/images/musicdude/screen-gigs.webp" alt="The Gigs screen: Arctic Monkeys in Amsterdam, 92 percent match" loading="lazy" width="720" height="1421">
+        </div>
+        <p class="why"><b>Why it matters.</b> The best night out is the one you would have missed.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="voices" data-caption="Same map. Your voice.">
+      <div>
+        <h2>It talks your way</h2>
+        <p class="lead">Eleven languages, and five ways of talking to you. Pick one.</p>
+        <div class="voices" role="group" aria-label="Communication style">
+          <button type="button" data-voice="warm" aria-pressed="true">Warm</button>
+          <button type="button" data-voice="playful" aria-pressed="false">Playful</button>
+          <button type="button" data-voice="straight" aria-pressed="false">Straight</button>
+          <button type="button" data-voice="adult" aria-pressed="false">Adult, 18+</button>
+          <button type="button" data-voice="genz" aria-pressed="false">Gen Z</button>
+        </div>
+        <div class="voice-out" aria-live="polite">
+          <p class="big" id="voice-title"></p>
+          <p id="voice-line"></p>
+        </div>
+        <p class="why"><b>Why it matters.</b> An app about your taste should sound like it was made for you.</p>
+      </div>
+    </section>
+
+    <section class="chapter" data-sky="portrait" data-caption="">
+      <div>
+        <h2>Free to start, deeper with Premium</h2>
+        <div class="plans">
+          <div>
+            <h3>Free</h3>
+            <p>A first look at your portrait from your top songs, the games, friends and taste matches, gigs near you, and a song for today.</p>
+          </div>
+          <div>
+            <h3>Premium, 14 days free</h3>
+            <p>Your whole library analysed, the full portrait and every era, the song for right now sent while you listen, daily picks, Ask for music and unlimited filters.</p>
+          </div>
+        </div>
+        <p class="why"><b>Always.</b> Unknowns are never guessed, friends never see your moods, and deleting your account deletes everything.</p>
+      </div>
+    </section>
+
+    <section class="end" data-sky="hero" data-caption="">
+      <div>
+        <img class="end-logo" src="/images/musicdude/logo.png" alt="MusicDude logo" loading="lazy">
+        <h2>See what your music looks like.</h2>
+        <div class="stores">
+          <a class="store live" href="https://play.google.com/store/apps/details?id=com.musicdude.app">Get it on Google Play</a>
+          <span class="store soon">App Store soon</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    MusicDude is made by DUDES.
+    <a href="/musicdude_privacy_policy.html">Privacy policy</a> and
+    <a href="/musicdude_terms_and_conditions.html">terms</a>.
+  </footer>
+
+  <script>
+  (() => {
+    /* ---------- Five voices: the app's own strings ---------- */
+    const VOICES = {
+      warm:     ['Song for today', 'One track a day, picked for you. "More of this" and "Not for me" steer the next one.'],
+      playful:  ["Today's earworm", 'Five songs a day, and the counter says which one you\'re on. Premium spills why each one was picked.'],
+      straight: ["Today's pick", 'Up to five songs a day. "More of this": similar song. "Change the vibe": different song.'],
+      adult:    ["Today's fucking banger", 'Up to five songs a day. "Change the vibe" bins that song for good.'],
+      genz:     ["today's song fr", 'up to 5 songs a day. "more of this" = similar, "change the vibe" = something else'],
+    };
+    const title = document.getElementById('voice-title');
+    const line = document.getElementById('voice-line');
+    const buttons = document.querySelectorAll('[data-voice]');
+    const pick = (v) => {
+      title.textContent = VOICES[v][0];
+      line.textContent = VOICES[v][1];
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.voice === v)));
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => pick(b.dataset.voice)));
+    pick('warm');
+
+    /* ---------- The sky ---------- */
+    const GRADE = ['#071D49', '#103B8F', '#1951FC', '#3781FC', '#00A6FF', '#59C7FF', '#97DDFF', '#CBEFFD'];
+    const PINK = '#F06BB0';
+    const AMBER = '#F2C46D';
+    const GREY = '#2D3A50';
+    const N = 150;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canvas = document.getElementById('sky');
+    const ctx = canvas.getContext('2d');
+    const caption = document.getElementById('sky-caption');
+
+    // A seeded random, so the sky is the same on every visit.
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const beta = (a, b) => { // cheap beta-ish: mean of powered uniforms
+      const u = Math.pow(rnd(), 1 / a), v = Math.pow(rnd(), 1 / b);
+      return u / (u + v);
+    };
+    const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+
+    // Each song: its sound (energy x, brightness y, valence v) and an era.
+    const songs = Array.from({ length: N }, (_, i) => {
+      const x = beta(2.2, 1.6), y = beta(2.0, 1.8);
+      return { x, y, v: Math.min(1, Math.max(0, 0.5 * x + 0.5 * y + (rnd() - 0.5) * 0.3)), era: i % 3, r: [2.2, 2.2, 2.8, 3.4, 4][Math.floor(rnd() * 5)], sx: rnd(), sy: rnd() };
+    });
+    const gradeOf = (v) => GRADE[Math.round(v * (GRADE.length - 1))];
+    const sorted = songs.map((s, i) => i).sort((a, b) => Math.hypot(songs[a].x - 0.72, songs[a].y - 0.62) - Math.hypot(songs[b].x - 0.72, songs[b].y - 0.62));
+    const nearest = sorted[0];
+
+    /* Where every dot goes in each chapter: [x 0..1, y 0..1 (down), color, alpha, radius scale]. */
+    const STATES = {
+      hero:     (s) => [s.x, 1 - s.y, gradeOf(s.v), 1, 1],
+      import:   (s) => [s.sx, s.sy, GREY, 0.9, 0.8],
+      listen:   (s) => [s.sx, s.sy, gradeOf(s.v), 1, 1],
+      portrait: (s) => [s.x, 1 - s.y, gradeOf(s.v), 1, 1],
+      eras:     (s) => {
+        const shift = [[-0.22, 0.2], [0, 0], [0.18, -0.16]][s.era];
+        return [s.x * 0.6 + 0.2 + shift[0], (1 - s.y) * 0.6 + 0.2 + shift[1], GRADE[[2, 4, 6][s.era]], s.era === 1 ? 1 : 0.55, 1];
+      },
+      now:      (s, i) => i === nearest ? [s.x, 1 - s.y, AMBER, 1, 2.6] : [s.x, 1 - s.y, gradeOf(s.v), 0.18, 1],
+      day:      (s, i) => sorted.indexOf(i) < 5 ? [0.3 + sorted.indexOf(i) * 0.1, 0.5, gradeOf(0.6 + sorted.indexOf(i) * 0.08), 1, 2.2] : [s.x, 1 - s.y, gradeOf(s.v), 0.14, 1],
+      library:  (s, i) => {
+        const k = sorted.indexOf(i), col = k % 10, row = Math.floor(k / 10);
+        return [0.12 + col * 0.085, 0.1 + row * 0.055, k < 15 ? AMBER : gradeOf(1 - k / N), 1 - k / (N * 1.15), 1];
+      },
+      games:    (s, i) => i % 30 === 0 ? [0.22 + (i / 30) * 0.14, 0.5, GRADE[7], 1, 2.6] : [s.sx, s.sy, gradeOf(s.v), 0.12, 0.8],
+      friends:  (s, i) => i % 2 ? [s.x * 0.62 + 0.06, (1 - s.y) * 0.62 + 0.18, GRADE[5], 0.9, 1] : [s.x * 0.62 + 0.32, (1 - s.y) * 0.62 + 0.18, PINK, 0.85, 1],
+      gigs:     (s, i) => i % 19 === 0 ? [s.sx * 0.8 + 0.1, s.sy * 0.7 + 0.15, GRADE[7], 1, 2.4] : [s.sx * 0.8 + 0.1, s.sy * 0.7 + 0.15, GRADE[1], 0.45, 0.7],
+      voices:   (s) => [s.x, 1 - s.y, gradeOf(s.v), 1, 1],
+    };
+    const OUTLINE = new Set(['hero', 'portrait', 'voices']);
+
+    let W = 0, H = 0, dpr = 1;
+    const resize = () => {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      const r = canvas.getBoundingClientRect();
+      W = r.width; H = r.height;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    };
+
+    // Current and target per dot.
+    const cur = songs.map(() => ({ x: 0.5, y: 0.5, c: hex(GREY), a: 0, r: 1 }));
+    let from = cur.map((d) => ({ ...d })), to = from, t0 = 0, dur = 1;
+    let outlineFrom = 0, outlineTo = 0, state = 'hero';
+
+    const go = (name, ms) => {
+      if (!STATES[name]) return;
+      state = name;
+      from = cur.map((d) => ({ ...d, c: d.c.slice() }));
+      to = songs.map((s, i) => {
+        const [x, y, c, a, r] = STATES[name](s, i);
+        return { x, y, c: hex(c), a, r };
+      });
+      outlineFrom = outlineNow; outlineTo = OUTLINE.has(name) ? 1 : 0;
+      t0 = performance.now(); dur = reduce ? 1 : ms;
+      requestAnimationFrame(frame);
+    };
+
+    let outlineNow = 0;
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+    // A soft outline around the core 90% of the dots (convex hull, rounded).
+    const outline = () => {
+      const pts = cur.filter((d) => d.a > 0.5).map((d) => [d.x, d.y]);
+      if (pts.length < 3) return null;
+      const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length, cy = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+      pts.sort((a, b) => Math.hypot(a[0] - cx, a[1] - cy) - Math.hypot(b[0] - cx, b[1] - cy));
+      const core = pts.slice(0, Math.floor(pts.length * 0.9)).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+      const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+      const lower = [], upper = [];
+      for (const p of core) { while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop(); lower.push(p); }
+      for (const p of core.slice().reverse()) { while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop(); upper.push(p); }
+      const hull = lower.slice(0, -1).concat(upper.slice(0, -1));
+      // Push each hull point out a little from the centre, so the dots sit inside.
+      return hull.map(([x, y]) => { const dx = x - cx, dy = y - cy, l = Math.hypot(dx, dy) || 1; return [x + (dx / l) * 0.035, y + (dy / l) * 0.035]; });
+    };
+
+    const P = (x, y) => {
+      const pad = Math.min(W, H) * 0.12, size = Math.min(W, H) - pad * 2;
+      const ox = (W - size) / 2, oy = (H - size) / 2;
+      return [ox + x * size, oy + y * size];
+    };
+
+    const draw = () => {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      // Axes, as on the Portrait.
+      const [ax0, ay0] = P(0, 0), [ax1, ay1] = P(1, 1), [mx, my] = P(0.5, 0.5);
+      ctx.strokeStyle = 'rgba(45,58,80,0.9)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(mx, ay0); ctx.lineTo(mx, ay1); ctx.moveTo(ax0, my); ctx.lineTo(ax1, my); ctx.stroke();
+
+      if (outlineNow > 0.02) {
+        const hull = outline();
+        if (hull) {
+          const pts = hull.map(([x, y]) => P(x, y)), n = pts.length;
+          ctx.beginPath();
+          ctx.moveTo(...pts[0]);
+          for (let i = 0; i < n; i++) {
+            const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+            ctx.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6, p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6, p2[0], p2[1]);
+          }
+          const g = ctx.createLinearGradient(ax0, ay0, ax1, ay1);
+          g.addColorStop(0, GRADE[6]); g.addColorStop(0.45, GRADE[5]); g.addColorStop(1, GRADE[2]);
+          ctx.globalAlpha = outlineNow; ctx.strokeStyle = g; ctx.lineWidth = 2;
+          ctx.fillStyle = 'rgba(89,199,255,0.04)'; ctx.fill(); ctx.stroke(); ctx.globalAlpha = 1;
+        }
+      }
+      const unit = Math.min(W, H) / 420;
+      cur.forEach((d, i) => {
+        const [x, y] = P(d.x, d.y);
+        ctx.globalAlpha = d.a;
+        ctx.fillStyle = `rgb(${d.c[0]},${d.c[1]},${d.c[2]})`;
+        ctx.beginPath(); ctx.arc(x, y, songs[i].r * d.r * unit, 0, Math.PI * 2); ctx.fill();
+        if (state === 'now' && i === nearest) { // the one song: a ring
+          ctx.globalAlpha = 0.5; ctx.strokeStyle = AMBER; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(x, y, songs[i].r * d.r * unit * 3, 0, Math.PI * 2); ctx.stroke();
+        }
+      });
+      ctx.globalAlpha = 1;
+    };
+
+    function frame(now) {
+      const k = Math.min(1, (now - t0) / dur), e = ease(k);
+      cur.forEach((d, i) => {
+        const f = from[i], g = to[i];
+        // Each dot leaves a little later than the one before: the sky reforms rather than jumps.
+        const lag = reduce ? e : ease(Math.min(1, Math.max(0, (k * 1.35) - (i / N) * 0.35)));
+        d.x = f.x + (g.x - f.x) * lag; d.y = f.y + (g.y - f.y) * lag;
+        d.a = f.a + (g.a - f.a) * lag; d.r = f.r + (g.r - f.r) * lag;
+        d.c = f.c.map((v, j) => Math.round(v + (g.c[j] - v) * lag));
+      });
+      outlineNow = outlineFrom + (outlineTo - outlineFrom) * e;
+      draw();
+      if (k < 1) requestAnimationFrame(frame);
+    }
+
+    resize();
+    window.addEventListener('resize', () => { resize(); draw(); });
+
+    // The page's one orchestrated moment: on load, scattered stars gather into a constellation.
+    songs.forEach((s, i) => Object.assign(cur[i], { x: s.sx, y: s.sy, c: hex(gradeOf(s.v)), a: 0.0, r: 1 }));
+    go('hero', 2200);
+
+    // Every other change answers the reader's scroll.
+    const sections = document.querySelectorAll('[data-sky]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const name = en.target.dataset.sky;
+        caption.textContent = en.target.dataset.caption || '';
+        if (name !== state) go(name, 1100);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    sections.forEach((s) => io.observe(s));
+  })();
+  </script>
+</body>
+</html>
