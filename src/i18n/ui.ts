@@ -14,7 +14,7 @@ export const languages = {
 // product names are never translated, and status drives which CTA renders.
 export const PRODUCTS = {
   weatherdude: { name: 'WeatherDude', status: 'live' as const, logo: '/icons/WeatherDudeLogo.svg' },
-  musicdude: { name: 'MusicDude', status: 'soon' as const, logo: '/icons/MusicDudeLogo.png' },
+  musicdude: { name: 'MusicDude', status: 'live' as const, logo: '/icons/MusicDudeLogo.png' },
   hungrydude: { name: 'HungryDude', status: 'dev' as const, logo: '/icons/HungryDudeLogo.svg' },
 };
 
@@ -33,7 +33,7 @@ export const WEATHERDUDE_STATS = {
   users: '10750 (upd. 29.09.2026)',
 };
 export const MUSICDUDE_STATS = {
-  releaseDate: '22.10',
+  releaseDate: '01.11',
 };
 
 export const ui = {
