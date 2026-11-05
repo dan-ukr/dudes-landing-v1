@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#080B12">
+  <title>MusicDude</title>
+  <meta property="og:title" content="How well do you know my music taste?">
+  <meta property="og:site_name" content="MusicDude">
+  <link rel="icon" href="/images/musicdude/logo.png">
+  <style>
+    @font-face { font-family: "Wix Madefor Display"; src: url("/fonts/musicdude/WixMadeforDisplay-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+    @font-face { font-family: "Inter"; src: url("/fonts/musicdude/Inter-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+    :root {
+      --night: #080B12; --raised: #1B2433; --line: #2D3A50;
+      --paper: #F4F7FF; --slate: #A6B4CB; --muted: #7F91AE;
+      --g2: #1951FC; --g3: #3781FC; --g4: #00A6FF; --g5: #59C7FF; --g6: #97DDFF; --g7: #CBEFFD;
+      --display: "Wix Madefor Display", "Segoe UI", system-ui, sans-serif;
+      --body: "Inter", "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; min-height: 100svh; color: var(--paper); font: 400 17px/1.45 var(--body); -webkit-text-size-adjust: 100%; }
+    #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; }
+    main { width: 100%; max-width: 30rem; margin: 0 auto; padding: max(20px, env(safe-area-inset-top)) 16px 40px; }
+    h1, h2, p { margin: 0; }
+    h1 { font: 700 clamp(30px, 8.5vw, 40px)/1.12 var(--display); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+    h2 { font: 700 24px/1.2 var(--display); overflow-wrap: anywhere; }
+    .quiet { color: var(--slate); }
+    .small { font-size: 14px; }
+    button, input, a { font: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--g6); outline-offset: 2px; }
+
+    /* The one bold thing: a constellation the friend draws by answering. */
+    .stars { display: block; width: 100%; height: auto; margin-bottom: 18px; overflow: visible; }
+    .stars line { stroke: var(--g5); stroke-width: 1; stroke-dasharray: 3 5; opacity: 0; transition: opacity .35s; }
+    .stars line.on { opacity: .6; }
+    .stars circle { fill: var(--line); transition: fill .3s, r .3s; }
+    .stars circle.on { fill: var(--g7); filter: drop-shadow(0 0 5px var(--g5)); }
+    .stars circle.now { fill: var(--g5); filter: drop-shadow(0 0 7px var(--g4)); }
+
+    .primary {
+      display: block; width: 100%; min-height: 52px; padding: 10px 16px; border: 0; border-radius: 999px;
+      color: #fff; font: 700 18px/1.2 var(--display);
+      background: linear-gradient(90deg, #214BAE, var(--g2) 55%, #204A9E);
+      box-shadow: 0 0 22px rgba(25, 81, 252, .45);
+    }
+    .primary[disabled] { opacity: .45; box-shadow: none; }
+
+    /* Start */
+    .start { display: grid; gap: 14px; padding-top: 3vh; }
+    label { display: grid; gap: 6px; margin-top: 8px; }
+    input {
+      width: 100%; min-height: 52px; padding: 0 16px; color: var(--paper); font-size: 18px;
+      background: rgba(27, 36, 51, .75); border: 1px solid var(--line); border-radius: 14px;
+    }
+
+    /* A round: two songs tied by the thread the app's graph uses. */
+    .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+    .count { color: var(--slate); font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .song { display: grid; gap: 10px; }
+    .who { display: grid; grid-template-columns: 84px 1fr; gap: 14px; align-items: center; }
+    .disc {
+      position: relative; width: 84px; height: 84px; padding: 0; border: 0; border-radius: 50%; background: var(--raised);
+      box-shadow: 0 0 20px rgba(0, 166, 255, .35);
+    }
+    .disc img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .disc svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .disc .shade { fill: rgba(8, 11, 18, .5); }
+    .disc .icon { fill: var(--paper); }
+    .disc .ring { fill: none; stroke: var(--g6); stroke-width: 3; transform: rotate(-90deg); transform-origin: center; stroke-dasharray: 289; stroke-dashoffset: 289; }
+    .title { font: 700 18px/1.25 var(--display); overflow-wrap: anywhere; }
+    .artist { color: var(--slate); font-size: 15px; overflow-wrap: anywhere; }
+    .stores { display: flex; flex-wrap: wrap; gap: 2px 14px; }
+    .store { color: var(--g6); font-size: 13px; }
+    .thread { display: flex; align-items: center; gap: 10px; margin: 16px 0 14px 41px; color: var(--muted); font-size: 14px; }
+    .thread::before { content: ""; width: 1px; height: 26px; border-left: 1px dashed var(--g5); }
+    .worth { margin-top: 20px; }
+    .drain { height: 3px; margin-top: 6px; border-radius: 3px; background: var(--raised); overflow: hidden; }
+    .drain i { display: block; height: 100%; background: linear-gradient(90deg, var(--g3), var(--g6)); transform-origin: left; }
+    .note { margin-top: 12px; color: var(--g7); }
+
+    /* The end: the finished sky, the score, then four lines one after another. */
+    .end { text-align: center; }
+    .score { font: 700 clamp(64px, 20vw, 92px)/1 var(--display); font-variant-numeric: tabular-nums; text-shadow: 0 0 34px rgba(0, 166, 255, .6); }
+    .place { margin-top: 8px; font: 700 22px/1.25 var(--display); color: var(--g7); }
+    .pitch { margin: 34px 0 30px; display: grid; gap: 10px; }
+    .pitch p { font: 700 22px/1.25 var(--display); animation: rise .6s ease-out both; }
+    .pitch p:nth-child(1) { animation-delay: .5s; }
+    .pitch p:nth-child(2) { animation-delay: 1.2s; }
+    .pitch p:nth-child(3) { animation-delay: 1.9s; color: var(--g6); }
+    .pitch p:nth-child(4) { animation-delay: 2.6s; color: var(--g6); }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .logo { display: block; width: 92px; height: 92px; margin: 0 auto 24px; border-radius: 22px; box-shadow: 0 0 44px 10px rgba(0, 166, 255, .55), 0 0 110px 34px rgba(25, 81, 252, .35); animation: rise .8s ease-out 3.2s both; }
+    .shops { display: grid; gap: 10px; animation: rise .6s ease-out 3.6s both; }
+    .shop { display: block; padding: 15px; border-radius: 999px; text-decoration: none; color: var(--paper); font: 700 17px/1.2 var(--display); border: 1px solid var(--g3); background: rgba(8, 11, 18, .5); }
+    .shop.soon { border-color: var(--line); color: var(--muted); }
+
+    .center { padding-top: 12vh; text-align: center; display: grid; gap: 12px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<main id="app" aria-live="polite"></main>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://musicdude-bcwt.onrender.com/public/friend-test/';
+  var PLAY_URL = 'https://play.google.com/store/apps/details?id=com.musicdude.app';
+  var IOS_URL = ''; // Filled in once the App Store listing is live.
+
+  var S = {
+    en: { place: 'Place {place} of {of}', startTitle: '{name} is testing you', startSub: 'Each pair has one song from the library and one look-alike. Pick fast: speed earns points.', nameLabel: 'Your first name', nameHint: 'It appears next to your score.', start: 'Start', question: 'What does {name} listen to?', pick: 'This one', or: 'or', worth: 'Points: {n}', play: 'Play', stop: 'Stop', clipFailed: 'This clip won’t play here. Open this page in Chrome.', sendFailed: 'Your score didn’t save. Check your connection and try again.', retry: 'Try again', yourScore: 'Your score', r1: 'Wanna see the full results?', r2: 'Wanna test your friends?', r3: 'Personalize your music', r4: 'With MusicDude', ios: 'Get it on iOS', iosSoon: 'App Store soon', gplay: 'Get it on Google Play', endedTitle: 'This test has ended', endedSub: 'Tests last 5 days.', goneTitle: 'This link doesn’t work', fullTitle: 'This test is full', loading: 'Loading…' },
+    fr: { place: 'Place {place} sur {of}', startTitle: '{name} te met à l’épreuve', startSub: 'Chaque paire contient un titre de la bibliothèque et un sosie. Choisis vite : la vitesse rapporte des points.', nameLabel: 'Ton prénom', nameHint: 'Il s’affiche à côté de ton score.', start: 'Commencer', question: 'Qu’écoute {name} ?', pick: 'Celui-ci', or: 'ou', worth: 'Points : {n}', play: 'Écouter', stop: 'Arrêter', clipFailed: 'Cet extrait ne se lance pas ici. Ouvre cette page dans Chrome.', sendFailed: 'Ton score n’a pas été enregistré. Vérifie ta connexion et réessaie.', retry: 'Réessayer', yourScore: 'Ton score', r1: 'Envie de voir tous les résultats ?', r2: 'Envie de tester tes amis ?', r3: 'Personnalise ta musique', r4: 'Avec MusicDude', ios: 'Disponible sur iOS', iosSoon: 'App Store bientôt', gplay: 'Disponible sur Google Play', endedTitle: 'Ce test est terminé', endedSub: 'Les tests durent 5 jours.', goneTitle: 'Ce lien ne fonctionne pas', fullTitle: 'Ce test est complet', loading: 'Chargement…' },
+    it: { place: 'Posto {place} su {of}', startTitle: '{name} ti mette alla prova', startSub: 'Ogni coppia ha un brano della libreria e un sosia. Scegli in fretta: la velocità vale punti.', nameLabel: 'Il tuo nome', nameHint: 'Appare accanto al tuo punteggio.', start: 'Inizia', question: 'Cosa ascolta {name}?', pick: 'Questo', or: 'o', worth: 'Punti: {n}', play: 'Ascolta', stop: 'Ferma', clipFailed: 'Questa clip non parte qui. Apri questa pagina in Chrome.', sendFailed: 'Il punteggio non è stato salvato. Controlla la connessione e riprova.', retry: 'Riprova', yourScore: 'Il tuo punteggio', r1: 'Vuoi vedere tutti i risultati?', r2: 'Vuoi mettere alla prova i tuoi amici?', r3: 'Personalizza la tua musica', r4: 'Con MusicDude', ios: 'Scarica per iOS', iosSoon: 'App Store a breve', gplay: 'Scarica su Google Play', endedTitle: 'Questo test è finito', endedSub: 'I test durano 5 giorni.', goneTitle: 'Questo link non funziona', fullTitle: 'Questo test è al completo', loading: 'Caricamento…' },
+    es: { place: 'Puesto {place} de {of}', startTitle: '{name} te pone a prueba', startSub: 'Cada pareja tiene una canción de la biblioteca y una parecida. Elige rápido: la velocidad da puntos.', nameLabel: 'Tu nombre', nameHint: 'Aparece junto a tu puntuación.', start: 'Empezar', question: '¿Qué escucha {name}?', pick: 'Esta', or: 'o', worth: 'Puntos: {n}', play: 'Escuchar', stop: 'Parar', clipFailed: 'Este clip no se reproduce aquí. Abre esta página en Chrome.', sendFailed: 'Tu puntuación no se guardó. Revisa la conexión e inténtalo de nuevo.', retry: 'Reintentar', yourScore: 'Tu puntuación', r1: '¿Quieres ver todos los resultados?', r2: '¿Quieres poner a prueba a tus amigos?', r3: 'Personaliza tu música', r4: 'Con MusicDude', ios: 'Descárgala en iOS', iosSoon: 'App Store pronto', gplay: 'Descárgala en Google Play', endedTitle: 'Este test ha terminado', endedSub: 'Los tests duran 5 días.', goneTitle: 'Este enlace no funciona', fullTitle: 'Este test está completo', loading: 'Cargando…' },
+    pt: { place: 'Lugar {place} de {of}', startTitle: '{name} está a testar-te', startSub: 'Cada par tem uma música da biblioteca e uma parecida. Escolhe depressa: a rapidez dá pontos.', nameLabel: 'O teu nome', nameHint: 'Aparece ao lado da tua pontuação.', start: 'Começar', question: 'O que ouve {name}?', pick: 'Esta', or: 'ou', worth: 'Pontos: {n}', play: 'Ouvir', stop: 'Parar', clipFailed: 'Este excerto não toca aqui. Abre esta página no Chrome.', sendFailed: 'A tua pontuação não foi guardada. Verifica a ligação e tenta outra vez.', retry: 'Tentar outra vez', yourScore: 'A tua pontuação', r1: 'Queres ver todos os resultados?', r2: 'Queres testar os teus amigos?', r3: 'Personaliza a tua música', r4: 'Com o MusicDude', ios: 'Obter para iOS', iosSoon: 'App Store em breve', gplay: 'Obter no Google Play', endedTitle: 'Este teste terminou', endedSub: 'Os testes duram 5 dias.', goneTitle: 'Este link não funciona', fullTitle: 'Este teste está cheio', loading: 'A carregar…' },
+    uk: { place: 'Місце {place} із {of}', startTitle: '{name} перевіряє тебе', startSub: 'У кожній парі одна пісня з бібліотеки й одна схожа. Обирай швидко: за швидкість є бали.', nameLabel: 'Твоє ім’я', nameHint: 'Воно з’явиться поруч із твоїм результатом.', start: 'Почати', question: 'Що слухає {name}?', pick: 'Ця', or: 'або', worth: 'Бали: {n}', play: 'Слухати', stop: 'Зупинити', clipFailed: 'Цей уривок тут не грає. Відкрий сторінку в Chrome.', sendFailed: 'Результат не збережено. Перевір зв’язок і спробуй ще раз.', retry: 'Спробувати ще раз', yourScore: 'Твій результат', r1: 'Хочеш побачити всі результати?', r2: 'Хочеш перевірити друзів?', r3: 'Налаштуй свою музику', r4: 'З MusicDude', ios: 'Завантажити для iOS', iosSoon: 'App Store скоро', gplay: 'Завантажити з Google Play', endedTitle: 'Цей тест завершено', endedSub: 'Тести тривають 5 днів.', goneTitle: 'Це посилання не працює', fullTitle: 'Цей тест заповнено', loading: 'Завантаження…' },
+    pl: { place: 'Miejsce {place} z {of}', startTitle: '{name} cię sprawdza', startSub: 'W każdej parze jest utwór z biblioteki i podobny do niego. Wybieraj szybko: za szybkość są punkty.', nameLabel: 'Twoje imię', nameHint: 'Pojawi się obok twojego wyniku.', start: 'Zacznij', question: 'Czego słucha {name}?', pick: 'Ten', or: 'czy', worth: 'Punkty: {n}', play: 'Posłuchaj', stop: 'Zatrzymaj', clipFailed: 'Ten fragment tu nie działa. Otwórz stronę w Chrome.', sendFailed: 'Wynik się nie zapisał. Sprawdź połączenie i spróbuj ponownie.', retry: 'Spróbuj ponownie', yourScore: 'Twój wynik', r1: 'Chcesz zobaczyć wszystkie wyniki?', r2: 'Chcesz sprawdzić znajomych?', r3: 'Spersonalizuj swoją muzykę', r4: 'Z MusicDude', ios: 'Pobierz na iOS', iosSoon: 'App Store wkrótce', gplay: 'Pobierz z Google Play', endedTitle: 'Ten test się zakończył', endedSub: 'Testy trwają 5 dni.', goneTitle: 'Ten link nie działa', fullTitle: 'Ten test jest pełny', loading: 'Ładowanie…' },
+    be: { place: 'Месца {place} з {of}', startTitle: '{name} правярае цябе', startSub: 'У кожнай пары адна песня з бібліятэкі і адна падобная. Выбірай хутка: за хуткасць ёсць балы.', nameLabel: 'Тваё імя', nameHint: 'Яно з’явіцца побач з тваім вынікам.', start: 'Пачаць', question: 'Што слухае {name}?', pick: 'Гэтая', or: 'ці', worth: 'Балы: {n}', play: 'Слухаць', stop: 'Спыніць', clipFailed: 'Гэты ўрывак тут не грае. Адкрый старонку ў Chrome.', sendFailed: 'Вынік не захаваўся. Правер сувязь і паспрабуй яшчэ раз.', retry: 'Паспрабаваць яшчэ раз', yourScore: 'Твой вынік', r1: 'Хочаш убачыць усе вынікі?', r2: 'Хочаш праверыць сяброў?', r3: 'Наладзь сваю музыку', r4: 'З MusicDude', ios: 'Спампаваць для iOS', iosSoon: 'App Store хутка', gplay: 'Спампаваць з Google Play', endedTitle: 'Гэты тэст завершаны', endedSub: 'Тэсты доўжацца 5 дзён.', goneTitle: 'Гэтая спасылка не працуе', fullTitle: 'Гэты тэст запоўнены', loading: 'Загрузка…' },
+    de: { place: 'Platz {place} von {of}', startTitle: '{name} testet dich', startSub: 'Jedes Paar hat einen Song aus der Bibliothek und einen ähnlichen. Wähle schnell: Tempo bringt Punkte.', nameLabel: 'Dein Vorname', nameHint: 'Er steht neben deiner Punktzahl.', start: 'Starten', question: 'Was hört {name}?', pick: 'Dieser', or: 'oder', worth: 'Punkte: {n}', play: 'Anhören', stop: 'Stoppen', clipFailed: 'Dieser Clip spielt hier nicht. Öffne die Seite in Chrome.', sendFailed: 'Deine Punktzahl wurde nicht gespeichert. Prüfe die Verbindung und versuch es noch mal.', retry: 'Noch mal versuchen', yourScore: 'Deine Punktzahl', r1: 'Willst du alle Ergebnisse sehen?', r2: 'Willst du deine Freunde testen?', r3: 'Personalisiere deine Musik', r4: 'Mit MusicDude', ios: 'Für iOS holen', iosSoon: 'App Store bald', gplay: 'Bei Google Play holen', endedTitle: 'Dieser Test ist beendet', endedSub: 'Tests laufen 5 Tage.', goneTitle: 'Dieser Link funktioniert nicht', fullTitle: 'Dieser Test ist voll', loading: 'Wird geladen…' },
+    hr: { place: 'Mjesto {place} od {of}', startTitle: '{name} te testira', startSub: 'U svakom paru je jedna pjesma iz biblioteke i jedna slična. Biraj brzo: brzina donosi bodove.', nameLabel: 'Tvoje ime', nameHint: 'Prikazat će se uz tvoj rezultat.', start: 'Počni', question: 'Što sluša {name}?', pick: 'Ova', or: 'ili', worth: 'Bodovi: {n}', play: 'Slušaj', stop: 'Zaustavi', clipFailed: 'Ovaj isječak ovdje ne radi. Otvori stranicu u Chromeu.', sendFailed: 'Rezultat nije spremljen. Provjeri vezu i pokušaj ponovno.', retry: 'Pokušaj ponovno', yourScore: 'Tvoj rezultat', r1: 'Želiš vidjeti sve rezultate?', r2: 'Želiš testirati prijatelje?', r3: 'Personaliziraj svoju glazbu', r4: 'S MusicDudeom', ios: 'Preuzmi za iOS', iosSoon: 'App Store uskoro', gplay: 'Preuzmi s Google Playa', endedTitle: 'Ovaj je test završen', endedSub: 'Testovi traju 5 dana.', goneTitle: 'Ova poveznica ne radi', fullTitle: 'Ovaj je test popunjen', loading: 'Učitavanje…' },
+    tr: { place: '{of} kişi içinde {place}. sıra', startTitle: '{name} seni test ediyor', startSub: 'Her çiftte kitaplıktan bir şarkı ve ona benzeyen bir şarkı var. Hızlı seç: hız puan kazandırır.', nameLabel: 'Adın', nameHint: 'Puanının yanında görünür.', start: 'Başla', question: '{name} hangisini dinliyor?', pick: 'Bu', or: 'ya da', worth: 'Puan: {n}', play: 'Dinle', stop: 'Durdur', clipFailed: 'Bu klip burada çalışmıyor. Sayfayı Chrome’da aç.', sendFailed: 'Puanın kaydedilmedi. Bağlantını kontrol et ve yeniden dene.', retry: 'Yeniden dene', yourScore: 'Puanın', r1: 'Tüm sonuçları görmek ister misin?', r2: 'Arkadaşlarını test etmek ister misin?', r3: 'Müziğini kişiselleştir', r4: 'MusicDude ile', ios: 'iOS için indir', iosSoon: 'App Store yakında', gplay: 'Google Play’den indir', endedTitle: 'Bu test sona erdi', endedSub: 'Testler 5 gün sürer.', goneTitle: 'Bu bağlantı çalışmıyor', fullTitle: 'Bu test dolu', loading: 'Yükleniyor…' }
+  };
+
+  var params = new URLSearchParams(location.search);
+  var code = (params.get('c') || '').trim();
+  var app = document.getElementById('app');
+  var strings = S.en;
+
+  function setLang(lang) {
+    strings = S[lang] || S.en;
+    document.documentElement.lang = S[lang] ? lang : 'en';
+  }
+  // Until the server says whose language it is, the visitor's own is the best guess.
+  setLang((navigator.language || 'en').slice(0, 2));
+
+  function T(id, vars) {
+    var out = strings[id];
+    Object.keys(vars || {}).forEach(function (k) { out = out.split('{' + k + '}').join(vars[k]); });
+    return out;
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  var SVG = 'http://www.w3.org/2000/svg';
+  function svg(tag, attrs) {
+    var n = document.createElementNS(SVG, tag);
+    Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); });
+    return n;
+  }
+  function clear() { app.textContent = ''; window.scrollTo(0, 0); }
+  function format(n) { return Number(n).toLocaleString(document.documentElement.lang); }
+
+  // Every test gets its own sky, seeded by its code.
+  function seeded(text) {
+    var h = 2166136261;
+    for (var i = 0; i < text.length; i += 1) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return function () {
+      h += 0x6D2B79F5;
+      var t = Math.imul(h ^ (h >>> 15), 1 | h);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function drawSky() {
+    var canvas = document.getElementById('sky');
+    var ratio = Math.min(2, window.devicePixelRatio || 1);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    canvas.width = w * ratio;
+    canvas.height = h * ratio;
+    var c = canvas.getContext('2d');
+    c.scale(ratio, ratio);
+    var glow = c.createRadialGradient(w * 0.75, h * 0.1, 0, w * 0.75, h * 0.1, Math.max(w, h) * 0.75);
+    glow.addColorStop(0, '#103B8F');
+    glow.addColorStop(0.5, '#071D49');
+    glow.addColorStop(1, '#080B12');
+    c.fillStyle = '#080B12';
+    c.fillRect(0, 0, w, h);
+    c.globalAlpha = 0.55;
+    c.fillStyle = glow;
+    c.fillRect(0, 0, w, h);
+    c.globalAlpha = 1;
+    var rnd = seeded(code || 'musicdude');
+    var grades = ['#3781FC', '#00A6FF', '#59C7FF', '#97DDFF', '#CBEFFD', '#F4F7FF'];
+    var count = Math.round((w * h) / 4200);
+    for (var i = 0; i < count; i += 1) {
+      var size = Math.pow(rnd(), 3) * 1.7 + 0.35;
+      c.globalAlpha = 0.25 + rnd() * 0.65;
+      c.fillStyle = grades[Math.floor(rnd() * grades.length)];
+      c.beginPath();
+      c.arc(rnd() * w, rnd() * h, size, 0, Math.PI * 2);
+      c.fill();
+    }
+    c.globalAlpha = 1;
+  }
+
+  function constellation(total) {
+    var rnd = seeded((code || 'x') + 'line');
+    var width = 320;
+    var height = 74;
+    var points = [];
+    for (var i = 0; i < total; i += 1) {
+      points.push({ x: 10 + ((width - 20) * i) / Math.max(1, total - 1), y: 12 + rnd() * (height - 24) });
+    }
+    var root = svg('svg', { class: 'stars', viewBox: '0 0 ' + width + ' ' + height, 'aria-hidden': 'true' });
+    var lines = [];
+    var dots = [];
+    points.forEach(function (p, i) {
+      if (i > 0) lines.push(root.appendChild(svg('line', { x1: points[i - 1].x, y1: points[i - 1].y, x2: p.x, y2: p.y })));
+    });
+    points.forEach(function (p) { dots.push(root.appendChild(svg('circle', { cx: p.x, cy: p.y, r: 3 }))); });
+    root.show = function (done, now) {
+      dots.forEach(function (d, i) {
+        d.setAttribute('class', i < done ? 'on' : i === now ? 'now' : '');
+        d.setAttribute('r', i < done ? 4 : i === now ? 4.5 : 3);
+      });
+      lines.forEach(function (l, i) { l.setAttribute('class', i < done - 1 ? 'on' : ''); });
+    };
+    return root;
+  }
+
+  function center(title, sub) {
+    clear();
+    var box = el('div', 'center');
+    box.appendChild(el('h1', '', title));
+    if (sub) box.appendChild(el('p', 'quiet', sub));
+    app.appendChild(box);
+    return box;
+  }
+
+  function api(path, options) {
+    return fetch(API + encodeURIComponent(code) + path, options).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (body) { return { status: r.status, body: body }; });
+    });
+  }
+
+  function showFailure(res) {
+    if (res.status === 410) {
+      if (res.body.lang) setLang(res.body.lang);
+      pitch(center(T('endedTitle'), T('endedSub')));
+    } else if (res.status === 404) {
+      pitch(center(T('goneTitle')));
+    } else {
+      var box = center(T('sendFailed'));
+      var again = el('button', 'primary', T('retry'));
+      again.onclick = function () { location.reload(); };
+      box.appendChild(again);
+    }
+  }
+
+  // ---------- A friend taking the test ----------
+
+  var test = null;
+  var picks = [];
+  var attemptKey = 'md_test_' + code;
+  var audio = new Audio();
+  audio.preload = 'none';
+  audio.setAttribute('playsinline', '');
+  var playing = null;
+
+  function remembered() {
+    try { return JSON.parse(localStorage.getItem(attemptKey) || 'null'); } catch (e) { return null; }
+  }
+  function remember(value) {
+    try { localStorage.setItem(attemptKey, JSON.stringify(value)); } catch (e) { /* Private mode: one attempt just isn't remembered here. */ }
+  }
+  function newAttempt() {
+    var bytes = new Uint8Array(16);
+    (window.crypto || window.msCrypto).getRandomValues(bytes);
+    return Array.prototype.map.call(bytes, function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  function stopClip() {
+    audio.pause();
+    if (playing) playing.show(false);
+    playing = null;
+  }
+  audio.addEventListener('ended', stopClip);
+  audio.addEventListener('timeupdate', function () {
+    if (playing && audio.duration) playing.progress(audio.currentTime / audio.duration);
+  });
+
+  function worthNow(ms) {
+    var s = test.scoring;
+    var speed = Math.max(0, Math.min(1, (s.slowMs - ms) / (s.slowMs - s.fastMs)));
+    return Math.round(s.base + s.bonus * speed);
+  }
+
+  function startScreen() {
+    clear();
+    var stars = constellation(test.rounds.length);
+    stars.show(0, -1);
+    app.appendChild(stars);
+    var form = el('form', 'start');
+    form.appendChild(el('h1', '', T('startTitle', { name: test.name })));
+    form.appendChild(el('p', 'quiet', T('startSub')));
+    var label = el('label');
+    label.appendChild(el('span', '', T('nameLabel')));
+    var input = el('input');
+    input.maxLength = 30;
+    input.autocomplete = 'given-name';
+    input.required = true;
+    label.appendChild(input);
+    label.appendChild(el('span', 'quiet small', T('nameHint')));
+    form.appendChild(label);
+    var go = el('button', 'primary', T('start'));
+    go.type = 'submit';
+    go.disabled = true;
+    form.appendChild(go);
+    input.oninput = function () { go.disabled = input.value.trim().length === 0; };
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var name = input.value.trim();
+      if (!name) return;
+      test.me = name;
+      test.attempt = newAttempt();
+      picks = [];
+      roundScreen(0);
+    };
+    app.appendChild(form);
+    input.focus({ preventScroll: true });
+  }
+
+  function songBlock(song, side, startedAt, at, note) {
+    var box = el('div', 'song');
+    var who = el('div', 'who');
+    var disc = el('button', 'disc');
+    disc.type = 'button';
+    disc.setAttribute('aria-label', T('play') + ': ' + song.artist + ', ' + song.title);
+    if (song.art) {
+      var img = el('img');
+      img.alt = '';
+      img.src = song.art.replace('100x100bb', '300x300bb');
+      disc.appendChild(img);
+    }
+    var face = svg('svg', { viewBox: '0 0 100 100', 'aria-hidden': 'true' });
+    face.appendChild(svg('circle', { class: 'shade', cx: 50, cy: 50, r: 50 }));
+    var icon = face.appendChild(svg('path', { class: 'icon', d: 'M40 31 L72 50 L40 69 Z' }));
+    var ring = face.appendChild(svg('circle', { class: 'ring', cx: 50, cy: 50, r: 46 }));
+    disc.appendChild(face);
+    var control = {
+      show: function (on) {
+        icon.setAttribute('d', on ? 'M37 33 H47 V67 H37 Z M53 33 H63 V67 H53 Z' : 'M40 31 L72 50 L40 69 Z');
+        disc.setAttribute('aria-label', (on ? T('stop') : T('play')) + ': ' + song.artist + ', ' + song.title);
+        if (!on) ring.style.strokeDashoffset = 289;
+      },
+      progress: function (share) { ring.style.strokeDashoffset = 289 * (1 - share); }
+    };
+    disc.onclick = function () {
+      if (playing === control) { stopClip(); return; }
+      stopClip();
+      note.textContent = '';
+      playing = control;
+      control.show(true);
+      audio.src = song.clip;
+      var started = audio.play();
+      if (started && started.catch) {
+        started.catch(function (err) {
+          if (err && err.name === 'AbortError') return;
+          stopClip();
+          note.textContent = T('clipFailed');
+        });
+      }
+    };
+    who.appendChild(disc);
+    var text = el('div');
+    text.appendChild(el('div', 'title', song.title));
+    text.appendChild(el('div', 'artist', song.artist));
+    var stores = el('div', 'stores');
+    [['Apple Music', song.store], ['Spotify', song.spotify]].forEach(function (s) {
+      if (!s[1]) return;
+      var link = el('a', 'store', s[0]);
+      link.href = s[1];
+      link.target = '_blank';
+      link.rel = 'noopener';
+      stores.appendChild(link);
+    });
+    text.appendChild(stores);
+    who.appendChild(text);
+    box.appendChild(who);
+    var pick = el('button', 'primary', T('pick'));
+    pick.type = 'button';
+    pick.onclick = function () {
+      stopClip();
+      picks.push({ side: side, ms: Math.round(performance.now() - startedAt) });
+      if (at + 1 < test.rounds.length) roundScreen(at + 1);
+      else send();
+    };
+    box.appendChild(pick);
+    return box;
+  }
+
+  var drainTimer = 0;
+  function roundScreen(at) {
+    clearInterval(drainTimer);
+    clear();
+    var stars = constellation(test.rounds.length);
+    stars.show(at, at);
+    app.appendChild(stars);
+    var head = el('div', 'head');
+    head.appendChild(el('h2', '', T('question', { name: test.name })));
+    head.appendChild(el('span', 'count', (at + 1) + '/' + test.rounds.length));
+    app.appendChild(head);
+    var startedAt = performance.now();
+    var note = el('p', 'note small');
+    note.setAttribute('role', 'status');
+    var round = test.rounds[at];
+    app.appendChild(songBlock(round.a, 'a', startedAt, at, note));
+    app.appendChild(el('div', 'thread', T('or')));
+    app.appendChild(songBlock(round.b, 'b', startedAt, at, note));
+    app.appendChild(note);
+    var worth = el('div', 'worth');
+    var worthText = el('div', 'quiet small');
+    var drain = el('div', 'drain');
+    var bar = drain.appendChild(el('i'));
+    worth.appendChild(worthText);
+    worth.appendChild(drain);
+    app.appendChild(worth);
+    var tick = function () {
+      var points = worthNow(performance.now() - startedAt);
+      worthText.textContent = T('worth', { n: format(points) });
+      bar.style.transform = 'scaleX(' + (points - test.scoring.base) / test.scoring.bonus + ')';
+    };
+    tick();
+    drainTimer = setInterval(tick, 200);
+  }
+
+  function send() {
+    clearInterval(drainTimer);
+    center(T('loading'));
+    api('/answers', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ attempt: test.attempt, name: test.me, picks: picks })
+    }).then(function (res) {
+      if (res.status === 201 || res.status === 200) {
+        remember({ score: res.body.score, attempt: test.attempt });
+        endScreen(res.body);
+      } else if (res.status === 409) {
+        pitch(center(T('fullTitle')));
+      } else {
+        showFailure(res);
+      }
+    }).catch(function () {
+      var box = center(T('sendFailed'));
+      var again = el('button', 'primary', T('retry'));
+      again.onclick = send;
+      box.appendChild(again);
+    });
+  }
+
+  function pitch(parent) {
+    var lines = el('div', 'pitch');
+    ['r1', 'r2', 'r3', 'r4'].forEach(function (id) { lines.appendChild(el('p', '', T(id))); });
+    parent.appendChild(lines);
+    var logo = el('img', 'logo');
+    logo.src = '/images/musicdude/logo.png';
+    logo.alt = 'MusicDude';
+    parent.appendChild(logo);
+    var shops = el('div', 'shops');
+    if (IOS_URL) {
+      var ios = el('a', 'shop', T('ios'));
+      ios.href = IOS_URL;
+      shops.appendChild(ios);
+    } else {
+      shops.appendChild(el('span', 'shop soon', T('iosSoon')));
+    }
+    var play = el('a', 'shop', T('gplay'));
+    play.href = PLAY_URL;
+    shops.appendChild(play);
+    parent.appendChild(shops);
+  }
+
+  function endScreen(result) {
+    clear();
+    var box = el('div', 'end');
+    var stars = constellation(test ? test.rounds.length : 10);
+    stars.show(99, -1);
+    box.appendChild(stars);
+    box.appendChild(el('p', 'quiet', T('yourScore')));
+    box.appendChild(el('div', 'score', format(result.score)));
+    if (result.place) box.appendChild(el('p', 'place', T('place', { place: format(result.place), of: format(result.of) })));
+    pitch(box);
+    app.appendChild(box);
+  }
+
+  // ---------- Start ----------
+
+  window.addEventListener('resize', drawSky);
+  drawSky();
+  if (!code) {
+    pitch(center(T('goneTitle')));
+  } else {
+    center(T('loading'));
+    api('').then(function (res) {
+      if (res.status !== 200) { showFailure(res); return; }
+      test = res.body;
+      setLang(test.lang);
+      document.title = T('startTitle', { name: test.name });
+      var earlier = remembered();
+      if (earlier) {
+        // The place moves as more friends play, so it is asked for again.
+        api('/answers/' + encodeURIComponent(earlier.attempt || 'none')).then(function (r) {
+          endScreen(r.status === 200 ? r.body : earlier);
+        }).catch(function () { endScreen(earlier); });
+      } else {
+        startScreen();
+      }
+    }).catch(showFailure.bind(null, { status: 0, body: {} }));
+  }
+})();
+</script>
+</body>
+</html>
